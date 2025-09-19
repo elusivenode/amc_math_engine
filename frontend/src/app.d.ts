@@ -9,3 +9,8 @@ declare namespace App {
   // interface PrivateEnv {}
   // interface PublicEnv {}
 }
+
+declare module '*.png?url' {
+  const src: string;
+  export default src;
+}
