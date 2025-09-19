@@ -1,3 +1,5 @@
+import type { ComponentType } from 'svelte';
+
 export type ProblemObjective = string;
 
 export type ProblemHint = {
@@ -21,6 +23,19 @@ export type NumericAnswer = {
 
 export type AnswerDefinition = NumericAnswer; // Future: extend with new discriminated union members
 
+export type ProblemDiagram =
+  | {
+      type: 'image';
+      src: string;
+      alt: string;
+      caption?: string;
+    }
+  | {
+      type: 'component';
+      component: ComponentType;
+      caption?: string;
+    };
+
 export type ProblemMetadata = {
   competition: 'AMC';
   division: 'Junior' | 'Intermediate' | 'Senior' | 'Upper Primary' | 'Lower Primary';
@@ -38,5 +53,6 @@ export type ProblemDefinition = {
   hints: ProblemHint[];
   solution: ProblemSolutionStep[];
   answer: AnswerDefinition;
+  diagram?: ProblemDiagram;
   metadata: ProblemMetadata;
 };

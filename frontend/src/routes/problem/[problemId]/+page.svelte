@@ -176,6 +176,23 @@
     </div>
     <div class="mt-6 space-y-4 text-lg text-slate-800">
       <p>{problem.question}</p>
+      {#if problem.diagram}
+        <figure class="rounded-xl border border-slate-100 bg-slate-50 p-4 text-center">
+          {#if problem.diagram.type === 'image'}
+            <img
+              src={problem.diagram.src}
+              alt={problem.diagram.alt}
+              class="mx-auto h-auto max-h-80 w-full max-w-xl object-contain"
+              loading="lazy"
+            />
+          {:else if problem.diagram.type === 'component'}
+            <svelte:component this={problem.diagram.component} />
+          {/if}
+          {#if problem.diagram.caption}
+            <figcaption class="mt-3 text-sm text-slate-500">{problem.diagram.caption}</figcaption>
+          {/if}
+        </figure>
+      {/if}
       <p class="text-sm text-slate-500">Try to reason it out before revealing hints. You can submit a simplified numeric answer or a fraction.</p>
     </div>
   </section>
