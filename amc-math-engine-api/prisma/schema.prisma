@@ -1,0 +1,165 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SubpathStage {
+  BASIC
+  INTERMEDIATE
+  ADVANCED
+  BOSS
+  FINAL
+}
+
+enum LevelKind {
+  PRACTICE
+  BOSS
+  OLYMPIAD
+}
+
+enum ProgressStatus {
+  LOCKED
+  AVAILABLE
+  IN_PROGRESS
+  MASTERED
+}
+
+enum AttemptOutcome {
+  CORRECT
+  INCORRECT
+  PARTIAL
+  SKIPPED
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  passwordHash  String
+  displayName   String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  progress      UserProgress[]
+  attempts      Attempt[]
+}
+
+model Path {
+  id          String     @id @default(uuid())
+  slug        String     @unique
+  title       String
+  description String?
+  themeColor  String?
+  order       Int?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  subpaths    Subpath[]
+}
+
+model Subpath {
+  id          String       @id @default(uuid())
+  pathId      String
+  path        Path         @relation(fields: [pathId], references: [id], onDelete: Cascade)
+  stage       SubpathStage
+  title       String
+  description String?
+  order       Int
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  levels      Level[]
+
+  @@unique([pathId, stage])
+}
+
+model Level {
+  id                   String         @id @default(uuid())
+  subpathId            String
+  subpath              Subpath        @relation(fields: [subpathId], references: [id], onDelete: Cascade)
+  kind                 LevelKind
+  order                Int
+  title                String
+  subtitle             String?
+  description          String?
+  recommendedDifficulty Int?
+  estimatedMinutes     Int?
+  isPublished          Boolean        @default(false)
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+  problems             Problem[]
+  storyPanels          StoryPanel[]
+  progressRecords      UserProgress[]
+
+  @@unique([subpathId, order])
+}
+
+model Problem {
+  id            String        @id @default(uuid())
+  levelId       String
+  level         Level         @relation(fields: [levelId], references: [id], onDelete: Cascade)
+  title         String?
+  statement     String
+  solution      String?
+  source        String?
+  difficulty    Int?
+  tags          String[]
+  metadata      Json?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  attempts      Attempt[]
+  hints         ProblemHint[]
+}
+
+model ProblemHint {
+  id        String   @id @default(uuid())
+  problemId String
+  problem   Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  order     Int
+  content   String
+  isMajor   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@unique([problemId, order])
+}
+
+model UserProgress {
+  userId           String
+  levelId          String
+  status           ProgressStatus @default(LOCKED)
+  masteryScore     Int?
+  attemptsCount    Int            @default(0)
+  hintsUsed        Int            @default(0)
+  unlockedAt       DateTime?
+  lastInteraction  DateTime?
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  level            Level          @relation(fields: [levelId], references: [id], onDelete: Cascade)
+
+  @@id([userId, levelId])
+  @@index([status])
+}
+
+model Attempt {
+  id             String         @id @default(uuid())
+  userId         String
+  problemId      String
+  outcome        AttemptOutcome
+  approach       String?
+  hintsUsed      Int            @default(0)
+  timeSpentSec   Int?
+  submittedAt    DateTime       @default(now())
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problem        Problem        @relation(fields: [problemId], references: [id], onDelete: Cascade)
+}
+
+model StoryPanel {
+  id        String   @id @default(uuid())
+  levelId   String
+  level     Level    @relation(fields: [levelId], references: [id], onDelete: Cascade)
+  order     Int
+  content   String
+  mediaUrl  String?
+  createdAt DateTime @default(now())
+
+  @@unique([levelId, order])
+}

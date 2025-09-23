@@ -22,3 +22,13 @@ target
 
 # Ignore worked problems folder
 /worked_problems/
+
+# Node projects
+/frontend/node_modules/
+/amc-math-engine-api/node_modules/
+/amc-math-engine-api/.pnpm-store/
+/amc-math-engine-api/dist/
+
+# Backend local env files
+/amc-math-engine-api/.env
+/amc-math-engine-api/.env.*
