@@ -17,11 +17,25 @@
     <p class="text-sm uppercase tracking-[0.2em] text-indigo-500">Prototype</p>
     <h1 class="text-4xl font-semibold text-slate-900">AMC Coaching Library</h1>
     <p class="text-base text-slate-600">
-      Pick a problem to unlock guided hints, instant feedback, and a full solution walkthrough.
+      Pick a problem to unlock guided hints, instant feedback, and a full solution walkthrough—or sign in to explore the new path-based curriculum.
     </p>
+    <div class="mt-6 flex flex-wrap justify-center gap-3">
+      <a
+        class="inline-flex items-center justify-center rounded-full bg-indigo-600 px-5 py-2 text-sm font-semibold uppercase tracking-[0.25em] text-white transition hover:bg-indigo-500"
+        href="/login"
+      >
+        Sign in to paths
+      </a>
+      <a
+        class="inline-flex items-center justify-center rounded-full border border-indigo-200 px-5 py-2 text-sm font-semibold uppercase tracking-[0.25em] text-indigo-600 transition hover:border-indigo-400 hover:text-indigo-700"
+        href="#problems"
+      >
+        Browse sample problems
+      </a>
+    </div>
   </header>
 
-  <section class="mt-12 grid gap-6 lg:grid-cols-2">
+  <section id="problems" class="mt-12 grid gap-6 lg:grid-cols-2">
     {#each problems as problem}
       <a
         class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-indigo-200 hover:shadow-md"
