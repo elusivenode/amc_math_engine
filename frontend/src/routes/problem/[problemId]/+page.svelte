@@ -3,6 +3,7 @@
   import { onDestroy, onMount } from 'svelte';
   import { get } from 'svelte/store';
   import MathInput from '$components/MathInput.svelte';
+  import TextWithMath from '$components/TextWithMath.svelte';
   import KatexBlock from '$components/KatexBlock.svelte';
   import { apiFetch } from '$lib/api';
   import type { NumericAnswer, ProblemDefinition } from '$lib/problems';
@@ -463,7 +464,7 @@
           </div>
         </div>
         <div class="mt-6 space-y-4 text-lg text-slate-800">
-          <p>{problem.question}</p>
+          <TextWithMath text={problem.question} />
           {#if problem.diagram}
             <figure class="rounded-xl border border-slate-100 bg-slate-50 p-4 text-center">
               {#if problem.diagram.type === 'image'}
@@ -552,7 +553,9 @@
             <li class={`rounded-xl border border-slate-200 p-4 transition ${index < revealedHints ? 'bg-white' : 'bg-slate-50'}`}>
               <p class="text-sm font-semibold text-slate-800">{hint.title}</p>
               {#if index < revealedHints}
-                <p class="mt-1 text-sm text-slate-600">{hint.body}</p>
+                <p class="mt-1 text-sm text-slate-600">
+                  <TextWithMath text={hint.body} />
+                </p>
                 {#if hint.expression}
                   <KatexBlock expression={hint.expression} />
                 {/if}
@@ -574,9 +577,15 @@
                   {index + 1}
                 </span>
                 <div class="space-y-2 text-sm text-slate-700">
-                  <p>{step.text}</p>
-                  {#if step.expression}
-                    <KatexBlock expression={step.expression} />
+                  {#if solutionUnlocked}
+                    <TextWithMath text={step.text} />
+                    {#if step.expression}
+                      <KatexBlock expression={step.expression} />
+                    {/if}
+                  {:else}
+                    <p class="text-xs uppercase tracking-[0.2em] text-slate-400">
+                      Unlock the solution to view this step.
+                    </p>
                   {/if}
                 </div>
               </div>
