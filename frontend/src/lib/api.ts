@@ -7,6 +7,7 @@ type FetchOptions = {
   body?: unknown;
   token?: string;
   headers?: Record<string, string>;
+  cache?: RequestCache;
 };
 
 export async function apiFetch<T>(path: string, options: FetchOptions = {}): Promise<T> {
@@ -24,6 +25,7 @@ export async function apiFetch<T>(path: string, options: FetchOptions = {}): Pro
     method: options.method ?? 'GET',
     headers,
     body: options.body ? JSON.stringify(options.body) : undefined,
+    cache: options.cache ?? 'no-store',
   });
 
   if (!response.ok) {

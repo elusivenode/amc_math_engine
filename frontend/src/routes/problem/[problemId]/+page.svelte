@@ -1,38 +1,263 @@
-<svelte:head>
-  <title>{data.problem.title} · AMC Math Prototype</title>
-  <meta
-    name="description"
-    content={`Australian Mathematics Competition practice: ${data.problem.title}`}
-  />
-</svelte:head>
-
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import { onDestroy, onMount } from 'svelte';
+  import { get } from 'svelte/store';
   import MathInput from '$components/MathInput.svelte';
   import KatexBlock from '$components/KatexBlock.svelte';
+  import { apiFetch } from '$lib/api';
+  import type { NumericAnswer, ProblemDefinition } from '$lib/problems';
+  import { authStore } from '$lib/stores/auth';
   import type { PageData } from './$types';
 
-  export let data: PageData;
-  const { problem } = data;
-
   type AttemptStatus = 'idle' | 'correct' | 'incorrect';
+  type AttemptOutcome = 'CORRECT' | 'INCORRECT' | 'SKIPPED';
+
+  type RemoteProblem = {
+    id: string;
+    title: string | null;
+    statement: string;
+    solution: string | null;
+    metadata: unknown;
+    level: {
+      id: string;
+      title: string;
+      points: number;
+      subpath: {
+        id: string;
+        stage: string;
+        title: string;
+      };
+    };
+    hints: { order: number; content: string }[];
+    createdAt: string;
+  };
+
+  type AttemptResponse = {
+    attempt: {
+      id: string;
+      outcome: AttemptOutcome;
+      hintsUsed: number;
+      timeSpentSec: number | null;
+      submittedAt: string;
+    };
+    progress: {
+      status: string;
+      masteryScore: number | null;
+      attemptsCount: number;
+      hintsUsed: number;
+      lastInteraction: string | null;
+    };
+    level: {
+      id: string;
+      points: number;
+    };
+  };
+
+  export let data: PageData & {
+    problemId: string;
+    source: 'sample' | 'remote';
+  };
+
+  let problem: ProblemDefinition | null = data.problem;
+  const source = data.source;
+  const problemId = data.problemId;
+
+  let loading = source === 'remote';
+  let fetchError = '';
 
   let revealedHints = 0;
   let attemptValue = '';
   let attempts = 0;
   let attemptStatus: AttemptStatus = 'idle';
   let feedback = '';
+  let submissionError = '';
+  let submitting = false;
   let solutionUnlocked = false;
   let gaveUp = false;
   let elapsedSeconds = 0;
   let startTime = Date.now();
   let timer: ReturnType<typeof setInterval> | undefined;
+  let lastProgress: AttemptResponse['progress'] | null = null;
+  let lastOutcome: AttemptOutcome | null = null;
+  let earnedPoints = 0;
+
+  function formatStatusLabel(status: string): string {
+    const lower = status.toLowerCase().replace(/_/g, ' ');
+    return lower
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }
+
+  function normalizeAnswer(metadata: unknown): NumericAnswer {
+    if (!metadata || typeof metadata !== 'object') {
+      return {
+        type: 'numeric',
+        value: 0,
+        tolerance: 0,
+        success: 'Great work!',
+        failure: 'Keep exploring the algebraic steps.',
+      };
+    }
+
+    const raw = (metadata as Record<string, unknown>).answer as Record<string, unknown> | undefined;
+    if (!raw) {
+      return {
+        type: 'numeric',
+        value: 0,
+        tolerance: 0,
+        success: 'Great work!',
+        failure: 'Keep exploring the algebraic steps.',
+      };
+    }
+
+    return {
+      type: 'numeric',
+      value: typeof raw.value === 'number' ? raw.value : 0,
+      tolerance: typeof raw.tolerance === 'number' ? raw.tolerance : 0,
+      success: typeof raw.success === 'string' ? raw.success : 'Great work!',
+      failure: typeof raw.failure === 'string' ? raw.failure : 'Keep exploring the algebraic steps.',
+    };
+  }
+
+  function getObjectives(metadata: Record<string, unknown>): string[] {
+    const objectives = metadata.objectives;
+    if (Array.isArray(objectives)) {
+      return objectives
+        .filter((item): item is string => typeof item === 'string')
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+    return [];
+  }
+
+  function getSolutionSteps(metadata: Record<string, unknown>, fallback: string | null) {
+    const steps = metadata.solutionSteps;
+    if (Array.isArray(steps) && steps.length > 0) {
+      return steps
+        .filter((step): step is { text: string; expression?: string } =>
+          typeof step === 'object' && step !== null && typeof step.text === 'string',
+        )
+        .map((step) => ({
+          text: step.text,
+          expression: typeof step.expression === 'string' ? step.expression : undefined,
+        }));
+    }
+
+    if (fallback) {
+      return [
+        {
+          text: fallback,
+        },
+      ];
+    }
+
+    return [
+      {
+        text: 'Solution steps will appear here soon.',
+      },
+    ];
+  }
+
+  function transformRemoteProblem(remote: RemoteProblem): ProblemDefinition {
+    const metadata =
+      (remote.metadata && typeof remote.metadata === 'object'
+        ? (remote.metadata as Record<string, unknown>)
+        : {}) ?? {};
+    const answer = normalizeAnswer(metadata);
+    const tagline =
+      typeof metadata.tagline === 'string' ? metadata.tagline : remote.level.subpath.title;
+    const objectives = getObjectives(metadata);
+    const solutionSteps = getSolutionSteps(metadata, remote.solution);
+
+    return {
+      id: remote.id,
+      title: remote.title ?? remote.level.title,
+      tagline,
+      difficulty: `Worth ${remote.level.points} pts`,
+      objectives: objectives.length > 0 ? objectives : [`Stage: ${remote.level.subpath.title}`],
+      question: remote.statement,
+      hints: remote.hints
+        .sort((a, b) => a.order - b.order)
+        .map((hint, index) => ({
+          title: `Hint ${index + 1}`,
+          body: hint.content,
+        })),
+      solution: solutionSteps,
+      answer,
+      metadata: {
+        competition: 'AMC',
+        division: 'Junior',
+        year: new Date(remote.createdAt ?? Date.now()).getFullYear(),
+        questionNumber: 0,
+      },
+    };
+  }
+
+  async function loadRemoteProblem(): Promise<void> {
+    const auth = get(authStore);
+    if (!auth) {
+      await goto('/login');
+      return;
+    }
+
+    try {
+      const remote = await apiFetch<RemoteProblem>(`/problems/${problemId}/`, {
+        token: auth.token,
+      });
+      problem = transformRemoteProblem(remote);
+      resetSession();
+      loading = false;
+    } catch (error) {
+      fetchError = error instanceof Error ? error.message : 'Failed to load problem.';
+      loading = false;
+    }
+  }
+
+  async function submitAttempt(outcome: AttemptOutcome, responseValue: string) {
+    const auth = get(authStore);
+    if (!auth) {
+      await goto('/login');
+      return null;
+    }
+
+    submitting = true;
+    submissionError = '';
+
+    try {
+      const payload = await apiFetch<AttemptResponse>(`/problems/${problemId}/attempts/`, {
+        method: 'POST',
+        token: auth.token,
+        body: {
+          outcome,
+          response: responseValue || undefined,
+          hintsUsed: revealedHints,
+          timeSpentSec: elapsedSeconds,
+        },
+      });
+
+      lastProgress = payload.progress;
+      lastOutcome = payload.attempt.outcome;
+      attempts = payload.progress.attemptsCount ?? attempts + 1;
+      earnedPoints = payload.level?.points ?? earnedPoints;
+      return payload;
+    } catch (error) {
+      submissionError = error instanceof Error ? error.message : 'Failed to record attempt.';
+      throw error;
+    } finally {
+      submitting = false;
+    }
+  }
 
   onMount(() => {
     startTime = Date.now();
     timer = setInterval(() => {
       elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
     }, 1000);
+
+    if (source === 'remote') {
+      void loadRemoteProblem();
+    }
   });
 
   onDestroy(() => {
@@ -41,36 +266,52 @@
     }
   });
 
-  const totalHints = problem.hints.length;
-
   function revealNextHint() {
-    if (revealedHints < totalHints) {
+    console.log('revealNextHint invoked', { problemPresent: !!problem, submitting, revealedHints });
+    if (!problem || submitting) return;
+    if (revealedHints < problem.hints.length) {
       revealedHints += 1;
     }
   }
 
-  function revealSolution() {
+  async function revealSolution() {
+    if (!problem) return;
+    if (solutionUnlocked) {
+      return;
+    }
+
     solutionUnlocked = true;
     gaveUp = true;
-    revealedHints = totalHints;
+    revealedHints = problem.hints.length;
     attemptStatus = 'idle';
     feedback = 'Solution revealed below. Take time to study each step.';
+
+    if (lastOutcome !== 'CORRECT') {
+      try {
+        await submitAttempt('SKIPPED', attemptValue);
+      } catch (error) {
+        // swallow error so the UI still reveals the solution
+      }
+    }
   }
 
   function resetSession() {
+    revealedHints = 0;
     attemptValue = '';
-    attempts = 0;
+    attempts = lastProgress?.attemptsCount ?? 0;
     attemptStatus = 'idle';
     feedback = '';
+    submissionError = '';
     solutionUnlocked = false;
     gaveUp = false;
-    revealedHints = 0;
     startTime = Date.now();
     elapsedSeconds = 0;
   }
 
-  function checkAnswer() {
-    attempts += 1;
+  async function checkAnswer() {
+    console.log('checkAnswer invoked', { problemPresent: !!problem, submitting, attemptValue });
+    if (!problem || submitting) return;
+
     const answerDef = problem.answer;
 
     if (answerDef.type !== 'numeric') {
@@ -87,13 +328,30 @@
     }
 
     const tolerance = answerDef.tolerance ?? 0;
-    if (Math.abs(numeric - answerDef.value) <= tolerance) {
-      attemptStatus = 'correct';
-      feedback = answerDef.success;
-      solutionUnlocked = true;
-    } else {
-      attemptStatus = 'incorrect';
-      feedback = answerDef.failure;
+    const isCorrect = Math.abs(numeric - answerDef.value) <= tolerance;
+    const outcome: AttemptOutcome = isCorrect ? 'CORRECT' : 'INCORRECT';
+
+    console.log('Attempt prepared', {
+      numeric,
+      expected: answerDef.value,
+      tolerance,
+      outcome,
+      attemptValue,
+    });
+
+    attemptStatus = isCorrect ? 'correct' : 'incorrect';
+    feedback = isCorrect ? answerDef.success : answerDef.failure;
+    solutionUnlocked = solutionUnlocked || isCorrect;
+
+    try {
+      const result = await submitAttempt(outcome, attemptValue);
+      console.log('Attempt response', result);
+      if (result && outcome === 'CORRECT') {
+        feedback = `${answerDef.success} You earned ${result.level.points} pts.`;
+      }
+    } catch (error) {
+      // keep UI state but ensure user sees the submission error message
+      console.error('Attempt submission failed', error);
     }
   }
 
@@ -154,133 +412,182 @@
     return `${paddedMins}:${paddedSecs}`;
   }
 
-  $: canRevealMore = revealedHints < totalHints;
-  $: feedbackTone = attemptStatus === 'correct' ? 'text-emerald-600' : attemptStatus === 'incorrect' ? 'text-rose-600' : 'text-slate-600';
+  $: totalHints = problem ? problem.hints.length : 0;
+  $: canRevealMore = problem ? revealedHints < totalHints : false;
+  $: feedbackTone =
+    attemptStatus === 'correct'
+      ? 'text-emerald-600'
+      : attemptStatus === 'incorrect'
+        ? 'text-rose-600'
+        : 'text-slate-600';
   $: elapsedLabel = formatElapsed(elapsedSeconds);
+  $: pageTitle = problem ? `${problem.title} · AMC Math Prototype` : 'AMC Math Prototype';
+  $: pageDescription = problem
+    ? `Australian Mathematics Competition practice: ${problem.title}`
+    : 'Attempt an AMC Math Engine problem.';
+  $: masterySummary = lastProgress
+    ? `${formatStatusLabel(lastProgress.status)} • ${lastProgress.masteryScore ?? 0} pts`
+    : null;
 </script>
 
+<svelte:head>
+  <title>{pageTitle}</title>
+  <meta name="description" content={pageDescription} />
+</svelte:head>
+
 <div class="mx-auto max-w-3xl space-y-8 px-6 py-10">
-  <header class="space-y-2 text-center">
-    <p class="text-sm uppercase tracking-[0.2em] text-indigo-500">Prototype</p>
-    <h1 class="text-3xl font-semibold text-slate-900">{problem.title}</h1>
-    <p class="text-base text-slate-600">{problem.tagline}</p>
-  </header>
-
-  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-    <div class="flex flex-wrap items-center justify-between gap-4 text-sm text-slate-500">
-      <span class="rounded-full bg-indigo-50 px-3 py-1 font-medium text-indigo-600">{problem.difficulty}</span>
-      <div class="flex items-center gap-4">
-        <span class="font-mono text-xs uppercase tracking-widest">Time {elapsedLabel}</span>
-        <span class="font-mono text-xs uppercase tracking-widest">Attempts {attempts}</span>
-      </div>
+  {#if loading}
+    <div class="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500 shadow-sm">
+      Loading problem…
     </div>
-    <div class="mt-6 space-y-4 text-lg text-slate-800">
-      <p>{problem.question}</p>
-      {#if problem.diagram}
-        <figure class="rounded-xl border border-slate-100 bg-slate-50 p-4 text-center">
-          {#if problem.diagram.type === 'image'}
-            <img
-              src={problem.diagram.src}
-              alt={problem.diagram.alt}
-              class="mx-auto h-auto max-h-80 w-full max-w-xl object-contain"
-              loading="lazy"
-            />
-          {:else if problem.diagram.type === 'component'}
-            <svelte:component this={problem.diagram.component} />
-          {/if}
-          {#if problem.diagram.caption}
-            <figcaption class="mt-3 text-sm text-slate-500">{problem.diagram.caption}</figcaption>
-          {/if}
-        </figure>
-      {/if}
-      <p class="text-sm text-slate-500">Try to reason it out before revealing hints. You can submit a simplified numeric answer or a fraction.</p>
+  {:else if fetchError}
+    <div class="rounded-2xl border border-rose-200 bg-rose-50 p-8 text-center text-rose-600 shadow-sm">
+      {fetchError}
     </div>
-  </section>
-
-  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-    <h2 class="text-lg font-semibold text-slate-900">Your turn</h2>
-    <div class="mt-4 space-y-4">
-      <MathInput
-        value={attemptValue}
-        placeholder="Enter your answer"
-        on:change={(event) => (attemptValue = event.detail)}
-      />
-      <div class="flex flex-wrap gap-3">
-        <button
-          class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:bg-slate-300"
-          on:click={checkAnswer}
-        >
-          Check answer
-        </button>
-        <button
-          class="rounded-lg border border-transparent px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-slate-300 hover:text-slate-900"
-          on:click={resetSession}
-        >
-          Reset
-        </button>
-        <button
-          class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-500 transition hover:border-slate-300 hover:text-slate-900 disabled:cursor-not-allowed disabled:text-slate-300"
-          on:click={revealNextHint}
-          disabled={!canRevealMore}
-        >
-          Reveal next hint
-        </button>
-        <button
-          class="rounded-lg border border-rose-200 px-4 py-2 text-sm font-medium text-rose-500 transition hover:border-rose-300 hover:text-rose-600"
-          on:click={revealSolution}
-        >
-          Reveal full solution
-        </button>
-      </div>
-      {#if feedback}
-        <p class={`text-sm ${feedbackTone}`}>{feedback}</p>
-      {/if}
-    </div>
-  </section>
-
-  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-    <div class="flex items-center justify-between">
-      <h2 class="text-lg font-semibold text-slate-900">Hint track</h2>
-      <span class="text-xs uppercase tracking-widest text-slate-400">{revealedHints}/{totalHints} revealed</span>
-    </div>
-    <div class="mt-4 space-y-4">
-      {#if revealedHints === 0}
-        <p class="text-sm text-slate-500">Hints unlock sequentially so learners commit to an idea before peeking.</p>
-      {/if}
-      {#each problem.hints.slice(0, revealedHints) as hint, index}
-        <article class="rounded-xl border border-slate-100 bg-slate-50 p-4 shadow-inner">
-          <h3 class="text-sm font-semibold uppercase tracking-wide text-indigo-500">{hint.title}</h3>
-          <p class="mt-2 text-sm text-slate-700">{hint.body}</p>
-          {#if hint.expression}
-            <KatexBlock expression={hint.expression} />
-          {/if}
-          <p class="mt-2 text-[11px] uppercase tracking-[0.2em] text-slate-400">Hint {index + 1}</p>
-        </article>
-      {/each}
-    </div>
-  </section>
-
-  {#if solutionUnlocked}
-    <section class="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 shadow-sm">
-      <div class="flex items-center justify-between">
-        <h2 class="text-lg font-semibold text-emerald-700">Solution walkthrough</h2>
-        {#if gaveUp}
-          <span class="text-xs uppercase tracking-widest text-emerald-600">Revealed on request</span>
-        {:else}
-          <span class="text-xs uppercase tracking-widest text-emerald-600">Unlocked by success</span>
+  {:else if problem}
+      <header class="space-y-2 text-center">
+        <p class="text-sm uppercase tracking-[0.2em] text-indigo-500">Prototype</p>
+        <h1 class="text-3xl font-semibold text-slate-900">{problem.title}</h1>
+        <p class="text-base text-slate-600">{problem.tagline}</p>
+        {#if masterySummary}
+          <p class="text-xs uppercase tracking-[0.3em] text-indigo-400">{masterySummary}</p>
         {/if}
-      </div>
-      <ol class="mt-4 space-y-3 text-sm text-emerald-900">
-        {#each problem.solution as step, stepIndex}
-          <li class="rounded-lg border border-emerald-100 bg-white/80 p-4 shadow-sm">
-            <p class="font-medium">Step {stepIndex + 1}</p>
-            <p class="mt-1">{step.text}</p>
-            {#if step.expression}
-              <KatexBlock expression={step.expression} />
-            {/if}
-          </li>
-        {/each}
-      </ol>
-    </section>
+      </header>
+
+      <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-4 text-sm text-slate-500">
+          <span class="rounded-full bg-indigo-50 px-3 py-1 font-medium text-indigo-600">{problem.difficulty}</span>
+          <div class="flex items-center gap-4">
+            <span class="font-mono text-xs uppercase tracking-widest">Time {elapsedLabel}</span>
+            <span class="font-mono text-xs uppercase tracking-widest">Attempts {attempts}</span>
+          </div>
+        </div>
+        <div class="mt-6 space-y-4 text-lg text-slate-800">
+          <p>{problem.question}</p>
+          {#if problem.diagram}
+            <figure class="rounded-xl border border-slate-100 bg-slate-50 p-4 text-center">
+              {#if problem.diagram.type === 'image'}
+                <img
+                  src={problem.diagram.src}
+                  alt={problem.diagram.alt}
+                  class="mx-auto h-auto max-h-80 w-full max-w-xl object-contain"
+                  loading="lazy"
+                />
+              {:else if problem.diagram.type === 'component'}
+                <svelte:component this={problem.diagram.component} />
+              {/if}
+              {#if problem.diagram.caption}
+                <figcaption class="mt-3 text-sm text-slate-500">{problem.diagram.caption}</figcaption>
+              {/if}
+            </figure>
+          {/if}
+          <p class="text-sm text-slate-500">
+            Try to reason it out before revealing hints. You can submit a simplified numeric answer or a fraction.
+          </p>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-semibold text-slate-900">Submit your attempt</h2>
+          <button
+            class="text-xs font-semibold uppercase tracking-[0.3em] text-rose-500 transition hover:text-rose-600"
+            type="button"
+            on:click={resetSession}
+          >
+            Reset session
+          </button>
+        </div>
+
+        <div class="mt-4 space-y-4">
+          <MathInput bind:value={attemptValue} placeholder="Type your answer or expression" />
+          <div class="flex flex-wrap gap-3">
+            <button
+              class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold uppercase tracking-[0.3em] text-white transition hover:bg-indigo-500 disabled:opacity-50"
+              type="button"
+              on:click={checkAnswer}
+              disabled={!attemptValue || submitting}
+            >
+              Check answer
+            </button>
+            <button
+              class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold uppercase tracking-[0.3em] text-slate-600 transition hover:border-indigo-200 hover:text-indigo-600 disabled:opacity-50"
+              type="button"
+              on:click={revealNextHint}
+              disabled={!canRevealMore || submitting}
+            >
+              Reveal hint
+            </button>
+            <button
+              class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-semibold uppercase tracking-[0.3em] text-amber-700 transition hover:border-amber-300 hover:bg-amber-100"
+              type="button"
+              on:click={revealSolution}
+              disabled={submitting || solutionUnlocked}
+            >
+              Give me the solution
+            </button>
+          </div>
+        </div>
+
+        {#if feedback}
+          <p class={`mt-4 rounded-lg bg-slate-50 px-4 py-3 text-sm ${feedbackTone}`}>
+            {feedback}
+          </p>
+        {/if}
+
+        {#if submissionError}
+          <p class="mt-3 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-600">
+            {submissionError}
+          </p>
+        {/if}
+      </section>
+
+      <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <header class="flex items-center justify-between">
+          <h2 class="text-lg font-semibold text-slate-900">Hints</h2>
+          <span class="text-xs uppercase tracking-[0.3em] text-slate-400">{revealedHints}/{totalHints}</span>
+        </header>
+        <ol class="mt-4 space-y-3">
+          {#each problem.hints as hint, index}
+            <li class={`rounded-xl border border-slate-200 p-4 transition ${index < revealedHints ? 'bg-white' : 'bg-slate-50'}`}>
+              <p class="text-sm font-semibold text-slate-800">{hint.title}</p>
+              {#if index < revealedHints}
+                <p class="mt-1 text-sm text-slate-600">{hint.body}</p>
+                {#if hint.expression}
+                  <KatexBlock expression={hint.expression} />
+                {/if}
+              {:else}
+                <p class="mt-1 text-xs text-slate-400">Unlock this hint to reveal its guidance.</p>
+              {/if}
+            </li>
+          {/each}
+        </ol>
+      </section>
+
+      <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-lg font-semibold text-slate-900">Solution outline</h2>
+        <ol class="mt-4 space-y-3">
+          {#each problem.solution as step, index}
+            <li class={`rounded-xl border border-slate-100 p-4 ${solutionUnlocked ? 'bg-white' : 'bg-slate-50'}`}>
+              <div class="flex items-start gap-3">
+                <span class="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-50 text-sm font-semibold text-indigo-600">
+                  {index + 1}
+                </span>
+                <div class="space-y-2 text-sm text-slate-700">
+                  <p>{step.text}</p>
+                  {#if step.expression}
+                    <KatexBlock expression={step.expression} />
+                  {/if}
+                </div>
+              </div>
+            </li>
+          {/each}
+        </ol>
+        {#if !solutionUnlocked}
+          <p class="mt-4 text-xs uppercase tracking-[0.3em] text-slate-400">
+            Keep working through hints or check your answer to unlock the full solution.
+          </p>
+        {/if}
+      </section>
   {/if}
 </div>

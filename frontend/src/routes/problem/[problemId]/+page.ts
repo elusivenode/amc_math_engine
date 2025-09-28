@@ -1,12 +1,28 @@
-import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { getProblemById } from '$lib/problems';
+import type { ProblemDefinition } from '$lib/problems';
 
-export const load: PageLoad = ({ params }) => {
-  const problem = getProblemById(params.problemId);
-  if (!problem) {
-    throw error(404, 'Problem not found');
+type LoadOutput = {
+  problemId: string;
+  problem: ProblemDefinition | null;
+  source: 'sample' | 'remote';
+};
+
+export const load = (({ params }) => {
+  const { problemId } = params;
+  const sampleProblem = getProblemById(problemId);
+
+  if (sampleProblem) {
+    return {
+      problemId,
+      problem: sampleProblem,
+      source: 'sample' as const,
+    };
   }
 
-  return { problem };
-};
+  return {
+    problemId,
+    problem: null,
+    source: 'remote' as const,
+  };
+}) satisfies PageLoad<LoadOutput>;

@@ -18,6 +18,7 @@
     order: number;
     kind: string;
     isPublished: boolean;
+    problems: { id: string; title: string; createdAt: string }[];
   };
 
   type Subpath = {
@@ -75,8 +76,17 @@
     void goto('/login');
   }
 
-  function startPath(slug: string) {
-    alert(`The ${slug} journey is under construction. Stay tuned!`);
+  function startPath(path: Path) {
+    const firstSubpath = orderSubpaths(path.subpaths)[0];
+    const firstLevel = firstSubpath ? orderLevels(firstSubpath.levels)[0] : undefined;
+    const firstProblem = firstLevel?.problems?.[0];
+
+    if (firstProblem) {
+      void goto(`/problem/${firstProblem.id}`);
+      return;
+    }
+
+    alert(`The ${path.title} journey is under construction. Stay tuned!`);
   }
 
   onMount(() => {
@@ -168,7 +178,7 @@
               <button
                 class="mt-6 inline-flex items-center justify-center rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold uppercase tracking-[0.25em] text-white transition hover:bg-indigo-500"
                 type="button"
-                on:click={() => startPath(path.slug)}
+                on:click={() => startPath(path)}
               >
                 Begin path
               </button>

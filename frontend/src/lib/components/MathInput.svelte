@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
 
-  const dispatch = createEventDispatcher<{ change: string }>();
+  const dispatch = createEventDispatcher<{ input: string }>();
 
   export let value = '';
   export let placeholder = '';
@@ -9,13 +9,10 @@
 
   let inputEl: HTMLInputElement;
 
-  function emit(newValue: string) {
-    dispatch('change', newValue);
-  }
-
   function handleInput(event: Event) {
     const target = event.currentTarget as HTMLInputElement;
-    emit(target.value);
+    value = target.value;
+    dispatch('input', value);
   }
 
   $: if (inputEl && value !== inputEl.value) {

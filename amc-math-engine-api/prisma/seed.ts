@@ -1,4 +1,9 @@
-import { PrismaClient, SubpathStage, LevelKind } from '@prisma/client';
+import {
+  PrismaClient,
+  SubpathStage,
+  LevelKind,
+  Prisma,
+} from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -26,6 +31,81 @@ type PathSeed = {
   themeColor?: string;
   order: number;
   subpaths: SubpathSeed[];
+};
+
+type ProblemSeed = {
+  id: string;
+  title: string;
+  statement: string;
+  solution: string;
+  difficulty?: number;
+  tags?: string[];
+  metadata?: Prisma.JsonValue;
+  hints: {
+    order: number;
+    content: string;
+    isMajor?: boolean;
+  }[];
+};
+
+const LEVEL_STAGE_POINTS: Record<SubpathStage, number> = {
+  [SubpathStage.BASIC]: 3,
+  [SubpathStage.INTERMEDIATE]: 4,
+  [SubpathStage.ADVANCED]: 7,
+  [SubpathStage.BOSS]: 10,
+  [SubpathStage.FINAL]: 10,
+};
+
+const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
+  'algebra-avengers:BASIC:1': [
+    {
+      id: 'algebra-avengers-basic-1-problem-1',
+      title: 'Linear Warm-up: Solve 3x + 5 = 20',
+      statement: 'Solve for $x$ in the equation $3x + 5 = 20$.',
+      solution:
+        'Subtract 5 from both sides to get $3x = 15$. Dividing both sides by 3 gives $x = 5$.',
+      difficulty: 1,
+      tags: ['algebra', 'equations', 'AMC warm-up'],
+      metadata: {
+        tagline: 'Refresh isolating variables to unlock the Algebra Avengers path.',
+        objectives: [
+          'Use inverse operations to isolate a variable in a one-step equation.',
+          'Translate the warm-up into clean algebraic reasoning to prepare for harder levels.',
+        ],
+        answer: {
+          type: 'numeric',
+          value: 5,
+          success: 'Correct! You isolated the variable cleanly.',
+          failure: 'Check each algebraic step—keep both sides balanced.',
+          tolerance: 0,
+        },
+        solutionSteps: [
+          {
+            text: 'Subtract 5 from both sides to move the constant away from the $x$ term.',
+            expression: '3x = 20 - 5',
+          },
+          {
+            text: 'Simplify the right-hand side.',
+            expression: '3x = 15',
+          },
+          {
+            text: 'Divide both sides by 3 to isolate $x$.',
+            expression: 'x = 5',
+          },
+        ],
+      },
+      hints: [
+        {
+          order: 1,
+          content: 'Move the constant term by subtracting 5 from both sides of the equation.',
+        },
+        {
+          order: 2,
+          content: 'After you have $3x = 15$, divide both sides by 3 to isolate $x$.',
+        },
+      ],
+    },
+  ],
 };
 
 const PATH_SEEDS: PathSeed[] = [
@@ -389,7 +469,11 @@ async function upsertPath(seed: PathSeed) {
     });
 
     for (const levelSeed of subpathSeed.levels) {
-      await prisma.level.upsert({
+      const levelKey = `${seed.slug}:${subpathSeed.stage}:${levelSeed.order}`;
+      const problemSeeds = PROBLEM_SEEDS[levelKey] ?? [];
+      const points = LEVEL_STAGE_POINTS[subpathSeed.stage];
+
+      const level = await prisma.level.upsert({
         where: {
           subpathId_order: {
             subpathId: subpath.id,
@@ -402,7 +486,8 @@ async function upsertPath(seed: PathSeed) {
           description: levelSeed.description,
           kind: levelSeed.kind,
           estimatedMinutes: levelSeed.estimatedMinutes,
-          isPublished: false,
+          points,
+          isPublished: problemSeeds.length > 0,
         },
         create: {
           subpathId: subpath.id,
@@ -412,9 +497,59 @@ async function upsertPath(seed: PathSeed) {
           subtitle: levelSeed.subtitle,
           description: levelSeed.description,
           estimatedMinutes: levelSeed.estimatedMinutes,
-          isPublished: false,
+          points,
+          isPublished: problemSeeds.length > 0,
         },
       });
+
+      if (problemSeeds.length > 0) {
+        await prisma.problem.deleteMany({
+          where: {
+            levelId: level.id,
+            id: { notIn: problemSeeds.map((problem) => problem.id) },
+          },
+        });
+
+        for (const problemSeed of problemSeeds) {
+          const metadata = problemSeed.metadata ?? Prisma.JsonNull;
+
+          const problem = await prisma.problem.upsert({
+            where: { id: problemSeed.id },
+            update: {
+              levelId: level.id,
+              title: problemSeed.title,
+              statement: problemSeed.statement,
+              solution: problemSeed.solution,
+              difficulty: problemSeed.difficulty,
+              tags: problemSeed.tags ?? [],
+              metadata,
+            },
+            create: {
+              id: problemSeed.id,
+              levelId: level.id,
+              title: problemSeed.title,
+              statement: problemSeed.statement,
+              solution: problemSeed.solution,
+              difficulty: problemSeed.difficulty,
+              tags: problemSeed.tags ?? [],
+              metadata,
+            },
+          });
+
+          await prisma.problemHint.deleteMany({ where: { problemId: problem.id } });
+
+          for (const hint of problemSeed.hints) {
+            await prisma.problemHint.create({
+              data: {
+                problemId: problem.id,
+                order: hint.order,
+                content: hint.content,
+                isMajor: hint.isMajor ?? false,
+              },
+            });
+          }
+        }
+      }
     }
   }
 }

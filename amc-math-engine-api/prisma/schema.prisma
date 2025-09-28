@@ -84,6 +84,7 @@ model Level {
   description          String?
   recommendedDifficulty Int?
   estimatedMinutes     Int?
+  points               Int            @default(0)
   isPublished          Boolean        @default(false)
   createdAt            DateTime       @default(now())
   updatedAt            DateTime       @updatedAt

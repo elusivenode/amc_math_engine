@@ -6,7 +6,17 @@ export type PathWithContent = Prisma.PathGetPayload<{
   include: {
     subpaths: {
       include: {
-        levels: true;
+        levels: {
+          include: {
+            problems: {
+              select: {
+                id: true;
+                title: true;
+                createdAt: true;
+              };
+            };
+          };
+        };
       };
     };
   };
@@ -25,6 +35,17 @@ export class PathsService {
           include: {
             levels: {
               orderBy: { order: 'asc' },
+              include: {
+                problems: {
+                  orderBy: { createdAt: 'asc' },
+                  select: {
+                    id: true,
+                    title: true,
+                    createdAt: true,
+                  },
+                  take: 1,
+                },
+              },
             },
           },
         },
