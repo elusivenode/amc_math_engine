@@ -52,6 +52,15 @@
       id: string;
       points: number;
     };
+    attempts?: AttemptRecord[];
+  };
+
+  type AttemptRecord = AttemptResponse['attempt'];
+
+  type AttemptSummaryPayload = {
+    progress: AttemptResponse['progress'] | null;
+    attempts: AttemptRecord[];
+    level: AttemptResponse['level'];
   };
 
   export let data: PageData & {
@@ -81,6 +90,7 @@
   let lastProgress: AttemptResponse['progress'] | null = null;
   let lastOutcome: AttemptOutcome | null = null;
   let earnedPoints = 0;
+  let attemptHistory: AttemptRecord[] = [];
 
   function formatStatusLabel(status: string): string {
     const lower = status.toLowerCase().replace(/_/g, ' ');
@@ -209,6 +219,24 @@
       problem = transformRemoteProblem(remote);
       resetSession();
       loading = false;
+
+      try {
+        const summary = await apiFetch<AttemptSummaryPayload>(
+          `/problems/${problemId}/summary`,
+          {
+            token: auth.token,
+          },
+        );
+        lastProgress = summary.progress;
+        attemptHistory = summary.attempts;
+        attempts = summary.progress?.attemptsCount ?? 0;
+        earnedPoints = summary.level.points ?? earnedPoints;
+        if (summary.progress?.status === 'MASTERED') {
+          solutionUnlocked = true;
+        }
+      } catch (summaryError) {
+        console.warn('Failed to load attempt summary', summaryError);
+      }
     } catch (error) {
       fetchError = error instanceof Error ? error.message : 'Failed to load problem.';
       loading = false;
@@ -241,6 +269,7 @@
       lastOutcome = payload.attempt.outcome;
       attempts = payload.progress.attemptsCount ?? attempts + 1;
       earnedPoints = payload.level?.points ?? earnedPoints;
+      attemptHistory = [payload.attempt, ...attemptHistory].slice(0, 10);
       return payload;
     } catch (error) {
       submissionError = error instanceof Error ? error.message : 'Failed to record attempt.';
@@ -429,6 +458,20 @@
   $: masterySummary = lastProgress
     ? `${formatStatusLabel(lastProgress.status)} • ${lastProgress.masteryScore ?? 0} pts`
     : null;
+
+  function formatDuration(seconds: number | null): string {
+    if (seconds === null || seconds === undefined) return '—';
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}m ${secs}s`;
+  }
+
+  function formatTimestamp(iso: string): string {
+    if (!iso) return '—';
+    const date = new Date(iso);
+    if (Number.isNaN(date.getTime())) return '—';
+    return date.toLocaleString();
+  }
 </script>
 
 <svelte:head>
@@ -436,7 +479,7 @@
   <meta name="description" content={pageDescription} />
 </svelte:head>
 
-<div class="mx-auto max-w-3xl space-y-8 px-6 py-10">
+<div class="mx-auto max-w-5xl space-y-8 px-6 py-10">
   {#if loading}
     <div class="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500 shadow-sm">
       Loading problem…
@@ -446,25 +489,28 @@
       {fetchError}
     </div>
   {:else if problem}
-      <header class="space-y-2 text-center">
-        <p class="text-sm uppercase tracking-[0.2em] text-indigo-500">Prototype</p>
-        <h1 class="text-3xl font-semibold text-slate-900">{problem.title}</h1>
-        <p class="text-base text-slate-600">{problem.tagline}</p>
+    <header class="space-y-2 text-center">
+      <div class="flex items-center justify-between">
+        <a class="text-sm font-semibold text-indigo-500 transition hover:text-indigo-700" href="/dashboard">← Back to dashboard</a>
         {#if masterySummary}
-          <p class="text-xs uppercase tracking-[0.3em] text-indigo-400">{masterySummary}</p>
+          <span class="text-xs uppercase tracking-[0.3em] text-indigo-400">{masterySummary}</span>
         {/if}
-      </header>
+      </div>
+      <p class="text-sm uppercase tracking-[0.2em] text-indigo-500">Prototype</p>
+      <h1 class="text-3xl font-semibold text-slate-900">{problem.title}</h1>
+      <p class="text-base text-slate-600">{problem.tagline}</p>
+    </header>
 
-      <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <div class="flex flex-wrap items-center justify-between gap-4 text-sm text-slate-500">
-          <span class="rounded-full bg-indigo-50 px-3 py-1 font-medium text-indigo-600">{problem.difficulty}</span>
-          <div class="flex items-center gap-4">
-            <span class="font-mono text-xs uppercase tracking-widest">Time {elapsedLabel}</span>
-            <span class="font-mono text-xs uppercase tracking-widest">Attempts {attempts}</span>
-          </div>
+    <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div class="flex flex-wrap items-center justify-between gap-4 text-sm text-slate-500">
+        <span class="rounded-full bg-indigo-50 px-3 py-1 font-medium text-indigo-600">{problem.difficulty}</span>
+        <div class="flex items-center gap-4">
+          <span class="font-mono text-xs uppercase tracking-widest">Time {elapsedLabel}</span>
+          <span class="font-mono text-xs uppercase tracking-widest">Attempts {attempts}</span>
         </div>
-        <div class="mt-6 space-y-4 text-lg text-slate-800">
-          <TextWithMath text={problem.question} />
+      </div>
+      <div class="mt-6 space-y-4 text-lg text-slate-800">
+        <TextWithMath text={problem.question} />
           {#if problem.diagram}
             <figure class="rounded-xl border border-slate-100 bg-slate-50 p-4 text-center">
               {#if problem.diagram.type === 'image'}
@@ -486,14 +532,63 @@
             Try to reason it out before revealing hints. You can submit a simplified numeric answer or a fraction.
           </p>
         </div>
-      </section>
+   </section>
+    <div class="grid gap-6 lg:grid-cols-[minmax(0,260px)_minmax(0,1fr)]">
+      <aside class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-lg font-semibold text-slate-900">Your progress</h2>
+        {#if lastProgress}
+          <dl class="mt-4 space-y-3 text-sm text-slate-600">
+            <div class="flex items-center justify-between">
+              <dt>Status</dt>
+              <dd class="font-semibold text-indigo-600">{formatStatusLabel(lastProgress.status)}</dd>
+            </div>
+            <div class="flex items-center justify-between">
+              <dt>Total attempts</dt>
+              <dd>{lastProgress.attemptsCount}</dd>
+            </div>
+            <div class="flex items-center justify-between">
+              <dt>Hints used</dt>
+              <dd>{lastProgress.hintsUsed}</dd>
+            </div>
+            <div class="flex items-center justify-between">
+              <dt>Last interaction</dt>
+              <dd>{formatTimestamp(lastProgress.lastInteraction ?? '')}</dd>
+            </div>
+          </dl>
+        {:else}
+          <p class="mt-4 text-sm text-slate-500">
+            No attempts recorded yet. Submit an answer to start tracking your progress.
+          </p>
+        {/if}
 
-      <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <div class="flex items-center justify-between">
-          <h2 class="text-lg font-semibold text-slate-900">Submit your attempt</h2>
-          <button
-            class="text-xs font-semibold uppercase tracking-[0.3em] text-rose-500 transition hover:text-rose-600"
-            type="button"
+        {#if attemptHistory.length > 0}
+          <div class="mt-6">
+            <h3 class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Recent attempts</h3>
+            <ul class="mt-3 space-y-2 text-sm text-slate-600">
+              {#each attemptHistory as item, index}
+                <li class="rounded-xl border border-slate-100 bg-slate-50 px-3 py-2">
+                  <p class="flex items-center justify-between">
+                    <span>#{attemptHistory.length - index}</span>
+                    <span class={item.outcome === 'CORRECT' ? 'text-emerald-600 font-semibold' : item.outcome === 'INCORRECT' ? 'text-rose-600 font-semibold' : 'text-slate-500'}>{item.outcome}</span>
+                  </p>
+                  <p class="mt-1 text-xs text-slate-500">
+                    Hints: {item.hintsUsed} · Time: {formatDuration(item.timeSpentSec)}
+                  </p>
+                  <p class="mt-1 text-[11px] text-slate-400">{formatTimestamp(item.submittedAt)}</p>
+                </li>
+              {/each}
+            </ul>
+          </div>
+        {/if}
+      </aside>
+
+      <div class="space-y-8">
+        <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-semibold text-slate-900">Submit your attempt</h2>
+            <button
+              class="text-xs font-semibold uppercase tracking-[0.3em] text-rose-500 transition hover:text-rose-600"
+              type="button"
             on:click={resetSession}
           >
             Reset session
@@ -520,35 +615,35 @@
               Reveal hint
             </button>
             <button
-              class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-semibold uppercase tracking-[0.3em] text-amber-700 transition hover:border-amber-300 hover:bg-amber-100"
+              class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-semibold uppercase tracking-[0.3em] text-amber-700 transition hover:border-amber-300 hover:bg-amber-100 disabled:opacity-60"
               type="button"
               on:click={revealSolution}
-              disabled={submitting || solutionUnlocked}
+              disabled={submitting || solutionUnlocked || !problem || revealedHints < problem.hints.length}
             >
               Give me the solution
             </button>
           </div>
         </div>
 
-        {#if feedback}
-          <p class={`mt-4 rounded-lg bg-slate-50 px-4 py-3 text-sm ${feedbackTone}`}>
-            {feedback}
-          </p>
-        {/if}
+          {#if feedback}
+            <p class={`mt-4 rounded-lg bg-slate-50 px-4 py-3 text-sm ${feedbackTone}`}>
+              {feedback}
+            </p>
+          {/if}
 
-        {#if submissionError}
-          <p class="mt-3 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-600">
-            {submissionError}
-          </p>
-        {/if}
-      </section>
+          {#if submissionError}
+            <p class="mt-3 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-600">
+              {submissionError}
+            </p>
+          {/if}
+        </section>
 
-      <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <header class="flex items-center justify-between">
-          <h2 class="text-lg font-semibold text-slate-900">Hints</h2>
-          <span class="text-xs uppercase tracking-[0.3em] text-slate-400">{revealedHints}/{totalHints}</span>
-        </header>
-        <ol class="mt-4 space-y-3">
+        <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <header class="flex items-center justify-between">
+            <h2 class="text-lg font-semibold text-slate-900">Hints</h2>
+            <span class="text-xs uppercase tracking-[0.3em] text-slate-400">{revealedHints}/{totalHints}</span>
+          </header>
+          <ol class="mt-4 space-y-3">
           {#each problem.hints as hint, index}
             <li class={`rounded-xl border border-slate-200 p-4 transition ${index < revealedHints ? 'bg-white' : 'bg-slate-50'}`}>
               <p class="text-sm font-semibold text-slate-800">{hint.title}</p>
@@ -565,14 +660,14 @@
             </li>
           {/each}
         </ol>
-      </section>
+        </section>
 
-      <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 class="text-lg font-semibold text-slate-900">Solution outline</h2>
-        <ol class="mt-4 space-y-3">
-          {#each problem.solution as step, index}
-            <li class={`rounded-xl border border-slate-100 p-4 ${solutionUnlocked ? 'bg-white' : 'bg-slate-50'}`}>
-              <div class="flex items-start gap-3">
+        <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 class="text-lg font-semibold text-slate-900">Solution outline</h2>
+          <ol class="mt-4 space-y-3">
+            {#each problem.solution as step, index}
+              <li class={`rounded-xl border border-slate-100 p-4 ${solutionUnlocked ? 'bg-white' : 'bg-slate-50'}`}>
+                <div class="flex items-start gap-3">
                 <span class="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-50 text-sm font-semibold text-indigo-600">
                   {index + 1}
                 </span>
@@ -589,14 +684,16 @@
                   {/if}
                 </div>
               </div>
-            </li>
-          {/each}
-        </ol>
-        {#if !solutionUnlocked}
-          <p class="mt-4 text-xs uppercase tracking-[0.3em] text-slate-400">
-            Keep working through hints or check your answer to unlock the full solution.
-          </p>
-        {/if}
-      </section>
+              </li>
+            {/each}
+          </ol>
+          {#if !solutionUnlocked}
+            <p class="mt-4 text-xs uppercase tracking-[0.3em] text-slate-400">
+              Keep working through hints or check your answer to unlock the full solution.
+            </p>
+          {/if}
+        </section>
+      </div>
+    </div>
   {/if}
 </div>

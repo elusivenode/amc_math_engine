@@ -15,6 +15,13 @@ export class ProblemsController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get(':id/summary')
+  getSummary(@Param('id') id: string, @Req() req: Request) {
+    const user = req.user as JwtUser;
+    return this.problemsService.getAttemptSummary(id, user.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post(':id/attempts')
   submitAttempt(
     @Param('id') id: string,
