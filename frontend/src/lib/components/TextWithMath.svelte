@@ -16,28 +16,62 @@
 
   $: segments = (() => {
     const results: Segment[] = [];
-    if (!text) return results;
-
-    const regex = /\$(.+?)\$/g;
-    let lastIndex = 0;
-    let match: RegExpExecArray | null;
-
-    while ((match = regex.exec(text)) !== null) {
-      const [fullMatch, mathContent] = match;
-      const start = match.index;
-      if (start > lastIndex) {
-        results.push({ type: 'text', value: text.slice(lastIndex, start) });
-      }
-      results.push({ type: 'math', value: mathContent });
-      lastIndex = start + fullMatch.length;
+    if (!text) {
+      return results;
     }
 
-    if (lastIndex < text.length) {
-      results.push({ type: 'text', value: text.slice(lastIndex) });
+    let buffer = '';
+    let inMath = false;
+
+    const flush = (segmentType: Segment['type']) => {
+      if (buffer.length === 0) return;
+      results.push({ type: segmentType, value: buffer });
+      buffer = '';
+    };
+
+    for (let i = 0; i < text.length; i += 1) {
+      const char = text[i];
+      const next = text[i + 1];
+
+      if (char === '\\' && next === '$') {
+        buffer += '$';
+        i += 1;
+        continue;
+      }
+
+      if (char === '$') {
+        if (inMath) {
+          flush('math');
+        } else {
+          flush('text');
+        }
+        inMath = !inMath;
+        continue;
+      }
+
+      buffer += char;
+    }
+
+    if (buffer.length > 0) {
+      if (inMath) {
+        // Unmatched math start – treat the captured content as literal text
+        if (results.length > 0 && results[results.length - 1].type === 'text') {
+          results[results.length - 1] = {
+            type: 'text',
+            value: `${results[results.length - 1].value}$${buffer}`,
+          };
+        } else {
+          results.push({ type: 'text', value: `$${buffer}` });
+        }
+        buffer = '';
+        inMath = false;
+      } else {
+        flush('text');
+      }
     }
 
     if (results.length === 0) {
-      results.push({ type: 'text', value: text });
+      results.push({ type: 'text', value: '' });
     }
 
     return results;

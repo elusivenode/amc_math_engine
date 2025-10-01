@@ -57,6 +57,7 @@ export const amc2001JuniorQ13: ProblemDefinition = {
     success: 'Correct — x = 111° once you account for the complementary angle and the triangle sum.',
     failure: 'Not quite. Revisit how the 76° angle complements the right angle and use the triangle sum again.'
   },
+  pathSlug: 'algebra-avengers',
   metadata: {
     competition: 'AMC',
     division: 'Junior',

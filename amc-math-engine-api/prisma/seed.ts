@@ -251,9 +251,10 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
     {
       id: 'algebra-avengers-basic-1-problem-5',
       title: 'Scaling of variable',
-      statement: 'A notebook costs $3 and a pen costs $2. Sarah buys 4 notebooks and some pens, spending $22 in total. How many pens did she buy?',
+      statement:
+        'A notebook costs \\$3 and a pen costs \\$2. Sarah buys 4 notebooks and some pens, spending \\$22 in total. How many pens did she buy?',
       solution:
-        'Create a variable and write down an equation capturing the situation - 4 x 3 + $2x = 22$.',
+        'Create a variable and write down an equation capturing the situation - $4 \\times 3 + 2x = 22$.',
       difficulty: 1,
       tags: ['algebra', 'equations', 'AMC warm-up'],
       metadata: {
@@ -507,7 +508,7 @@ const PATH_SEEDS: PathSeed[] = [
     title: 'Guild of the Geometers',
     description: 'Visual intuition and geometric power tools for competitions.',
     themeColor: '#06d6a0',
-    order: 3,
+    order: 4,
     subpaths: [
       {
         stage: SubpathStage.BASIC,
@@ -580,7 +581,7 @@ const PATH_SEEDS: PathSeed[] = [
     title: 'Knights of Number',
     description: 'Number theory resilience for modular mayhem.',
     themeColor: '#118ab2',
-    order: 4,
+    order: 3,
     subpaths: [
       {
         stage: SubpathStage.BASIC,

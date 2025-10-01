@@ -51,6 +51,7 @@ export const amc2001JuniorQ14: ProblemDefinition = {
     success: 'Exactly — 8 successful shots in game two lift his average to 50%.',
     failure: 'Not quite. Recalculate the total goals needed for a 50% average over all shots.'
   },
+  pathSlug: 'algebra-avengers',
   metadata: {
     competition: 'AMC',
     division: 'Junior',

@@ -24,6 +24,12 @@ export type ProblemWithRelations = Prisma.ProblemGetPayload<{
             id: true;
             stage: true;
             title: true;
+            path: {
+              select: {
+                slug: true;
+                title: true;
+              };
+            };
           };
         };
       };
@@ -95,6 +101,16 @@ export class ProblemsService {
           select: {
             id: true,
             points: true,
+            subpath: {
+              select: {
+                path: {
+                  select: {
+                    slug: true,
+                    title: true,
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -201,7 +217,7 @@ export class ProblemsService {
       ? ProgressStatus.MASTERED
       : inProgress
       ? ProgressStatus.IN_PROGRESS
-      : ProgressStatus.LOCKED;
+      : ProgressStatus.AVAILABLE;
 
     return {
       progress: {

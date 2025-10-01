@@ -54,6 +54,8 @@
     description?: string | null;
     themeColor?: string | null;
     order: number | null;
+    isUnlocked: boolean;
+    unlockRequirement?: string | null;
     subpaths: SubpathSummary[];
     summary: StageStats;
   };
@@ -113,6 +115,7 @@
   }
 
   function goToPath(path: PathProgress) {
+    if (!path.isUnlocked) return;
     void goto(`/path/${path.slug}`);
   }
 
@@ -176,19 +179,34 @@
         <section class="space-y-8">
           {#each paths as path (path.id)}
             {@const stats = computeStats(path)}
-            <article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-                  <div class="flex flex-wrap items-center justify-between gap-4">
-                    <div class="space-y-2">
-                      <p class="text-xs uppercase tracking-[0.3em] text-slate-400">{path.slug.replace(/-/g, ' ')}</p>
-                      <h2 class="text-2xl font-semibold text-slate-900">{path.title}</h2>
-                      {#if path.description}
-                        <p class="text-sm text-slate-600">{path.description}</p>
-                      {/if}
+            <article
+              class={`rounded-3xl border bg-white p-6 shadow-sm transition ${path.isUnlocked ? 'border-slate-200 hover:-translate-y-0.5 hover:shadow-md' : 'border-slate-100 opacity-80'}`}
+            >
+              <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="space-y-2">
+                  <p class="text-xs uppercase tracking-[0.3em] text-slate-400">{path.slug.replace(/-/g, ' ')}</p>
+                  <h2 class="text-2xl font-semibold text-slate-900">{path.title}</h2>
+                  {#if path.description}
+                    <p class="text-sm text-slate-600">{path.description}</p>
+                  {/if}
+                </div>
+                <div class="text-right text-xs uppercase tracking-[0.3em] text-slate-400">
+                  {stats.mastered}/{stats.total} mastered
+                </div>
+              </div>
+
+                  {#if !path.isUnlocked}
+                    <div class="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-700">
+                      <p class="font-semibold uppercase tracking-[0.2em]">Path locked</p>
+                      <p class="mt-1 text-xs text-amber-800">
+                        {#if path.unlockRequirement}
+                          Master {path.unlockRequirement} to unlock this storyline.
+                        {:else}
+                          Master the previous path to unlock this storyline.
+                        {/if}
+                      </p>
                     </div>
-                    <div class="text-right text-xs uppercase tracking-[0.3em] text-slate-400">
-                      {stats.mastered}/{stats.total} mastered
-                    </div>
-                  </div>
+                  {/if}
 
                   <div class="mt-5 grid gap-3 sm:grid-cols-3">
                     <div class="rounded-2xl border border-slate-100 bg-slate-50 p-4 text-sm text-slate-600">
@@ -230,11 +248,18 @@
                   </ul>
 
                   <button
-                    class="mt-6 inline-flex items-center justify-center rounded-full bg-indigo-600 px-5 py-2 text-sm font-semibold uppercase tracking-[0.25em] text-white transition hover:bg-indigo-500"
+                    class={`mt-6 inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-semibold uppercase tracking-[0.25em] transition ${path.isUnlocked ? 'bg-indigo-600 text-white hover:bg-indigo-500' : 'bg-slate-200 text-slate-500 cursor-not-allowed'}`}
                     type="button"
+                    disabled={!path.isUnlocked}
+                    aria-disabled={!path.isUnlocked}
                     on:click={() => goToPath(path)}
+                    title={path.isUnlocked ? undefined : path.unlockRequirement ? `Master ${path.unlockRequirement} first` : 'Master the previous path first'}
                   >
-                    {stats.started ? 'Continue path' : 'Begin path'}
+                    {#if path.isUnlocked}
+                      {stats.started ? 'Continue path' : 'Begin path'}
+                    {:else}
+                      Locked
+                    {/if}
                   </button>
                 </article>
           {/each}

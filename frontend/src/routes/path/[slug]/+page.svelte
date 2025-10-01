@@ -9,6 +9,9 @@
   import { get } from 'svelte/store';
   import { apiFetch } from '$lib/api';
   import { authStore } from '$lib/stores/auth';
+  import StoryPanelModal from '$lib/components/StoryPanelModal.svelte';
+  import { getStoryBeatForPath, getStoryBeatForProblem } from '$lib/story';
+  import type { StoryBeat } from '$lib/story';
 
   export let data: { slug: string };
 
@@ -56,6 +59,8 @@
     description?: string | null;
     themeColor?: string | null;
     order: number | null;
+    isUnlocked: boolean;
+    unlockRequirement?: string | null;
     subpaths: SubpathSummary[];
     summary: StageStats;
   };
@@ -71,6 +76,12 @@
   let path: PathProgress | null = null;
   let loading = true;
   let errorMessage = '';
+  let storyPanel: StoryBeat | null = null;
+  let storyModalOpen = false;
+  let storyInitialized = false;
+  let problemOrderById: Map<string, number> = new Map();
+  let nextProblemOrder: number | null = null;
+  let pathHasProgress = false;
 
   function statusLabel(status: TileStatus): string {
     switch (status) {
@@ -102,9 +113,25 @@
     }
   }
 
+  function closeStoryPanel() {
+    storyModalOpen = false;
+  }
+
   function handleTileClick(tile: ProblemTile) {
+    if (!path?.isUnlocked) return;
     if (!tile.problemId || tile.isPlaceholder || !tile.isAccessible) return;
-    void goto(`/problem/${tile.problemId}`);
+
+    const params = new URLSearchParams();
+    if (path.slug) {
+      params.set('path', path.slug);
+    }
+    const overallOrder = problemOrderById.get(tile.problemId);
+    if (overallOrder !== undefined) {
+      params.set('order', overallOrder.toString());
+    }
+
+    const query = params.toString();
+    void goto(`/problem/${tile.problemId}${query ? `?${query}` : ''}`);
   }
 
   async function loadPath() {
@@ -125,12 +152,92 @@
     }
   }
 
+  $: if (path) {
+    const map = new Map<string, number>();
+    let orderCounter = 1;
+    let candidate:
+      | {
+          problemId: string;
+          order: number;
+          status: TileStatus;
+        }
+      | null = null;
+
+    for (const subpath of path.subpaths) {
+      for (const level of subpath.levels) {
+        for (const tile of level.tiles) {
+          if (!tile.problemId || tile.isPlaceholder) {
+            continue;
+          }
+
+          map.set(tile.problemId, orderCounter);
+
+          if (
+            tile.isAccessible &&
+            tile.status !== 'MASTERED' &&
+            (tile.status === 'READY' || tile.status === 'IN_PROGRESS')
+          ) {
+            const isBetter =
+              candidate === null ||
+              (tile.status === 'READY' && candidate.status !== 'READY') ||
+              (candidate && tile.status === candidate.status && orderCounter < candidate.order);
+
+            if (isBetter) {
+              candidate = {
+                problemId: tile.problemId,
+                order: orderCounter,
+                status: tile.status,
+              };
+            }
+          }
+
+          orderCounter += 1;
+        }
+      }
+    }
+
+    problemOrderById = map;
+    nextProblemOrder = candidate?.order ?? null;
+    pathHasProgress =
+      (path.summary.mastered ?? 0) > 0 || (path.summary.inProgress ?? 0) > 0;
+  } else {
+    problemOrderById = new Map();
+    nextProblemOrder = null;
+    pathHasProgress = false;
+  }
+
+  $: if (!storyInitialized && !loading && !errorMessage && path) {
+    storyInitialized = true;
+    if (!path.isUnlocked) {
+      storyPanel = null;
+      storyModalOpen = false;
+    } else {
+      const panel = pathHasProgress
+        ? getStoryBeatForProblem(path.slug, nextProblemOrder ?? undefined) ?? null
+        : getStoryBeatForPath(path.slug);
+
+      if (panel && !pathHasProgress) {
+        storyPanel = panel;
+        storyModalOpen = true;
+      } else {
+        storyPanel = null;
+        storyModalOpen = false;
+      }
+    }
+  }
+
   onMount(() => {
     void loadPath();
   });
 </script>
 
 <div class="min-h-screen bg-slate-50 pb-20">
+  <StoryPanelModal
+    open={storyModalOpen}
+    panel={storyPanel}
+    continueLabel="Enter Path"
+    on:close={closeStoryPanel}
+  />
   <div class="mx-auto max-w-5xl px-6 pt-10">
     <button
       class="text-sm font-semibold text-indigo-500 transition hover:text-indigo-700"
@@ -157,6 +264,19 @@
         {/if}
         <p class="text-xs uppercase tracking-[0.3em] text-slate-400">{path.summary.mastered}/{path.summary.total} problems mastered</p>
       </header>
+
+      {#if !path.isUnlocked}
+        <div class="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-6 text-amber-700 shadow-sm">
+          <p class="text-sm font-semibold uppercase tracking-[0.2em]">Path locked</p>
+          <p class="mt-2 text-sm">
+            {#if path.unlockRequirement}
+              Master {path.unlockRequirement} to unlock this adventure.
+            {:else}
+              Master the previous path to unlock this adventure.
+            {/if}
+          </p>
+        </div>
+      {/if}
 
       <div class="mt-10 space-y-8">
         {#each path.subpaths as subpath, index}

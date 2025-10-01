@@ -54,5 +54,6 @@ export type ProblemDefinition = {
   solution: ProblemSolutionStep[];
   answer: AnswerDefinition;
   diagram?: ProblemDiagram;
+  pathSlug?: string;
   metadata: ProblemMetadata;
 };

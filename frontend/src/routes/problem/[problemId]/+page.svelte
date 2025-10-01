@@ -7,6 +7,9 @@
   import KatexBlock from '$components/KatexBlock.svelte';
   import { apiFetch } from '$lib/api';
   import type { NumericAnswer, ProblemDefinition } from '$lib/problems';
+  import StoryPanelModal from '$lib/components/StoryPanelModal.svelte';
+  import { getStoryBeatForPath, getStoryBeatForProblem } from '$lib/story';
+  import type { StoryBeat } from '$lib/story';
   import { authStore } from '$lib/stores/auth';
   import type { PageData } from './$types';
 
@@ -27,6 +30,10 @@
         id: string;
         stage: string;
         title: string;
+        path: {
+          slug: string;
+          title: string;
+        };
       };
     };
     hints: { order: number; content: string }[];
@@ -66,11 +73,15 @@
   export let data: PageData & {
     problemId: string;
     source: 'sample' | 'remote';
+    pathSlug: string | null;
+    problemOrder: number | null;
   };
 
   let problem: ProblemDefinition | null = data.problem;
   const source = data.source;
   const problemId = data.problemId;
+  const pathSlugHint = data.pathSlug;
+  const problemOrderHint = data.problemOrder;
 
   let loading = source === 'remote';
   let fetchError = '';
@@ -91,6 +102,13 @@
   let lastOutcome: AttemptOutcome | null = null;
   let earnedPoints = 0;
   let attemptHistory: AttemptRecord[] = [];
+  let storyPanel: StoryBeat | null = null;
+  let storyModalOpen = false;
+  let storyInitialized = false;
+  let storyContext: StoryBeat['context'] | null = null;
+  let storyAcknowledged = true;
+  let nextStoryPanel: StoryBeat | null = null;
+  let showContinueButton = false;
 
   function formatStatusLabel(status: string): string {
     const lower = status.toLowerCase().replace(/_/g, ' ');
@@ -98,6 +116,28 @@
       .split(' ')
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
+  }
+
+  function handleStoryClose() {
+    storyModalOpen = false;
+    if (storyContext === 'problem') {
+      storyAcknowledged = true;
+    }
+  }
+
+  function handleStoryContinue() {
+    storyModalOpen = false;
+    storyAcknowledged = true;
+    nextStoryPanel = null;
+    showContinueButton = false;
+  }
+
+  function handleContinuePath() {
+    if (!nextStoryPanel) return;
+    storyPanel = nextStoryPanel;
+    storyContext = nextStoryPanel.context;
+    storyModalOpen = true;
+    storyAcknowledged = false;
   }
 
   function normalizeAnswer(metadata: unknown): NumericAnswer {
@@ -196,6 +236,7 @@
         })),
       solution: solutionSteps,
       answer,
+      pathSlug: remote.level.subpath.path?.slug,
       metadata: {
         competition: 'AMC',
         division: 'Junior',
@@ -203,6 +244,30 @@
         questionNumber: 0,
       },
     };
+  }
+
+  $: if (!storyInitialized && problem) {
+    storyPanel = null;
+    storyContext = null;
+    storyModalOpen = false;
+    storyAcknowledged = true;
+    showContinueButton = false;
+    nextStoryPanel = null;
+
+    const storySlug = pathSlugHint ?? problem.pathSlug ?? null;
+    if (storySlug) {
+      let panel = getStoryBeatForProblem(storySlug, problemOrderHint ?? undefined);
+      if (!panel) {
+        panel = getStoryBeatForPath(storySlug);
+      }
+      if (panel) {
+        storyPanel = panel;
+        storyContext = panel.context;
+        storyModalOpen = true;
+        storyAcknowledged = false;
+      }
+    }
+    storyInitialized = true;
   }
 
   async function loadRemoteProblem(): Promise<void> {
@@ -336,6 +401,8 @@
     gaveUp = false;
     startTime = Date.now();
     elapsedSeconds = 0;
+    showContinueButton = false;
+    nextStoryPanel = null;
   }
 
   async function checkAnswer() {
@@ -372,6 +439,27 @@
     attemptStatus = isCorrect ? 'correct' : 'incorrect';
     feedback = isCorrect ? answerDef.success : answerDef.failure;
     solutionUnlocked = solutionUnlocked || isCorrect;
+
+    if (isCorrect) {
+      const storySlug = pathSlugHint ?? problem.pathSlug ?? null;
+      const nextOrder = (problemOrderHint ?? 0) + 1;
+      if (storySlug) {
+        const upcomingPanel = getStoryBeatForProblem(storySlug, nextOrder);
+        if (upcomingPanel) {
+          nextStoryPanel = upcomingPanel;
+          showContinueButton = true;
+        } else {
+          nextStoryPanel = null;
+          showContinueButton = false;
+        }
+      } else {
+        nextStoryPanel = null;
+        showContinueButton = false;
+      }
+    } else {
+      nextStoryPanel = null;
+      showContinueButton = false;
+    }
 
     try {
       const result = await submitAttempt(outcome, attemptValue);
@@ -479,7 +567,17 @@
   <meta name="description" content={pageDescription} />
 </svelte:head>
 
-<div class="mx-auto max-w-5xl space-y-8 px-6 py-10">
+<StoryPanelModal
+  open={storyModalOpen}
+  panel={storyPanel}
+  continueLabel={storyPanel?.context === 'problem' ? 'Attempt Problem' : 'Continue'}
+  actionHint={storyPanel?.context === 'problem' ? 'leave' : 'close'}
+  on:close={handleStoryClose}
+  on:continue={handleStoryContinue}
+/>
+
+{#if storyAcknowledged || !storyPanel}
+  <div class="mx-auto max-w-5xl space-y-8 px-6 py-10">
   {#if loading}
     <div class="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500 shadow-sm">
       Loading problem…
@@ -631,6 +729,18 @@
             </p>
           {/if}
 
+          {#if showContinueButton && nextStoryPanel && !storyModalOpen}
+            <div class="mt-4">
+              <button
+                class="inline-flex items-center justify-center rounded-full bg-indigo-600 px-5 py-2 text-sm font-semibold uppercase tracking-[0.25em] text-white transition hover:bg-indigo-500"
+                type="button"
+                on:click={handleContinuePath}
+              >
+                Continue path
+              </button>
+            </div>
+          {/if}
+
           {#if submissionError}
             <p class="mt-3 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-600">
               {submissionError}
@@ -696,4 +806,5 @@
       </div>
     </div>
   {/if}
-</div>
+  </div>
+{/if}
