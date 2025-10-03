@@ -12,8 +12,13 @@ async function bootstrap() {
     next();
   });
 
+  const origins = process.env.FRONTEND_ORIGIN
+    ?.split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
   app.enableCors({
-    origin: process.env.FRONTEND_ORIGIN ?? true,
+    origin: origins?.length ? origins : true,
     credentials: true,
   });
 
