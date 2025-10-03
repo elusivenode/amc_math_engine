@@ -32,3 +32,5 @@ target
 # Backend local env files
 /amc-math-engine-api/.env
 /amc-math-engine-api/.env.*
+
+/frontend/testing_logins.txt
