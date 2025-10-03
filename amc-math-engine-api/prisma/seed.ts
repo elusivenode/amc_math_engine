@@ -60,14 +60,14 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
   'algebra-avengers:BASIC:1': [
     {
       id: 'algebra-avengers-basic-1-problem-1',
-      title: 'Linear Warm-up: Solve 3x + 5 = 20',
+      title: 'Simple linear equation.',
       statement: 'Solve for $x$ in the equation $3x + 5 = 20$.',
       solution:
         'Subtract 5 from both sides to get $3x = 15$. Dividing both sides by 3 gives $x = 5$.',
       difficulty: 1,
       tags: ['algebra', 'equations', 'AMC warm-up'],
       metadata: {
-        tagline: 'Refresh isolating variables to unlock the Algebra Avengers path.',
+        tagline: 'Refresh your skills in isolating variables to unlock the later paths.',
         objectives: [
           'Use inverse operations to isolate a variable in a one-step equation.',
           'Translate the warm-up into clean algebraic reasoning to prepare for harder levels.',
@@ -76,7 +76,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           type: 'numeric',
           value: 5,
           success: 'Correct! You isolated the variable cleanly.',
-          failure: 'Check each algebraic step—keep both sides balanced.',
+          failure: 'Check each algebraic step — keep both sides balanced.',
           tolerance: 0,
         },
         solutionSteps: [
@@ -102,6 +102,254 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
         {
           order: 2,
           content: 'After you have $3x = 15$, divide both sides by 3 to isolate $x$.',
+        },
+      ],
+    },
+    {
+      id: 'algebra-avengers-basic-1-problem-2',
+      title: 'Dealing with brackets.',
+      statement: 'Solve for $x$ in the equation $4(x-2) = 12$.',
+      solution:
+        'Divide both sides by 4 to get $x - 2 = 3$, then add 2 to both sides to obtain $x = 5$.',
+      difficulty: 1,
+      tags: ['algebra', 'equations', 'AMC warm-up'],
+      metadata: {
+        tagline: 'Practice isolating variables in a two-step linear equation.',
+        objectives: [
+          'Use inverse operations to undo multiplication and addition.',
+          'Decide whether to distribute or divide first when simplifying.',
+        ],
+        answer: {
+          type: 'numeric',
+          value: 5,
+          success: 'Correct! Dividing first keeps the arithmetic clean.',
+          failure: 'Revisit each inverse operation and keep both sides balanced.',
+          tolerance: 0,
+        },
+        solutionSteps: [
+          {
+            text: 'Divide both sides of the equation by 4 to remove the coefficient on the bracket.',
+            expression: 'x - 2 = 3',
+          },
+          {
+            text: 'Add 2 to both sides to isolate $x$.',
+            expression: 'x = 5',
+          },
+        ],
+      },
+      hints: [
+        {
+          order: 1,
+          content: 'Can you isolate $x$ by undoing what is happening to it?',
+        },
+        {
+          order: 2,
+          content:
+            'Is it easier to distribute the 4 through the brackets, or divide both sides by 4 right away?',
+        },
+      ],
+    },
+    {
+      id: 'algebra-avengers-basic-1-problem-3',
+      title: 'x on both sides.',
+      statement: 'Solve for $x$ in the equation $2x + 5 = x + 11$.',
+      solution:
+        'Collect the x\'s on one side to get $x = 6$.',
+      difficulty: 1,
+      tags: ['algebra', 'equations', 'AMC warm-up'],
+      metadata: {
+        tagline: 'What you do to one side, you must do to the other.',
+        objectives: [
+          'Do the same operation on both sides.',
+        ],
+        answer: {
+          type: 'numeric',
+          value: 6,
+          success: 'Correct! That was easy!.',
+          failure: 'Revisit the reshuffle and keep both sides balanced.',
+          tolerance: 0,
+        },
+        solutionSteps: [
+          {
+            text: 'Subtract $x$ from both sides.',
+            expression: '2x + 5 - x = x + 11 - x',
+          },
+          {
+            text: 'Subtract 5 from both sides.',
+            expression: '2x + 5 - x - 5 = x + 11 - x - 5',
+          },
+          {
+            text: 'Tidy up.',
+            expression: 'x = 6',
+          },
+        ],
+      },
+      hints: [
+        {
+          order: 1,
+          content: 'We still want to isolate $x$ by doing the same operation on both sides of the equation.',
+        },
+        {
+          order: 2,
+          content:
+            'You can do 2 \'tidy up\' steps at the same time if you like!',
+        },
+      ],
+    },
+    {
+      id: 'algebra-avengers-basic-1-problem-4',
+      title: 'Extract an equation',
+      statement: 'Sam is 5 years older the Alex. The sum of their ages is 27. How old is Alex?',
+      solution:
+        'Create a variable and write down an equation capturing the situation - $(x + 5) + x = 27$.',
+      difficulty: 1,
+      tags: ['algebra', 'equations', 'AMC warm-up'],
+      metadata: {
+        tagline: 'Turn words into equations.',
+        objectives: [
+          'Create an equation then solve for variable of interest.',
+        ],
+        answer: {
+          type: 'numeric',
+          value: 11,
+          success: 'Correct! Ok, time to ramp it up.',
+          failure: 'Think about the last problem.  Your equation should be along those lines.',
+          tolerance: 0,
+        },
+        solutionSteps: [
+          {
+            text: 'Let Alex\'s age = x.',
+            expression: '(x + 5) + x = 27',
+          },
+          {
+            text: 'Collect the x\'s and isolate them.',
+            expression: '2x = 22',
+          },
+          {
+            text: 'Divide both sides by 2.',
+            expression: 'x = 11',
+          },
+        ],
+      },
+      hints: [
+        {
+          order: 1,
+          content: 'Let\'s create some variables.  One for Sam and one for Alex?',
+        },
+        {
+          order: 2,
+          content:
+            'Only need one variable that relates Sam\'s and Alex\'s age together!',
+        },
+        {
+          order: 3,
+          content:
+            'Should the variable represent Sam\'s age or Alex\'s? Be guided by the problem.',
+        },
+      ],
+    },
+    {
+      id: 'algebra-avengers-basic-1-problem-5',
+      title: 'Scaling of variable',
+      statement:
+        'A notebook costs \\$3 and a pen costs \\$2. Sarah buys 4 notebooks and some pens, spending \\$22 in total. How many pens did she buy?',
+      solution:
+        'Create a variable and write down an equation capturing the situation - $4 \\times 3 + 2x = 22$.',
+      difficulty: 1,
+      tags: ['algebra', 'equations', 'AMC warm-up'],
+      metadata: {
+        tagline: 'Buying a collection of items cam be turned in an algebraic equation.',
+        objectives: [
+          'Create an equation that captures the impact of those coefficients.',
+        ],
+        answer: {
+          type: 'numeric',
+          value: 5,
+          success: 'Correct! Now you cooking with gas!',
+          failure: 'Think about the items purchased and in what amounts.',
+          tolerance: 0,
+        },
+        solutionSteps: [
+          {
+            text: 'Let the number of pens = x.',
+            expression: '4 x 3 + 2x = 22',
+          },
+          {
+            text: 'Isolate the x\'s.',
+            expression: '2x = 10',
+          },
+          {
+            text: 'Divide both sides by 2.',
+            expression: 'x = 5',
+          },
+        ],
+      },
+      hints: [
+        {
+          order: 1,
+          content: 'What is unknown of interest.  Set a variable for it.',
+        },
+        {
+          order: 2,
+          content:
+            'Can you write an equation capturing the numerical meaning of the sentence?',
+        },
+        {
+          order: 3,
+          content:
+            'Did you get 4 x 3 + 2x = 22?  Isolate x.',
+        },
+      ],
+    },
+    {
+      id: 'algebra-avengers-basic-1-problem-6',
+      title: 'Slipping in a fraction.',
+      statement: 'Jack gives one third of his cricket cards, plus 7 of his footy cards to Emmett.  These are Emmett\'s first 15 cards. How many cricket cards did Jack begin with?',
+      solution:
+        'Create a variable and write down an equation capturing the situation - $x/3 + 7 = 15$.',
+      difficulty: 2,
+      tags: ['algebra', 'equations', 'AMC warm-up'],
+      metadata: {
+        tagline: 'Don\'t nbe put off by fractions.  Treat them as any other number.',
+        objectives: [
+          'Handle fractions correctly when manipulating an equation.',
+        ],
+        answer: {
+          type: 'numeric',
+          value: 24,
+          success: 'Correct! That was generous of Jack!',
+          failure: 'Did you let x be Jack\'s initial number of cricket cards?.',
+          tolerance: 0,
+        },
+        solutionSteps: [
+          {
+            text: 'Let the x be the number of cricket cards that Jack started with.',
+            expression: 'x/3 + 7 = 15',
+          },
+          {
+            text: 'Isolate the x\'s.',
+            expression: 'x/3 = 8',
+          },
+          {
+            text: 'Multiply both sides by 3.',
+            expression: 'x = 24',
+          },
+        ],
+      },
+      hints: [
+        {
+          order: 1,
+          content: 'What is unknown of interest.  Set a variable for it.',
+        },
+        {
+          order: 2,
+          content:
+            'How can write an equation capturing that fraction of one third?',
+        },
+        {
+          order: 3,
+          content:
+            'Did you get x / 3 + 7 = 15?  Isolate x.',
         },
       ],
     },
@@ -260,7 +508,7 @@ const PATH_SEEDS: PathSeed[] = [
     title: 'Guild of the Geometers',
     description: 'Visual intuition and geometric power tools for competitions.',
     themeColor: '#06d6a0',
-    order: 3,
+    order: 4,
     subpaths: [
       {
         stage: SubpathStage.BASIC,
@@ -333,7 +581,7 @@ const PATH_SEEDS: PathSeed[] = [
     title: 'Knights of Number',
     description: 'Number theory resilience for modular mayhem.',
     themeColor: '#118ab2',
-    order: 4,
+    order: 3,
     subpaths: [
       {
         stage: SubpathStage.BASIC,

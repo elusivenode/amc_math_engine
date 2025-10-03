@@ -52,6 +52,7 @@ export const sequence20thTerm: ProblemDefinition = {
     success: 'Correct! You applied the arithmetic sequence formula cleanly.',
     failure: 'Not quite. Double-check the difference and your substitution into the formula.'
   },
+  pathSlug: 'algebra-avengers',
   metadata: {
     competition: 'AMC',
     division: 'Junior',
