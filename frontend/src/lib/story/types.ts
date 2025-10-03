@@ -11,4 +11,5 @@ export type StoryBeat = {
   imageAlt: string;
   caption?: string;
   problemOrder?: number;
+  problemId?: string;
 };

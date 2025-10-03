@@ -11,6 +11,10 @@
   import { getStoryBeatForPath, getStoryBeatForProblem } from '$lib/story';
   import type { StoryBeat } from '$lib/story';
   import { authStore } from '$lib/stores/auth';
+  import {
+    markStoryBeatAcknowledged,
+    hasAcknowledgedStoryBeat,
+  } from '$lib/stores/story-progress';
   import type { PageData } from './$types';
 
   type AttemptStatus = 'idle' | 'correct' | 'incorrect';
@@ -78,10 +82,10 @@
   };
 
   let problem: ProblemDefinition | null = data.problem;
-  const source = data.source;
-  const problemId = data.problemId;
-  const pathSlugHint = data.pathSlug;
-  const problemOrderHint = data.problemOrder;
+  let source = data.source;
+  let problemId = data.problemId;
+  let pathSlugHint = data.pathSlug;
+  let problemOrderHint = data.problemOrder;
 
   let loading = source === 'remote';
   let fetchError = '';
@@ -118,6 +122,34 @@
       .join(' ');
   }
 
+  $: if (data.problemId !== problemId) {
+    source = data.source;
+    problemId = data.problemId;
+    pathSlugHint = data.pathSlug;
+    problemOrderHint = data.problemOrder;
+    problem = data.problem;
+
+    loading = source === 'remote';
+    fetchError = '';
+    storyInitialized = false;
+    storyPanel = null;
+    storyContext = null;
+    storyAcknowledged = true;
+    showContinueButton = false;
+    nextStoryPanel = null;
+
+    lastProgress = null;
+    lastOutcome = null;
+    earnedPoints = 0;
+    attemptHistory = [];
+
+    resetSession();
+
+    if (source === 'remote') {
+      void loadRemoteProblem();
+    }
+  }
+
   function handleStoryClose() {
     storyModalOpen = false;
     if (storyContext === 'problem') {
@@ -126,10 +158,34 @@
   }
 
   function handleStoryContinue() {
+    const target = storyPanel;
+
     storyModalOpen = false;
     storyAcknowledged = true;
     nextStoryPanel = null;
     showContinueButton = false;
+
+    if (
+      target &&
+      target.context === 'problem' &&
+      target.problemId &&
+      target.problemId !== problemId
+    ) {
+      markStoryBeatAcknowledged(target.id);
+      const params = new URLSearchParams();
+      const slug = target.pathSlug ?? pathSlugHint ?? problem?.pathSlug ?? null;
+
+      if (slug) {
+        params.set('path', slug);
+      }
+
+      if (typeof target.problemOrder === 'number') {
+        params.set('order', target.problemOrder.toString());
+      }
+
+      const query = params.toString();
+      void goto(`/problem/${target.problemId}${query ? `?${query}` : ''}`);
+    }
   }
 
   function handleContinuePath() {
@@ -263,8 +319,10 @@
       if (panel) {
         storyPanel = panel;
         storyContext = panel.context;
-        storyModalOpen = true;
-        storyAcknowledged = false;
+        const alreadySeen =
+          panel.context === 'problem' ? hasAcknowledgedStoryBeat(panel.id) : false;
+        storyAcknowledged = alreadySeen ? true : false;
+        storyModalOpen = alreadySeen ? false : true;
       }
     }
     storyInitialized = true;

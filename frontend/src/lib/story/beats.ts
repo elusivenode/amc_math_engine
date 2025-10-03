@@ -26,6 +26,7 @@ export const storyBeats: StoryBeat[] = [
     sequence: 2,
     context: 'problem',
     problemOrder: 1,
+    problemId: 'algebra-avengers-basic-1-problem-1',
     title: 'Carl Friedrich Gauss',
     narrative: [
       'The dust swirls in the long silence. A cool breeze floats through the stable, gently tugging Carl Friedrich Gauss back into the present.',
@@ -44,6 +45,7 @@ export const storyBeats: StoryBeat[] = [
     sequence: 3,
     context: 'problem',
     problemOrder: 2,
+    problemId: 'algebra-avengers-basic-1-problem-2',
     title: 'Princess Emmy Noether',
     narrative: [
       '"Some answers must lie in here", Emmy sighed.  6 hours had passed since she entered to library since learning of death of Archimedes.',
@@ -62,6 +64,7 @@ export const storyBeats: StoryBeat[] = [
     sequence: 4,
     context: 'problem',
     problemOrder: 3,
+    problemId: 'algebra-avengers-basic-1-problem-3',
     title: 'The squire is summoned.',
     narrative: [
       '"Apologies for the late hour Squire Gauss.  She said you must come immediately."',
@@ -82,6 +85,7 @@ export const storyBeats: StoryBeat[] = [
     sequence: 5,
     context: 'problem',
     problemOrder: 4,
+    problemId: 'algebra-avengers-basic-1-problem-4',
     title: 'A midnight meeting.',
     narrative: [
       '"Yes, he is on his way My Lady."',
@@ -102,6 +106,7 @@ export const storyBeats: StoryBeat[] = [
     sequence: 6,
     context: 'problem',
     problemOrder: 5,
+    problemId: 'algebra-avengers-basic-1-problem-5',
     title: 'Questions ... but no answers.',
     narrative: [
       '"Thank you for coming Squire Gauss. This matter is most urgent."',
