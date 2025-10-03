@@ -45,3 +45,7 @@ export async function apiFetch<T>(path: string, options: FetchOptions = {}): Pro
 }
 
 export type AuthResponse = AuthState;
+
+export type RegisterResponse = {
+  checkoutUrl: string;
+};

@@ -5,19 +5,43 @@
 
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { page } from '$app/stores';
   import { get } from 'svelte/store';
   import { onMount } from 'svelte';
-  import { apiFetch, type AuthResponse } from '$lib/api';
+  import { apiFetch, type AuthResponse, type RegisterResponse } from '$lib/api';
   import { authStore, setAuth } from '$lib/stores/auth';
 
   type Mode = 'login' | 'register';
+  type SignupPlan = 'MONTHLY' | 'LIFETIME';
+
+  const planOptions: Array<{
+    value: SignupPlan;
+    label: string;
+    price: string;
+    description: string;
+  }> = [
+    {
+      value: 'MONTHLY',
+      label: 'Monthly access',
+      price: '$15 per month',
+      description: 'Recurring access billed every month.',
+    },
+    {
+      value: 'LIFETIME',
+      label: 'Lifetime access',
+      price: '$100 one-time',
+      description: 'Pay once for ongoing access.',
+    },
+  ];
 
   let mode: Mode = 'login';
   let email = '';
   let password = '';
   let displayName = '';
+  let selectedPlan: SignupPlan = 'MONTHLY';
   let loading = false;
   let errorMessage = '';
+  let checkoutStatus: string | null = null;
 
   onMount(() => {
     const current = get(authStore);
@@ -25,6 +49,8 @@
       void goto('/dashboard');
     }
   });
+
+  $: checkoutStatus = $page.url.searchParams.get('checkout');
 
   function switchMode(nextMode: Mode) {
     mode = nextMode;
@@ -38,22 +64,35 @@
 
     try {
       const endpoint = mode === 'login' ? '/auth/login' : '/auth/register';
-      const payload =
-        mode === 'login'
-          ? { email, password }
-          : {
-              email,
-              password,
-              displayName: displayName.trim() ? displayName.trim() : undefined,
-            };
+      if (mode === 'login') {
+        const response = await apiFetch<AuthResponse>(endpoint, {
+          method: 'POST',
+          body: { email, password },
+        });
 
-      const response = await apiFetch<AuthResponse>(endpoint, {
+        setAuth(response);
+        await goto('/dashboard');
+        return;
+      }
+
+      const registerPayload = {
+        email,
+        password,
+        displayName: displayName.trim() ? displayName.trim() : undefined,
+        plan: selectedPlan,
+      };
+
+      const response = await apiFetch<RegisterResponse>(endpoint, {
         method: 'POST',
-        body: payload,
+        body: registerPayload,
       });
 
-      setAuth(response);
-      await goto('/dashboard');
+      if (response.checkoutUrl) {
+        window.location.assign(response.checkoutUrl);
+        return;
+      }
+
+      throw new Error('Stripe checkout session could not be created.');
     } catch (error) {
       errorMessage = error instanceof Error ? error.message : 'Authentication failed.';
     } finally {
@@ -95,6 +134,16 @@
       </button>
     </div>
 
+    {#if checkoutStatus === 'success'}
+      <p class="mt-6 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+        Payment confirmed! Sign in with your new credentials to start learning.
+      </p>
+    {:else if checkoutStatus === 'cancel'}
+      <p class="mt-6 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-700">
+        Checkout was cancelled. You can restart registration below when you're ready.
+      </p>
+    {/if}
+
     <form class="mt-8 space-y-5" on:submit={handleSubmit}>
       <label class="block text-sm font-medium text-slate-700">
         Email address
@@ -120,16 +169,43 @@
       </label>
 
       {#if mode === 'register'}
-        <label class="block text-sm font-medium text-slate-700">
-          Display name
-          <input
-            class="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-base text-slate-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
-            type="text"
-            bind:value={displayName}
-            placeholder="Optional"
-            maxlength="50"
-          />
-        </label>
+        <div class="space-y-4">
+          <label class="block text-sm font-medium text-slate-700">
+            Display name
+            <input
+              class="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-base text-slate-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+              type="text"
+              bind:value={displayName}
+              placeholder="Optional"
+              maxlength="50"
+            />
+          </label>
+
+          <fieldset class="space-y-3">
+            <legend class="text-sm font-medium text-slate-700">Choose your access plan</legend>
+            {#each planOptions as option}
+              <label
+                class="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 px-4 py-3 transition hover:border-indigo-400"
+                class:active={selectedPlan === option.value}
+              >
+                <input
+                  class="mt-1"
+                  type="radio"
+                  name="plan"
+                  value={option.value}
+                  checked={selectedPlan === option.value}
+                  on:change={() => (selectedPlan = option.value)}
+                  required
+                />
+                <div>
+                  <p class="font-semibold text-slate-900">{option.label}</p>
+                  <p class="text-sm text-slate-600">{option.description}</p>
+                  <p class="mt-1 text-sm font-medium text-indigo-600">{option.price}</p>
+                </div>
+              </label>
+            {/each}
+          </fieldset>
+        </div>
       {/if}
 
       {#if errorMessage}
@@ -158,5 +234,10 @@
     background: white;
     color: #312e81;
     box-shadow: 0 1px 3px rgb(15 23 42 / 0.1);
+  }
+
+  label.active {
+    border-color: #4338ca;
+    box-shadow: 0 1px 4px rgb(99 102 241 / 0.18);
   }
 </style>

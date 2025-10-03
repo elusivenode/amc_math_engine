@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { BillingModule } from './billing/billing.module';
 import { PathsModule } from './paths/paths.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ProblemsModule } from './problems/problems.module';
@@ -15,6 +16,7 @@ import { ProblemsModule } from './problems/problems.module';
     }),
     PrismaModule,
     AuthModule,
+    BillingModule,
     PathsModule,
     ProblemsModule,
   ],

@@ -35,6 +35,20 @@ enum AttemptOutcome {
   SKIPPED
 }
 
+enum MembershipPlan {
+  NONE
+  MONTHLY
+  LIFETIME
+}
+
+enum MembershipStatus {
+  NONE
+  PENDING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+}
+
 model User {
   id            String         @id @default(uuid())
   email         String         @unique
@@ -42,6 +56,13 @@ model User {
   displayName   String?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
+  stripeCustomerId     String?   @unique
+  stripeSubscriptionId String?   @unique
+  stripePriceId        String?
+  membershipPlan       MembershipPlan   @default(NONE)
+  membershipStatus     MembershipStatus @default(NONE)
+  membershipActivatedAt DateTime?
+  membershipExpiresAt  DateTime?
   progress      UserProgress[]
   attempts      Attempt[]
 }

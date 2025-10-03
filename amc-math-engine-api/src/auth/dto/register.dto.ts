@@ -1,6 +1,7 @@
 import { Transform } from 'class-transformer';
 import {
   IsEmail,
+  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -8,6 +9,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { BillingPlan } from '../../billing/billing.types';
 
 export class RegisterDto {
   @IsEmail()
@@ -30,4 +32,8 @@ export class RegisterDto {
   @IsNotEmpty()
   @MaxLength(50)
   displayName?: string;
+
+  @Transform(({ value }) => value?.toString().toUpperCase())
+  @IsEnum(BillingPlan)
+  plan!: BillingPlan;
 }

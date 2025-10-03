@@ -1,8 +1,10 @@
 import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '@prisma/client';
+import { MembershipPlan, MembershipStatus, User } from '@prisma/client';
 import * as argon2 from 'argon2';
 import { PrismaService } from '../prisma/prisma.service';
+import { BillingService } from '../billing/billing.service';
+import { BillingPlan } from '../billing/billing.types';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 
@@ -15,14 +17,19 @@ export type AuthPayload = {
   };
 };
 
+export type RegisterResult = {
+  checkoutUrl: string;
+};
+
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
+    private readonly billingService: BillingService,
   ) {}
 
-  async register(dto: RegisterDto): Promise<AuthPayload> {
+  async register(dto: RegisterDto): Promise<RegisterResult> {
     const existing = await this.prisma.user.findUnique({ where: { email: dto.email } });
 
     if (existing) {
@@ -31,15 +38,21 @@ export class AuthService {
 
     const passwordHash = await argon2.hash(dto.password);
 
+    const membershipPlan = this.toMembershipPlan(dto.plan);
+
     const user = await this.prisma.user.create({
       data: {
         email: dto.email,
         passwordHash,
         displayName: dto.displayName,
+        membershipPlan,
+        membershipStatus: membershipPlan === MembershipPlan.NONE ? MembershipStatus.NONE : MembershipStatus.PENDING,
       },
     });
 
-    return this.buildResponse(user);
+    const checkoutUrl = await this.billingService.createCheckoutSession(user.id, dto.plan);
+
+    return { checkoutUrl };
   }
 
   async login(dto: LoginDto): Promise<AuthPayload> {
@@ -53,6 +66,10 @@ export class AuthService {
 
     if (!passwordValid) {
       throw new UnauthorizedException('Invalid credentials');
+    }
+
+    if (user.membershipPlan !== MembershipPlan.NONE && user.membershipStatus !== MembershipStatus.ACTIVE) {
+      throw new UnauthorizedException('Membership is not active. Please complete your payment.');
     }
 
     return this.buildResponse(user);
@@ -69,5 +86,16 @@ export class AuthService {
         displayName: user.displayName,
       },
     };
+  }
+
+  private toMembershipPlan(plan: BillingPlan): MembershipPlan {
+    switch (plan) {
+      case BillingPlan.MONTHLY:
+        return MembershipPlan.MONTHLY;
+      case BillingPlan.LIFETIME:
+        return MembershipPlan.LIFETIME;
+      default:
+        return MembershipPlan.NONE;
+    }
   }
 }
