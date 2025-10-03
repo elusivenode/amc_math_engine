@@ -9,7 +9,7 @@ This repository contains a lightweight SvelteKit prototype for an online Austral
   - `/src/lib/components/KatexBlock.svelte` – Renders KaTeX expressions after mount
   - `/src/routes/+page.svelte` – Minimal flow showing: problem statement, sequential hints, answer checking, and solution reveal
 
-## Getting started
+## Getting started - triggering deploy
 
 1. Install dependencies:
    ```bash
