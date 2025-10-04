@@ -287,7 +287,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
       hints: [
         {
           order: 1,
-          content: 'What is unknown of interest.  Set a variable for it.',
+          content: 'What is the unknown of interest?  Set a variable for it.',
         },
         {
           order: 2,
@@ -310,7 +310,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
       difficulty: 2,
       tags: ['algebra', 'equations', 'AMC warm-up'],
       metadata: {
-        tagline: 'Don\'t nbe put off by fractions.  Treat them as any other number.',
+        tagline: 'Don\'t be put off by fractions.  Treat them as any other number.',
         objectives: [
           'Handle fractions correctly when manipulating an equation.',
         ],
@@ -339,7 +339,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
       hints: [
         {
           order: 1,
-          content: 'What is unknown of interest.  Set a variable for it.',
+          content: 'What is the unknown of interest?  Set a variable for it.',
         },
         {
           order: 2,
@@ -350,6 +350,67 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           order: 3,
           content:
             'Did you get x / 3 + 7 = 15?  Isolate x.',
+        },
+      ],
+    },
+    {
+      id: 'algebra-avengers-basic-1-problem-7',
+      title: 'A bit more than a fraction.',
+      statement: 'Leo gives away one quarter of his comic books and 5 more. He now has 40 left. How many comic books did he start with?',
+      solution:
+        'Create a variable and write down an equation capturing the situation - $x − (x/4 + 5) = 40$.',
+      difficulty: 2,
+      tags: ['algebra', 'equations', 'AMC warm-up'],
+      metadata: {
+        tagline: 'Don\'t be put off by fractions.  Treat them as any other number.',
+        objectives: [
+          'Handle fractions correctly when manipulating an equation.',
+        ],
+        answer: {
+          type: 'numeric',
+          value: 60,
+          success: 'Correct! Nice manipulation of the equation.',
+          failure: '$x − (x/4 + 5) = 40$ is the equation you need.',
+          tolerance: 0,
+        },
+        solutionSteps: [
+          {
+            text: 'Let x be the number of comic books Leo started with.',
+            expression: 'x − (x/4 + 5) = 40',
+          },
+          {
+            text: 'Combine the x\'s.',
+            expression: '(3/4)x - 5 = 40',
+          },
+          {
+            text: 'Isolate x.',
+            expression: '(3/4)x = 45',
+          },
+          {
+            text: 'Solve for x.',
+            expression: 'x = 60',
+          },
+        ],
+      },
+      hints: [
+        {
+          order: 1,
+          content: 'Let x be the number of comic books Leo started with.',
+        },
+        {
+          order: 2,
+          content:
+            ' Gives away one quarter and 5 more” means he loses x/4 + 5.',
+        },
+        {
+          order: 3,
+          content:
+            'Write the equation: x − (x/4 + 5) = 40.',
+        },
+        {
+          order: 4,
+          content:
+            'Simplify: (3/4)x − 5 = 40 ⇒ (3/4)x = 45 ⇒ x=60.',
         },
       ],
     },

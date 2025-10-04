@@ -123,4 +123,40 @@ export const storyBeats: StoryBeat[] = [
     imageAlt: 'Princess Emmy questions for Carl Friedrich.',
     caption: 'Princess Emmy questions Carl Friedrich about the appearance of his name in the Order of Olympiad.',
   },
+  {
+    id: 'algebra-avengers-problem-6',
+    pathSlug: 'algebra-avengers',
+    sequence: 7,
+    context: 'problem',
+    problemOrder: 6,
+    problemId: 'algebra-avengers-basic-1-problem-6',
+    title: 'A strange sense of connection.',
+    narrative: [
+      'Carl Friedrich walks alone under the moonlight, his boots crunching softly against the gravel path. The air is cool, and the night insects sing along the stream beside him.',
+      'His thoughts race, replaying the strange encounter with Princess Emmy. “She was holding something back,” he murmurs, brow furrowed. “What on earth does that book have to do with me? I never even met Archimedes … all I know of him and the Order is what my father taught me during our lessons."',
+      'Crossing the small stone bridge leading back to the stables, Carl feels a shiver course through him, not from the night air but from a strange, heavy sense of connection - like unseen eyes watching, or an echo of Archimedes’ presence carried in the current below. The moonlight glimmers on the water as if whispering secrets he cannot yet understand.',
+      
+    ],
+    image: '/story/algebraic-avengers/beat_7.png',
+    imageAlt: 'Carl Friedrich walks home, thoughts swirling through this mind.',
+    caption: 'Carl Friedrich walks home, thoughts swirling through this mind.',
+  },
+  {
+    id: 'algebra-avengers-problem-7',
+    pathSlug: 'algebra-avengers',
+    sequence: 8,
+    context: 'problem',
+    problemOrder: 7,
+    problemId: 'algebra-avengers-basic-1-problem-7',
+    title: 'A fight for reason?.',
+    narrative: [
+      'The first light of dawn creeps into the stable yard, pale and cold. Carl Friedrich rises after a restless night, his mind still crowded with questions. He moves with quiet purpose, leading Thunder - the proud steed of Sir Euler - into the aisle. The horse snorts gently, steam rising from its nostrils in the morning chill, as Carl rubs him down with steady strokes.',
+      'As his hands work the brush through Thunder’s coat, Carl drifts back to memories of his father. Long evenings bent over parchment, ink smudged on their fingers, as they worked through mathematical problems by candlelight. His father’s eyes always burned with something more than simple curiosity - something Carl only half understood. Each lesson carried a story of the Order of the Olympiad, of Archimedes’ daring, of the struggle to preserve reason.',
+      '“Fight for reason. Defend rationality, son,” his father had always insisted, voice steady with conviction. Carl remembered smiling at the time, thinking it was nothing more than romantic idealism. But now, in the quiet dawn, with the strange weight of Emmy’s summons still pressing on him, those words seemed less fanciful - and more like a warning.',
+      
+    ],
+    image: '/story/algebraic-avengers/beat_8.png',
+    imageAlt: 'Carl Friedrich remembers.',
+    caption: 'Carl Friedrich is lost in this thoughts. Recalling his father’s words.',
+  },
 ];
