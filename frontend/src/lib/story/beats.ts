@@ -148,7 +148,7 @@ export const storyBeats: StoryBeat[] = [
     context: 'problem',
     problemOrder: 7,
     problemId: 'algebra-avengers-basic-1-problem-7',
-    title: 'A fight for reason?.',
+    title: 'A fight for reason?',
     narrative: [
       'The first light of dawn creeps into the stable yard, pale and cold. Carl Friedrich rises after a restless night, his mind still crowded with questions. He moves with quiet purpose, leading Thunder - the proud steed of Sir Euler - into the aisle. The horse snorts gently, steam rising from its nostrils in the morning chill, as Carl rubs him down with steady strokes.',
       'As his hands work the brush through Thunder’s coat, Carl drifts back to memories of his father. Long evenings bent over parchment, ink smudged on their fingers, as they worked through mathematical problems by candlelight. His father’s eyes always burned with something more than simple curiosity - something Carl only half understood. Each lesson carried a story of the Order of the Olympiad, of Archimedes’ daring, of the struggle to preserve reason.',

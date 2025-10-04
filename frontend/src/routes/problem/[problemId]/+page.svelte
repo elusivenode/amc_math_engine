@@ -8,7 +8,11 @@
   import { apiFetch } from '$lib/api';
   import type { NumericAnswer, ProblemDefinition } from '$lib/problems';
   import StoryPanelModal from '$lib/components/StoryPanelModal.svelte';
-  import { getStoryBeatForPath, getStoryBeatForProblem } from '$lib/story';
+  import {
+    getStoryBeatForPath,
+    getStoryBeatForProblem,
+    getStoryBeatByProblemId,
+  } from '$lib/story';
   import type { StoryBeat } from '$lib/story';
   import { authStore } from '$lib/stores/auth';
   import {
@@ -162,6 +166,8 @@
 
     storyModalOpen = false;
     storyAcknowledged = true;
+    storyPanel = null;
+    storyContext = null;
     nextStoryPanel = null;
     showContinueButton = false;
 
@@ -500,7 +506,10 @@
 
     if (isCorrect) {
       const storySlug = pathSlugHint ?? problem.pathSlug ?? null;
-      const nextOrder = (problemOrderHint ?? 0) + 1;
+      const currentStoryBeat =
+        storySlug && problem.id ? getStoryBeatByProblemId(storySlug, problem.id) : null;
+      const baseOrder = currentStoryBeat?.problemOrder ?? problemOrderHint ?? 0;
+      const nextOrder = baseOrder + 1;
       if (storySlug) {
         const upcomingPanel = getStoryBeatForProblem(storySlug, nextOrder);
         if (upcomingPanel) {

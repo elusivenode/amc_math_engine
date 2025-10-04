@@ -42,3 +42,14 @@ export function getStoryBeatForProblem(
 
   return fallback ?? beats[beats.length - 1];
 }
+
+export function getStoryBeatByProblemId(pathSlug: string, problemId: string): StoryBeat | null {
+  return (
+    storyBeats.find(
+      (beat) =>
+        beat.pathSlug === pathSlug &&
+        beat.context === 'problem' &&
+        beat.problemId === problemId,
+    ) ?? null
+  );
+}
