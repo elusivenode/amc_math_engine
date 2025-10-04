@@ -31,9 +31,11 @@
 />
 
 {#if open && panel}
-  <div class="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/80 p-4">
+  <div
+    class="fixed inset-0 z-[60] flex items-start justify-center overflow-y-auto bg-slate-900/80 p-4 sm:p-6 lg:items-center"
+  >
     <div
-      class="relative w-full max-w-[85rem] overflow-hidden rounded-3xl bg-white shadow-2xl md:max-h-[90vh]"
+      class="relative mt-6 w-full max-w-[85rem] overflow-hidden rounded-3xl bg-white shadow-2xl lg:mt-0 lg:max-h-[90vh]"
       role="dialog"
       aria-modal="true"
       aria-labelledby={titleId}
@@ -48,11 +50,11 @@
         ×
       </button>
 
-      <div class="grid gap-0 md:grid-cols-[1.5fr_1fr] md:items-stretch">
-        <figure class="relative flex max-h-[85vh] items-center justify-center bg-slate-100">
+      <div class="grid gap-0 lg:grid-cols-[1.5fr_1fr] lg:items-stretch">
+        <figure class="relative flex max-h-[60vh] items-center justify-center bg-slate-100 landscape:max-h-[70vh] lg:max-h-[85vh] lg:landscape:max-h-[85vh]">
           {#if panel.image}
             <img
-              class="h-full max-h-[85vh] w-full object-contain"
+              class="h-full max-h-[60vh] w-full object-contain landscape:max-h-[70vh] lg:max-h-[85vh] lg:landscape:max-h-[85vh]"
               src={panel.image}
               alt={panel.imageAlt}
             />
@@ -69,7 +71,7 @@
           {/if}
         </figure>
 
-        <div class="flex h-full min-h-[320px] flex-col p-6 md:p-8">
+        <div class="flex h-full min-h-[280px] flex-col p-6 md:p-8 lg:min-h-[320px]">
           <div class="shrink-0">
             <h2 class="text-2xl font-semibold text-slate-900" id={titleId}>{panel.title}</h2>
           </div>
