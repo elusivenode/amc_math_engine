@@ -370,7 +370,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           type: 'numeric',
           value: 60,
           success: 'Correct! Nice manipulation of the equation.',
-          failure: '$x − (x/4 + 5) = 40$ is the equation you need.',
+          failure: '$x - \\left(\\frac{x}{4} + 5\\right) = 40$ is the equation you need.',
           tolerance: 0,
         },
         solutionSteps: [
@@ -434,7 +434,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           type: 'numeric',
           value: 54,
           success: 'Correct! The rectangle’s area is 54 cm².',
-          failure: 'First find the width using $2(w + w + 3) = 30$.',
+          failure: 'First find the width using $2\\bigl(w + (w + 3)\\bigr) = 30$.',
           tolerance: 0,
         },
         solutionSteps: [
