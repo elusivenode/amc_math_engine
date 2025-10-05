@@ -792,7 +792,7 @@
 
           {#if feedback}
             <p class={`mt-4 rounded-lg bg-slate-50 px-4 py-3 text-sm ${feedbackTone}`}>
-              {feedback}
+              <TextWithMath text={feedback} />
             </p>
           {/if}
 

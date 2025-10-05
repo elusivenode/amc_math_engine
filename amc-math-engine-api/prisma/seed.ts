@@ -434,7 +434,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           type: 'numeric',
           value: 54,
           success: 'Correct! The rectangle’s area is 54 cm².',
-          failure: 'First find the width using $2(w + w+3) = 30$.',
+          failure: 'First find the width using $2(w + w + 3) = 30$.',
           tolerance: 0,
         },
         solutionSteps: [
@@ -444,7 +444,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           },
           {
             text: 'Use the perimeter formula.',
-            expression: '2(w + (w+3)) = 30',
+            expression: '2(w + (w + 3)) = 30',
           },
           {
             text: 'Simplify and solve for $w$.',
