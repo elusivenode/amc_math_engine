@@ -21,4 +21,4 @@ export function listProblems(): ProblemDefinition[] {
   return problems.slice();
 }
 
-export { type ProblemDefinition, type NumericAnswer } from './schema';
+export { type ProblemDefinition, type NumericAnswer, type AnswerDefinition } from './schema';

@@ -483,7 +483,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
       id: 'algebra-avengers-basic-1-problem-9',
       title: 'Counting heads and legs.',
       statement:
-        'A farmer has chickens and sheep. Together they have 20 heads and 56 legs. How many chickens and how many sheep are there?',
+        'A farmer has chickens and sheep. Together they have 20 heads and 56 legs. How many chickens and how many sheep are there? Enter your answer as "chickens,sheep" (for example, "12,8").',
       solution:
         'Use two equations: $c + s = 20$ (heads) and $2c + 4s = 56$ (legs). Solve for $c$ and $s$.',
       difficulty: 3,
@@ -496,11 +496,14 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           'Interpret the solution in context (number of animals).'
         ],
         answer: {
-          type: 'object',
-          value: { chickens: 12, sheep: 8 },
+          type: 'pair',
+          expected: { first: 12, second: 8 },
+          firstLabel: 'chickens',
+          secondLabel: 'sheep',
+          separator: ',',
+          inputHint: 'Enter chickens first, then sheep, separated by a comma — for example: 1,2.',
           success: 'Correct! There are 12 chickens and 8 sheep.',
-          failure: 'Start with $c + s = 20$ and $2c + 4s = 56$ and solve step by step.',
-          tolerance: 0,
+          failure: 'Not quite. Enter chickens first, then sheep (e.g. 12,8) and re-check the equations.',
         },
         solutionSteps: [
           {
@@ -544,6 +547,59 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
         },
       ],
     },    
+    {
+      id: 'algebra-avengers-basic-1-problem-10',
+      title: 'Fruity ratios.',
+      statement:
+        'In a fruit punch mix, the ratio of orange juice to pineapple juice is 3:2. If the mix contains 25 litres in total, how many litres of orange juice does it contain?',
+      solution:
+        'The ratio 3:2 means there are 5 equal parts in total. Each part is $25 ÷ 5 = 5$ litres. Orange juice takes 3 parts, so $3 × 5 = 15$ litres.',
+      difficulty: 3,
+      tags: ['algebra', 'ratios', 'proportions', 'AMC basic'],
+      metadata: {
+        tagline: 'Use ratios to divide a whole into parts.',
+        objectives: [
+          'Understand and work with ratios.',
+          'Apply proportional reasoning to find quantities.',
+          'Connect ratios with fractions of a whole.',
+        ],
+        answer: {
+          type: 'numeric',
+          value: 15,
+          success: 'Correct! There are 15 litres of orange juice.',
+          failure: 'First find the total number of parts: $3 + 2 = 5$. Each part is $25 ÷ 5 = 5$.',
+          tolerance: 0,
+        },
+        solutionSteps: [
+          {
+            text: 'Add the parts in the ratio: $3 + 2 = 5$.',
+            expression: 'total parts = 5',
+          },
+          {
+            text: 'Work out how many litres each part is worth.',
+            expression: '25 ÷ 5 = 5',
+          },
+          {
+            text: 'Orange juice is 3 parts.',
+            expression: '3 × 5 = 15',
+          },
+        ],
+      },
+      hints: [
+        {
+          order: 1,
+          content: 'Add the ratio parts: $3 + 2 = 5$.',
+        },
+        {
+          order: 2,
+          content: 'Each part is worth $25 ÷ 5 = 5$ litres.',
+        },
+        {
+          order: 3,
+          content: 'Orange juice is 3 parts, so multiply $3 × 5$.',
+        },
+      ],
+    },
   ],
 };
 

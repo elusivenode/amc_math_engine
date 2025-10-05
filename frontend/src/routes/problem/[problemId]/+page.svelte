@@ -6,7 +6,7 @@
   import TextWithMath from '$components/TextWithMath.svelte';
   import KatexBlock from '$components/KatexBlock.svelte';
   import { apiFetch } from '$lib/api';
-  import type { NumericAnswer, ProblemDefinition } from '$lib/problems';
+  import type { AnswerDefinition, NumericAnswer, ProblemDefinition } from '$lib/problems';
   import StoryPanelModal from '$lib/components/StoryPanelModal.svelte';
   import {
     getStoryBeatForPath,
@@ -204,26 +204,55 @@
     storyAcknowledged = false;
   }
 
-  function normalizeAnswer(metadata: unknown): NumericAnswer {
+  const defaultNumericAnswer: NumericAnswer = {
+    type: 'numeric',
+    value: 0,
+    tolerance: 0,
+    success: 'Great work!',
+    failure: 'Keep exploring the algebraic steps.',
+  };
+
+  function normalizeAnswer(metadata: unknown): AnswerDefinition {
     if (!metadata || typeof metadata !== 'object') {
-      return {
-        type: 'numeric',
-        value: 0,
-        tolerance: 0,
-        success: 'Great work!',
-        failure: 'Keep exploring the algebraic steps.',
-      };
+      return defaultNumericAnswer;
     }
 
     const raw = (metadata as Record<string, unknown>).answer as Record<string, unknown> | undefined;
     if (!raw) {
-      return {
-        type: 'numeric',
-        value: 0,
-        tolerance: 0,
-        success: 'Great work!',
-        failure: 'Keep exploring the algebraic steps.',
-      };
+      return defaultNumericAnswer;
+    }
+
+    const rawType = typeof raw.type === 'string' ? raw.type.toLowerCase() : 'numeric';
+
+    if (rawType === 'pair') {
+      const expected = raw.expected as Record<string, unknown> | undefined;
+      const tolerance = raw.tolerance as Record<string, unknown> | undefined;
+
+      if (
+        expected &&
+        typeof expected.first === 'number' &&
+        typeof expected.second === 'number'
+      ) {
+        return {
+          type: 'pair',
+          expected: {
+            first: expected.first,
+            second: expected.second,
+          },
+          separator: typeof raw.separator === 'string' && raw.separator.length > 0 ? raw.separator : ',',
+          firstLabel: typeof raw.firstLabel === 'string' ? raw.firstLabel : undefined,
+          secondLabel: typeof raw.secondLabel === 'string' ? raw.secondLabel : undefined,
+          tolerance: tolerance
+            ? {
+                first: typeof tolerance.first === 'number' ? tolerance.first : undefined,
+                second: typeof tolerance.second === 'number' ? tolerance.second : undefined,
+              }
+            : undefined,
+          inputHint: typeof raw.inputHint === 'string' ? raw.inputHint : undefined,
+          success: typeof raw.success === 'string' ? raw.success : 'Great work!',
+          failure: typeof raw.failure === 'string' ? raw.failure : 'Keep exploring the algebraic steps.',
+        } satisfies AnswerDefinition;
+      }
     }
 
     return {
@@ -232,7 +261,7 @@
       tolerance: typeof raw.tolerance === 'number' ? raw.tolerance : 0,
       success: typeof raw.success === 'string' ? raw.success : 'Great work!',
       failure: typeof raw.failure === 'string' ? raw.failure : 'Keep exploring the algebraic steps.',
-    };
+    } satisfies NumericAnswer;
   }
 
   function getObjectives(metadata: Record<string, unknown>): string[] {
@@ -479,30 +508,59 @@
 
     const answerDef = problem.answer;
 
-    if (answerDef.type !== 'numeric') {
+    let outcome: AttemptOutcome;
+    let isCorrect = false;
+
+    if (answerDef.type === 'numeric') {
+      const numeric = evaluateResponse(attemptValue);
+      if (numeric === null) {
+        attemptStatus = 'incorrect';
+        feedback = 'Please enter a numeric value. Fractions such as "116/2" or "\\frac{116}{2}" are supported.';
+        return;
+      }
+
+      const tolerance = answerDef.tolerance ?? 0;
+      isCorrect = Math.abs(numeric - answerDef.value) <= tolerance;
+      outcome = isCorrect ? 'CORRECT' : 'INCORRECT';
+
+      console.log('Attempt prepared', {
+        numeric,
+        expected: answerDef.value,
+        tolerance,
+        outcome,
+        attemptValue,
+      });
+    } else if (answerDef.type === 'pair') {
+      const pair = evaluatePairResponse(attemptValue, answerDef.separator ?? ',');
+      if (!pair) {
+        attemptStatus = 'incorrect';
+        feedback =
+          answerDef.inputHint ??
+          `Please enter two numbers separated by a comma${answerDef.firstLabel || answerDef.secondLabel ? ' (for example: 12,8)' : ''}.`;
+        return;
+      }
+
+      const toleranceFirst = answerDef.tolerance?.first ?? 0;
+      const toleranceSecond = answerDef.tolerance?.second ?? 0;
+
+      const firstOk = Math.abs(pair.first - answerDef.expected.first) <= toleranceFirst;
+      const secondOk = Math.abs(pair.second - answerDef.expected.second) <= toleranceSecond;
+      isCorrect = firstOk && secondOk;
+      outcome = isCorrect ? 'CORRECT' : 'INCORRECT';
+
+      console.log('Attempt prepared', {
+        pair,
+        expected: answerDef.expected,
+        toleranceFirst,
+        toleranceSecond,
+        outcome,
+        attemptValue,
+      });
+    } else {
       attemptStatus = 'incorrect';
-      feedback = 'This problem is not configured for numeric answers yet.';
+      feedback = 'This problem is not configured to accept answers yet.';
       return;
     }
-
-    const numeric = evaluateResponse(attemptValue);
-    if (numeric === null) {
-      attemptStatus = 'incorrect';
-      feedback = 'Please enter a numeric value. Fractions such as "116/2" or "\\frac{116}{2}" are supported.';
-      return;
-    }
-
-    const tolerance = answerDef.tolerance ?? 0;
-    const isCorrect = Math.abs(numeric - answerDef.value) <= tolerance;
-    const outcome: AttemptOutcome = isCorrect ? 'CORRECT' : 'INCORRECT';
-
-    console.log('Attempt prepared', {
-      numeric,
-      expected: answerDef.value,
-      tolerance,
-      outcome,
-      attemptValue,
-    });
 
     attemptStatus = isCorrect ? 'correct' : 'incorrect';
     feedback = isCorrect ? answerDef.success : answerDef.failure;
@@ -591,6 +649,58 @@
       console.warn('Failed to evaluate response', error);
       return null;
     }
+  }
+
+  type PairValue = { first: number; second: number };
+
+  function evaluatePairResponse(rawInput: string, separator: string): PairValue | null {
+    if (!rawInput) return null;
+
+    const trimmed = rawInput.trim();
+    if (!trimmed) return null;
+
+    const segments = splitPairSegments(trimmed, separator);
+    if (segments.length !== 2) {
+      return null;
+    }
+
+    const parseSegment = (segment: string): number | null => {
+      const normalized = segment.trim();
+      if (!normalized) return null;
+
+      const match = normalized.match(/-?[0-9]+(?:\.[0-9]+)?/);
+      if (!match) return null;
+
+      const value = Number(match[0]);
+      return Number.isFinite(value) ? value : null;
+    };
+
+    const first = parseSegment(segments[0]);
+    const second = parseSegment(segments[1]);
+
+    if (first === null || second === null) {
+      return null;
+    }
+
+    return { first, second };
+  }
+
+  function splitPairSegments(input: string, separator: string): string[] {
+    const trimmedSeparator = separator.trim();
+
+    if (trimmedSeparator && trimmedSeparator !== ' ') {
+      const parts = input.split(trimmedSeparator).map((part) => part.trim()).filter(Boolean);
+      if (parts.length === 2) {
+        return parts;
+      }
+    }
+
+    const fallback = input.split(/[,;\s]+/).map((part) => part.trim()).filter(Boolean);
+    if (fallback.length === 2) {
+      return fallback;
+    }
+
+    return [];
   }
 
   function formatElapsed(seconds: number): string {
@@ -698,7 +808,11 @@
             </figure>
           {/if}
           <p class="text-sm text-slate-500">
-            Try to reason it out before revealing hints. You can submit a simplified numeric answer or a fraction.
+            {#if problem.answer.type === 'pair'}
+              Enter your answer as two numbers separated by a comma — {problem.answer.firstLabel ?? 'first value'} first, {problem.answer.secondLabel ?? 'second value'} second. Example: "12,8".
+            {:else}
+              Try to reason it out before revealing hints. You can submit a simplified numeric answer or a fraction.
+            {/if}
           </p>
         </div>
    </section>
@@ -766,6 +880,9 @@
 
         <div class="mt-4 space-y-4">
           <MathInput bind:value={attemptValue} placeholder="Type your answer or expression" />
+          {#if problem.answer.type === 'pair' && problem.answer.inputHint}
+            <p class="text-xs text-slate-500">{problem.answer.inputHint}</p>
+          {/if}
           <div class="flex flex-wrap gap-3">
             <button
               class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold uppercase tracking-[0.3em] text-white transition hover:bg-indigo-500 disabled:opacity-50"

@@ -21,7 +21,25 @@ export type NumericAnswer = {
   failure: string;
 };
 
-export type AnswerDefinition = NumericAnswer; // Future: extend with new discriminated union members
+export type PairAnswer = {
+  type: 'pair';
+  expected: {
+    first: number;
+    second: number;
+  };
+  separator?: string;
+  firstLabel?: string;
+  secondLabel?: string;
+  tolerance?: {
+    first?: number;
+    second?: number;
+  };
+  inputHint?: string;
+  success: string;
+  failure: string;
+};
+
+export type AnswerDefinition = NumericAnswer | PairAnswer;
 
 export type ProblemDiagram =
   | {
