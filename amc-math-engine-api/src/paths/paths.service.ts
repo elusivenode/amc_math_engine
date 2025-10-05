@@ -299,6 +299,10 @@ export class PathsService {
           },
         };
 
+        if (summary.title.toLowerCase().includes('basic')) {
+          summary.stats.total = PROBLEMS_PER_LEVEL;
+        }
+
         previousSubpathCompleted = previousSubpathCompleted && subpathCompleted;
         return summary;
       });
