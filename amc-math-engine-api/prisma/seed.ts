@@ -414,6 +414,71 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
         },
       ],
     },
+    {
+      id: 'algebra-avengers-basic-1-problem-8',
+      title: 'A rectangular riddle.',
+      statement:
+        'A rectangle has a perimeter of 30 cm. Its length is 3 cm longer than its width. What is its area?',
+      solution:
+        'Use the perimeter formula $2(l + w) = 30$ with $l = w + 3$ to find the width and length, then calculate the area.',
+      difficulty: 3,
+      tags: ['algebra', 'geometry', 'equations', 'AMC junior'],
+      metadata: {
+        tagline: 'Connect geometry formulas with algebra to solve for dimensions.',
+        objectives: [
+          'Set up and solve an equation from a geometry formula.',
+          'Translate a word problem into algebraic expressions.',
+          'Compute area after solving for dimensions.'
+        ],
+        answer: {
+          type: 'numeric',
+          value: 54,
+          success: 'Correct! The rectangle’s area is 54 cm².',
+          failure: 'First find the width using $2(w + w+3) = 30$.',
+          tolerance: 0,
+        },
+        solutionSteps: [
+          {
+            text: 'Let the width be $w$. Then the length is $w + 3$.',
+            expression: 'l = w + 3',
+          },
+          {
+            text: 'Use the perimeter formula.',
+            expression: '2(w + (w+3)) = 30',
+          },
+          {
+            text: 'Simplify and solve for $w$.',
+            expression: '2(2w + 3) = 30 ⇒ 4w + 6 = 30 ⇒ 4w = 24 ⇒ w = 6',
+          },
+          {
+            text: 'Find the length.',
+            expression: 'l = w + 3 = 9',
+          },
+          {
+            text: 'Compute the area.',
+            expression: 'A = l × w = 9 × 6 = 54',
+          },
+        ],
+      },
+      hints: [
+        {
+          order: 1,
+          content: 'Let the width be $w$. The length is then $w + 3$.',
+        },
+        {
+          order: 2,
+          content: 'Use the perimeter formula $2(l + w) = 30$.',
+        },
+        {
+          order: 3,
+          content: 'Substitute $l = w + 3$ and solve for $w$.',
+        },
+        {
+          order: 4,
+          content: 'Once you know the dimensions, calculate the area $A = l × w$.',
+        },
+      ],
+    }    
   ],
 };
 

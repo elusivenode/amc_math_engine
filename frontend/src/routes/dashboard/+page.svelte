@@ -36,6 +36,15 @@
     inProgress: number;
   };
 
+  type NextProblem = {
+    title: string;
+    status: TileStatus;
+    stage: string;
+    stageTitle: string;
+    levelTitle?: string | null;
+    problemId?: string;
+  };
+
   type SubpathSummary = {
     id: string;
     title: string;
@@ -75,6 +84,7 @@
     started: boolean;
     currentStage?: SubpathSummary;
     nextLockedStage?: SubpathSummary;
+    nextProblem?: NextProblem;
   };
 
   let paths: PathProgress[] = [];
@@ -82,13 +92,71 @@
   let errorMessage = '';
   let userName = '';
 
+  function findNextProblem(path: PathProgress): NextProblem | undefined {
+    type Candidate = {
+      tile: ProblemTile;
+      subpath: SubpathSummary;
+      level: LevelSummary;
+      priority: number;
+    };
+
+    const statusPriority: Record<TileStatus, number> = {
+      MASTERED: 3,
+      IN_PROGRESS: 0,
+      READY: 1,
+      LOCKED: 4,
+      COMING_SOON: 5,
+    };
+
+    let best: Candidate | undefined;
+
+    for (const subpath of path.subpaths) {
+      if (!subpath.isUnlocked) {
+        break;
+      }
+
+      for (const level of subpath.levels) {
+        for (const tile of level.tiles) {
+          if (!tile.problemId || tile.isPlaceholder || !tile.isAccessible) {
+            continue;
+          }
+
+          const priority = statusPriority[tile.status];
+
+          if (priority > 1) {
+            continue;
+          }
+
+          if (!best || priority < best.priority) {
+            best = { tile, subpath, level, priority };
+          }
+        }
+      }
+    }
+
+    if (!best) {
+      return undefined;
+    }
+
+    return {
+      title: best.tile.title,
+      status: best.tile.status,
+      stage: best.subpath.stage,
+      stageTitle: best.subpath.title,
+      levelTitle: best.level.title,
+      problemId: best.tile.problemId,
+    } satisfies NextProblem;
+  }
+
   function computeStats(path: PathProgress): PathStats {
     const { mastered, total, inProgress } = path.summary;
     const started = mastered + inProgress > 0;
     const currentStage = path.subpaths.find((sub) => sub.isUnlocked && !sub.isCompleted);
     const nextLockedStage = path.subpaths.find((sub) => !sub.isUnlocked);
 
-    return { mastered, total, inProgress, started, currentStage, nextLockedStage };
+    const nextProblem = findNextProblem(path);
+
+    return { mastered, total, inProgress, started, currentStage, nextLockedStage, nextProblem };
   }
 
   async function loadPaths() {
@@ -191,7 +259,11 @@
                   {/if}
                 </div>
                 <div class="text-right text-xs uppercase tracking-[0.3em] text-slate-400">
-                  {stats.mastered}/{stats.total} mastered
+                  {#if stats.currentStage}
+                    {stageLabels[stats.currentStage.stage] ?? stats.currentStage.stage} · {stats.mastered}/{stats.total} mastered
+                  {:else}
+                    {stats.mastered}/{stats.total} mastered
+                  {/if}
                 </div>
               </div>
 
@@ -212,14 +284,26 @@
                     <div class="rounded-2xl border border-slate-100 bg-slate-50 p-4 text-sm text-slate-600">
                       <p class="font-semibold text-slate-800">Progress</p>
                       <p class="mt-1 text-2xl font-semibold text-indigo-600">{stats.mastered}/{stats.total}</p>
-                      <p class="text-xs text-slate-500">Problems mastered</p>
+                      <p class="text-xs text-slate-500">
+                        Problems mastered{#if stats.currentStage} · Stage: {stageLabels[stats.currentStage.stage] ?? stats.currentStage.stage}{/if}
+                      </p>
                     </div>
                     <div class="rounded-2xl border border-slate-100 bg-slate-50 p-4 text-sm text-slate-600">
                       <p class="font-semibold text-slate-800">Currently tackling</p>
-                      <p class="mt-1 text-2xl font-semibold text-amber-600">{stats.inProgress}</p>
-                      <p class="text-xs text-slate-500">Problems in progress</p>
-                      {#if stats.currentStage}
-                        <p class="mt-1 text-xs text-slate-500">Stage: {stageLabels[stats.currentStage.stage] ?? stats.currentStage.stage}</p>
+                      {#if stats.nextProblem}
+                        <p class="mt-1 text-base font-semibold text-amber-600">{stats.nextProblem.title}</p>
+                        <p class="text-xs text-slate-500">
+                          {stageLabels[stats.nextProblem.stage] ?? stats.nextProblem.stage}
+                          {#if stats.nextProblem.levelTitle}
+                            · {stats.nextProblem.levelTitle}
+                          {/if}
+                        </p>
+                        <p class="mt-1 text-[11px] uppercase tracking-[0.25em] text-amber-500">
+                          {stats.nextProblem.status === 'IN_PROGRESS' ? 'In progress' : 'Ready to begin'}
+                        </p>
+                      {:else}
+                        <p class="mt-1 text-base font-semibold text-emerald-600">All caught up</p>
+                        <p class="text-xs text-slate-500">No problems waiting for you right now.</p>
                       {/if}
                     </div>
                     <div class="rounded-2xl border border-slate-100 bg-slate-50 p-4 text-sm text-slate-600">

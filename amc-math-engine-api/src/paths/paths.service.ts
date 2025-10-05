@@ -260,7 +260,7 @@ export class PathsService {
           const realTiles = tiles.filter((tile) => !tile.isPlaceholder && tile.problemId);
           const levelMastered = realTiles.filter((tile) => tile.status === 'MASTERED').length;
           const levelInProgress = realTiles.filter((tile) => tile.status === 'IN_PROGRESS').length;
-          const levelTotal = realTiles.length;
+          const levelTotal = PROBLEMS_PER_LEVEL;
 
           stageMastered += levelMastered;
           stageInProgress += levelInProgress;
@@ -307,6 +307,20 @@ export class PathsService {
         ? subpathSummaries.every((sub) => sub.isCompleted)
         : false;
 
+      const currentStageSummary =
+        subpathSummaries.find((sub) => sub.isUnlocked && !sub.isCompleted)
+        ?? subpathSummaries.find((sub) => sub.isUnlocked)
+        ?? subpathSummaries[0]
+        ?? null;
+
+      const overallSummary = {
+        mastered: totalMastered,
+        total: totalProblems,
+        inProgress: totalInProgress,
+      } satisfies StageStats;
+
+      const summary = currentStageSummary ? { ...currentStageSummary.stats } : overallSummary;
+
       summaries.push({
         id: path.id,
         slug: path.slug,
@@ -317,11 +331,7 @@ export class PathsService {
         isUnlocked: pathIsUnlocked,
         unlockRequirement,
         subpaths: subpathSummaries,
-        summary: {
-          mastered: totalMastered,
-          total: totalProblems,
-          inProgress: totalInProgress,
-        },
+        summary,
       });
 
       if (pathIsUnlocked) {
