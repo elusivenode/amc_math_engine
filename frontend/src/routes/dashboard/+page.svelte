@@ -87,6 +87,14 @@
     nextProblem?: NextProblem;
   };
 
+  const PROBLEMS_PER_LEVEL = 15;
+
+  function stageCapacity(subpath: SubpathSummary): number {
+    const levelsCount = subpath.levels?.length ?? 0;
+    const nominalCapacity = levelsCount * PROBLEMS_PER_LEVEL;
+    return Math.max(subpath.stats.total ?? 0, nominalCapacity);
+  }
+
   let paths: PathProgress[] = [];
   let loading = true;
   let errorMessage = '';
@@ -150,13 +158,25 @@
 
   function computeStats(path: PathProgress): PathStats {
     const { mastered, total, inProgress } = path.summary;
-    const started = mastered + inProgress > 0;
     const currentStage = path.subpaths.find((sub) => sub.isUnlocked && !sub.isCompleted);
     const nextLockedStage = path.subpaths.find((sub) => !sub.isUnlocked);
 
     const nextProblem = findNextProblem(path);
 
-    return { mastered, total, inProgress, started, currentStage, nextLockedStage, nextProblem };
+    const displayMastered = currentStage ? currentStage.stats.mastered : mastered;
+    const displayInProgress = currentStage ? currentStage.stats.inProgress : inProgress;
+    const displayTotal = currentStage ? stageCapacity(currentStage) : total;
+    const started = displayMastered + displayInProgress > 0;
+
+    return {
+      mastered: displayMastered,
+      total: displayTotal,
+      inProgress: displayInProgress,
+      started,
+      currentStage,
+      nextLockedStage,
+      nextProblem,
+    };
   }
 
   async function loadPaths() {
@@ -322,7 +342,7 @@
                       <li class="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 px-3 py-2">
                         <div>
                           <span class="font-semibold text-slate-700">{stageLabels[subpath.stage] ?? subpath.stage}</span>
-                          <p class="mt-1 text-[11px] text-slate-500">{subpath.stats.mastered}/{subpath.stats.total} mastered</p>
+                          <p class="mt-1 text-[11px] text-slate-500">{subpath.stats.mastered}/{stageCapacity(subpath)} mastered</p>
                         </div>
                         <span class={`rounded-full px-2 py-0.5 uppercase tracking-[0.25em] ${stageStatusClasses(subpath)}`}>
                           {stageStatusLabel(subpath)}

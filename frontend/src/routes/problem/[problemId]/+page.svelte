@@ -13,6 +13,7 @@
     getStoryBeatForProblem,
     getStoryBeatByProblemId,
   } from '$lib/story';
+  import { renderTextWithMath } from '$lib/utils/textWithMath';
   import type { StoryBeat } from '$lib/story';
   import { authStore } from '$lib/stores/auth';
   import {
@@ -117,6 +118,7 @@
   let storyAcknowledged = true;
   let nextStoryPanel: StoryBeat | null = null;
   let showContinueButton = false;
+  let formattedFeedback = '';
 
   function formatStatusLabel(status: string): string {
     const lower = status.toLowerCase().replace(/_/g, ' ');
@@ -469,6 +471,8 @@
     nextStoryPanel = null;
   }
 
+  $: formattedFeedback = feedback ? renderTextWithMath(feedback) : '';
+
   async function checkAnswer() {
     console.log('checkAnswer invoked', { problemPresent: !!problem, submitting, attemptValue });
     if (!problem || submitting) return;
@@ -792,7 +796,7 @@
 
           {#if feedback}
             <p class={`mt-4 rounded-lg bg-slate-50 px-4 py-3 text-sm ${feedbackTone}`}>
-              <TextWithMath text={feedback} />
+              {@html formattedFeedback}
             </p>
           {/if}
 
