@@ -503,7 +503,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           separator: ',',
           inputHint: 'Enter chickens first, then sheep, separated by a comma — for example: 1,2.',
           success: 'Correct! There are 12 chickens and 8 sheep.',
-          failure: 'Not quite. Enter chickens first, then sheep (e.g. 12,8) and re-check the equations.',
+          failure: 'Not quite. Enter chickens first, then sheep (e.g. 1,2) and re-check the equations.',
         },
         solutionSteps: [
           {
