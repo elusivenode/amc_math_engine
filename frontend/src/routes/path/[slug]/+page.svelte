@@ -65,6 +65,14 @@
     summary: StageStats;
   };
 
+  const PROBLEMS_PER_LEVEL = 15;
+
+  function stageCapacity(subpath: SubpathSummary): number {
+    const levelsCount = subpath.levels?.length ?? 0;
+    const nominalCapacity = levelsCount * PROBLEMS_PER_LEVEL;
+    return Math.max(subpath.stats.total ?? 0, nominalCapacity);
+  }
+
   const stageLabels: Record<string, string> = {
     BASIC: 'Basic prep and warm-up',
     INTERMEDIATE: 'Intermediate problem solving',
@@ -287,7 +295,7 @@
                 {#if subpath.description}
                   <p class="text-sm text-slate-500">{subpath.description}</p>
                 {/if}
-                <p class="text-xs text-slate-500">{subpath.stats.mastered}/{subpath.stats.total} mastered</p>
+                <p class="text-xs text-slate-500">{subpath.stats.mastered}/{stageCapacity(subpath)} mastered</p>
               </div>
               <span class="rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600">
                 {stageLabels[subpath.stage] ?? subpath.stage}

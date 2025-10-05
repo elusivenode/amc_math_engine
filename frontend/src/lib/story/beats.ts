@@ -205,7 +205,7 @@ export const storyBeats: StoryBeat[] = [
     problemId: 'algebra-avengers-basic-1-problem-10',
     title: 'A hidden riddle.',
     narrative: [
-      'Emmy had read through every page of the great tome. Twice. After her meeting with Carl Friedrich, she could think of nothing else. “I know this is important… but why?” she whispered. For hours she had traced the passages about the Order and their devotion to problem-solving, yet nowhere did it explain why the name of a squire—Gauss—was scrawled in its margin.',
+      'Emmy had read through every page of the great tome. Twice. After her meeting with Carl Friedrich, she could think of nothing else. “I know this is important… but why?” she whispered. For hours she had traced the passages about the Order and their devotion to problem-solving, yet nowhere did it explain why the name of a Squire Gauss was scrawled in its margin.',
       'Her eyes burned with fatigue. With a sigh, she closed the heavy cover and heaved the volume back toward its place on the shelf. As she slid it into place, something shifted. A thin, rectangular slip of parchment edged its way from beneath the spine, fluttering onto the floor.',
       'Emmy bent down, heart quickening. On the slip, in faded ink, was written a riddle:',
       '“Red lies at the ratio 3:2, when all of their prayers align.”',
