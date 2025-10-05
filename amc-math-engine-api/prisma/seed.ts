@@ -478,7 +478,72 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           content: 'Once you know the dimensions, calculate the area $A = l × w$.',
         },
       ],
-    }    
+    },
+    {
+      id: 'algebra-avengers-basic-1-problem-9',
+      title: 'Counting heads and legs.',
+      statement:
+        'A farmer has chickens and sheep. Together they have 20 heads and 56 legs. How many chickens and how many sheep are there?',
+      solution:
+        'Use two equations: $c + s = 20$ (heads) and $2c + 4s = 56$ (legs). Solve for $c$ and $s$.',
+      difficulty: 3,
+      tags: ['algebra', 'systems of equations', 'AMC junior'],
+      metadata: {
+        tagline: 'Translate word problems into a system of equations.',
+        objectives: [
+          'Set up two equations from a real-world scenario.',
+          'Apply substitution or elimination to solve a system.',
+          'Interpret the solution in context (number of animals).'
+        ],
+        answer: {
+          type: 'object',
+          value: { chickens: 12, sheep: 8 },
+          success: 'Correct! There are 12 chickens and 8 sheep.',
+          failure: 'Start with $c + s = 20$ and $2c + 4s = 56$ and solve step by step.',
+          tolerance: 0,
+        },
+        solutionSteps: [
+          {
+            text: 'Let $c$ = number of chickens and $s$ = number of sheep.',
+            expression: 'c + s = 20',
+          },
+          {
+            text: 'Use the leg count equation.',
+            expression: '2c + 4s = 56',
+          },
+          {
+            text: 'Simplify the second equation by dividing through by 2.',
+            expression: 'c + 2s = 28',
+          },
+          {
+            text: 'Subtract the first equation $(c + s = 20)$ from $(c + 2s = 28)$.',
+            expression: 's = 8',
+          },
+          {
+            text: 'Substitute back to find chickens.',
+            expression: 'c + 8 = 20 ⇒ c = 12',
+          },
+        ],
+      },
+      hints: [
+        {
+          order: 1,
+          content: 'Each animal has 1 head, so $c + s = 20$.',
+        },
+        {
+          order: 2,
+          content: 'Each chicken has 2 legs, each sheep has 4 legs, so $2c + 4s = 56$.',
+        },
+        {
+          order: 3,
+          content: 'Try simplifying the second equation by dividing through by 2.',
+        },
+        {
+          order: 4,
+          content: 'Use elimination or substitution to solve the system.',
+        },
+      ],
+    },    
   ],
 };
 
