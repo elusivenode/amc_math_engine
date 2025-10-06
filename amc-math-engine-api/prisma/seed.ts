@@ -600,6 +600,59 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
         },
       ],
     },
+    {
+      id: 'algebra-avengers-basic-1-problem-11',
+      title: 'Currency confusion.',
+      statement:
+        'Suppose an Australian dollar is worth 55 US cents. An Australian tourist in the USA buys an item worth $US100 and pays $A200. What should the change be in $US?',
+      solution:
+        'First convert the $A200 into US dollars: $200 × 0.55 = $110. The tourist spends $100, so the change should be $110 − $100 = $10 US.',
+      difficulty: 3,
+      tags: ['algebra', 'rates', 'currency conversion', 'AMC junior'],
+      metadata: {
+        tagline: 'Work carefully with exchange rates to find equivalent values.',
+        objectives: [
+          'Convert between currencies using an exchange rate.',
+          'Subtract costs to determine change.',
+          'Check units carefully to avoid mistakes.'
+        ],
+        answer: {
+          type: 'numeric',
+          value: 10,
+          success: 'Correct! The change is $10 US.',
+          failure: 'First convert $A200 into US dollars: $200 × 0.55 = $110. Then subtract the cost $100.',
+          tolerance: 0,
+        },
+        solutionSteps: [
+          {
+            text: 'Convert the Australian dollars into US dollars.',
+            expression: '200 × 0.55 = 110',
+          },
+          {
+            text: 'Subtract the cost of the item in US dollars.',
+            expression: '110 − 100 = 10',
+          },
+          {
+            text: 'So the change is $10 US.',
+            expression: '10',
+          },
+        ],
+      },
+      hints: [
+        {
+          order: 1,
+          content: 'Start by converting the $A200 into US dollars.',
+        },
+        {
+          order: 2,
+          content: 'Use the exchange rate: 1 AUD = 0.55 USD.',
+        },
+        {
+          order: 3,
+          content: 'Now subtract the item cost of $100 from the converted value.',
+        },
+      ],
+    },    
   ],
 };
 

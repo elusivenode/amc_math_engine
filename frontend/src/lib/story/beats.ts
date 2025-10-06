@@ -215,4 +215,22 @@ export const storyBeats: StoryBeat[] = [
     imageAlt: 'Princess Emmy in the candlelit library discovering a hidden parchment.',
     caption: 'In the quiet library, Emmy uncovers a mysterious riddle hidden in the spine of the book.',
   },  
+  {
+    id: 'algebra-avengers-problem-11',
+    pathSlug: 'algebra-avengers',
+    sequence: 12,
+    context: 'problem',
+    problemOrder: 11,
+    problemId: 'algebra-avengers-basic-1-problem-11',
+    title: 'The Baron’s fury.',
+    narrative: [
+      '“What do you mean your men can’t find them!” The Red Baron’s voice cracked like a whip, echoing through the vaulted hall. He slammed his gauntleted hand on the oak table, the sound rattling goblets and scattering parchments. His face blazed crimson, eyes burning with fury so intense that even his lead henchman flinched.',
+      '“We know he had the Stones of Enlightenment! Your scouts said they were in his possession the day before we seized him,” the Baron snarled.',
+      'The henchman bowed his head, words tumbling nervously. “They were there, my Lord… but they are not there now. The place has been cleared out.”',
+      'A suffocating silence followed, heavy as the storm before a thunderclap. The soldiers in the shadows dared not breathe. The Red Baron’s glare lingered on his trembling servant, the air alive with the threat of sudden, violent reprisal.'
+    ],
+    image: '/story/algebraic-avengers/beat_12.png',
+    imageAlt: 'The Red Baron slams his hand on a war table in a vaulted hall as soldiers cower.',
+    caption: 'The Red Baron’s fury fills the hall with dread.',
+  },  
 ];
