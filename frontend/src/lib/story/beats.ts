@@ -233,4 +233,21 @@ export const storyBeats: StoryBeat[] = [
     imageAlt: 'The Red Baron slams his hand on a war table in a vaulted hall as soldiers cower.',
     caption: 'The Red Baron’s fury fills the hall with dread.',
   },  
+  {
+    id: 'algebra-avengers-problem-12',
+    pathSlug: 'algebra-avengers',
+    sequence: 13,
+    context: 'problem',
+    problemOrder: 12,
+    problemId: 'algebra-avengers-basic-1-problem-12',
+    title: 'The hunt begins.',
+    narrative: [
+      '“Spread out! Find the Stones! Spare no one in the search!” roared the lead henchman, his voice ragged with fear as much as fury. He slammed a fist into his palm, eyes darting nervously toward the great hall behind him.',
+      '“Find them… FIND them… FIND THEM!” The words rose to a shriek, echoing against the stone walls. The men stiffened, their terror plain; none dared whisper the unthinkable—that the Stones might already be gone.',
+      'Torches flared as soldiers broke ranks, scattering into the night. Boots pounded against cobblestones, shadows stretched across the courtyard, and the air reeked of desperation.'
+    ],
+    image: '/story/algebraic-avengers/beat_13.png',
+    imageAlt: 'Soldiers in red coats scatter from the great hall courtyard at night, torches flaring.',
+    caption: 'The Red Baron’s men scatter into the night, desperate to find the Stones.',
+  }  
 ];

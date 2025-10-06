@@ -652,7 +652,74 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           content: 'Now subtract the item cost of $100 from the converted value.',
         },
       ],
-    },    
+    },  
+    {
+      id: 'algebra-avengers-basic-1-problem-12',
+      title: 'A walk in directions.',
+      statement:
+        'Mila walks 1 km east, then 2 km south, 3 km west and finally 4 km north. How far is she from her starting point?',
+      solution:
+        'Track her net movement: East – West = 1 − 3 = − 2 km (2 km west). North – South = 4 − 2 = 2 km (2 km north). Her displacement is the diagonal of a right triangle with sides 2 and 2, so distance = √(2² + 2²) = √8 = 2√2 km.',
+      difficulty: 4,
+      tags: ['algebra', 'geometry', 'Pythagoras', 'AMC junior'],
+      metadata: {
+        tagline: 'Use coordinates or Pythagoras’ theorem to calculate displacement.',
+        objectives: [
+          'Represent movements east/west and north/south as net displacements.',
+          'Form a right triangle with the displacements as legs.',
+          'Apply Pythagoras’ theorem to compute the final distance.'
+        ],
+        answer: {
+          type: 'numeric',
+          value: 2.828,
+          success: 'Correct! Mila ends up about 2.83 km from her starting point.',
+          failure: 'First find net movements: 2 km west, 2 km north. Then apply Pythagoras: √(2² + 2²).',
+          tolerance: 0.01,
+          supportsRadicals: true,
+          inputHint: 'Use √ to enter radical forms like √8 or 2√2, or give a decimal to two decimal places.',
+        },
+        solutionSteps: [
+          {
+            text: 'Compute net east – west movement.',
+            expression: '1 − 3 = − 2 (2 km west)',
+          },
+          {
+            text: 'Compute net north – south movement.',
+            expression: '4 − 2 = 2 (2 km north)',
+          },
+          {
+            text: 'Form a right triangle with legs 2 and 2.',
+            expression: 'legs = 2, 2',
+          },
+          {
+            text: 'Apply Pythagoras’ theorem.',
+            expression: '√(2² + 2²) = √8 = 2√2',
+          },
+          {
+            text: 'Simplify result.',
+            expression: '≈ 2.83 km',
+          },
+        ],
+      },
+      hints: [
+        {
+          order: 1,
+          content: 'First find Mila’s net east–west movement.',
+        },
+        {
+          order: 2,
+          content: 'Then find her net north–south movement.',
+        },
+        {
+          order: 3,
+          content: 'Draw a right triangle using these net displacements.',
+        },
+        {
+          order: 4,
+          content: 'Use Pythagoras: √(a² + b²).',
+        },
+      ],
+    },
   ],
 };
 

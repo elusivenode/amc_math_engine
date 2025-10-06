@@ -19,6 +19,8 @@ export type NumericAnswer = {
   tolerance?: number;
   success: string;
   failure: string;
+  supportsRadicals?: boolean;
+  inputHint?: string;
 };
 
 export type PairAnswer = {

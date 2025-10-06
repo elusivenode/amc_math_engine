@@ -15,6 +15,28 @@
     dispatch('input', value);
   }
 
+  export function insertAtCursor(insertText: string) {
+    if (!insertText) return;
+
+    if (!inputEl) {
+      value = `${value ?? ''}${insertText}`;
+      dispatch('input', value);
+      return;
+    }
+
+    const start = inputEl.selectionStart ?? inputEl.value.length;
+    const end = inputEl.selectionEnd ?? inputEl.value.length;
+    const current = inputEl.value;
+    const next = `${current.slice(0, start)}${insertText}${current.slice(end)}`;
+
+    value = next;
+    inputEl.value = next;
+    inputEl.focus();
+    const caret = start + insertText.length;
+    inputEl.setSelectionRange(caret, caret);
+    dispatch('input', value);
+  }
+
   $: if (inputEl && value !== inputEl.value) {
     inputEl.value = value;
   }

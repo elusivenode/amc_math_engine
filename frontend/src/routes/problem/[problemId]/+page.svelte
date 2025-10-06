@@ -98,6 +98,7 @@
   let revealedHints = 0;
   let attemptValue = '';
   let attempts = 0;
+  let mathInputRef: { insertAtCursor?: (text: string) => void } | null = null;
   let attemptStatus: AttemptStatus = 'idle';
   let feedback = '';
   let submissionError = '';
@@ -119,6 +120,25 @@
   let nextStoryPanel: StoryBeat | null = null;
   let showContinueButton = false;
   let formattedFeedback = '';
+  let showRadicalShortcut = false;
+
+  $: {
+    if (problem?.answer?.type === 'numeric') {
+      const numericAnswer = problem.answer as NumericAnswer;
+      showRadicalShortcut = numericAnswer.supportsRadicals === true;
+    } else {
+      showRadicalShortcut = false;
+    }
+  }
+
+  function insertSquareRootSymbol() {
+    if (mathInputRef?.insertAtCursor) {
+      mathInputRef.insertAtCursor('√');
+      return;
+    }
+
+    attemptValue = `${attemptValue ?? ''}√`;
+  }
 
   function formatStatusLabel(status: string): string {
     const lower = status.toLowerCase().replace(/_/g, ' ');
@@ -210,6 +230,7 @@
     tolerance: 0,
     success: 'Great work!',
     failure: 'Keep exploring the algebraic steps.',
+    supportsRadicals: false,
   };
 
   function normalizeAnswer(metadata: unknown): AnswerDefinition {
@@ -261,6 +282,8 @@
       tolerance: typeof raw.tolerance === 'number' ? raw.tolerance : 0,
       success: typeof raw.success === 'string' ? raw.success : 'Great work!',
       failure: typeof raw.failure === 'string' ? raw.failure : 'Keep exploring the algebraic steps.',
+      supportsRadicals: raw.supportsRadicals === true,
+      inputHint: typeof raw.inputHint === 'string' ? raw.inputHint : undefined,
     } satisfies NumericAnswer;
   }
 
@@ -615,6 +638,10 @@
     });
 
     normalized = normalized
+      .replace(/\\sqrt\s*\{([^{}]+)\}/g, (_match, radicand) => `root(${radicand})`)
+      .replace(/√\s*\(([^()]+)\)/g, (_match, radicand) => `root(${radicand})`)
+      .replace(/√\s*([0-9.]+)/g, (_match, radicand) => `root(${radicand})`)
+      .replace(/\\sqrt/g, 'root')
       .replace(/\\cdot|\\times/g, '*')
       .replace(/\\div/g, '/')
       .replace(/\\left|\\right/g, '')
@@ -623,6 +650,16 @@
       .replace(/\\ /g, '')
       .replace(/[{}]/g, '')
       .trim();
+
+    normalized = normalized.replace(/(\d|\))\s*(root|sqrt)\s*\(/gi, (_match, prefix, keyword) => `${prefix}*${keyword}(`);
+
+    normalized = normalized.replace(/(root|sqrt)\s*\(([^()]*)\)/gi, (_match, _keyword, radicand) => {
+      const inner = radicand.trim();
+      if (!inner) {
+        return 'NaN';
+      }
+      return `(${inner})**0.5`;
+    });
 
     if (!normalized) return null;
 
@@ -879,8 +916,27 @@
         </div>
 
         <div class="mt-4 space-y-4">
-          <MathInput bind:value={attemptValue} placeholder="Type your answer or expression" />
-          {#if problem.answer.type === 'pair' && problem.answer.inputHint}
+          <div class="flex items-start gap-2">
+            <div class="flex-1">
+              <MathInput
+                bind:this={mathInputRef}
+                bind:value={attemptValue}
+                placeholder="Type your answer or expression"
+              />
+            </div>
+            {#if showRadicalShortcut}
+              <button
+                class="rounded-lg border border-slate-300 px-3 py-2 text-xl leading-none text-slate-600 transition hover:border-indigo-300 hover:text-indigo-600"
+                type="button"
+                on:click={insertSquareRootSymbol}
+                aria-label="Insert square root symbol"
+                title="Insert √"
+              >
+                √
+              </button>
+            {/if}
+          </div>
+          {#if problem.answer.inputHint}
             <p class="text-xs text-slate-500">{problem.answer.inputHint}</p>
           {/if}
           <div class="flex flex-wrap gap-3">
