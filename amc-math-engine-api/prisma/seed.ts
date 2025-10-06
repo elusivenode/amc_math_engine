@@ -604,9 +604,9 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
       id: 'algebra-avengers-basic-1-problem-11',
       title: 'Currency confusion.',
       statement:
-        'Suppose an Australian dollar is worth 55 US cents. An Australian tourist in the USA buys an item worth $US100 and pays $A200. What should the change be in $US?',
+        'Suppose an Australian dollar is worth 55 US cents. An Australian tourist in the USA buys an item worth US\\$100 and pays A\\$200. What should the change be in US\\$?',
       solution:
-        'First convert the $A200 into US dollars: $200 × 0.55 = $110. The tourist spends $100, so the change should be $110 − $100 = $10 US.',
+        'First convert the A\\$200 into US dollars: 200 × 0.55 = 110. The tourist spends 100, so the change should be 110 − 100 = 10 US dollars.',
       difficulty: 3,
       tags: ['algebra', 'rates', 'currency conversion', 'AMC junior'],
       metadata: {
