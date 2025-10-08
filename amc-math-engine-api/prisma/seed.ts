@@ -738,7 +738,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
         ],
         diagram: {
           type: 'image',
-          src: '/problems/algebra/basic/problem-13.svg',
+          src: '/problems/algebra/basic/problem-13.png',
           alt: 'Right triangle with sides 16, 12, and 20 units and altitude h drawn to the base.',
           caption: 'Use the area of the 12-16-20 right triangle to determine the altitude on the hypotenuse.'
         },
@@ -749,7 +749,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           success: 'Correct! Equating the two area expressions gives $h = 9.6$.',
           failure: 'Remember that the same triangle area can be written as $\\tfrac{1}{2}ab$ or $\\tfrac{1}{2}ch$ for a right triangle.',
           supportsRadicals: false,
-          inputHint: 'Enter a decimal or fraction equivalent to 9.6.'
+          inputHint: 'Enter a decimal or fraction equivalent eg. 1.3'
         },
         solutionSteps: [
           {
