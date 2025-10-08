@@ -785,9 +785,9 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
       id: 'algebra-avengers-basic-1-problem-14',
       title: 'Hanako’s Marble Puzzle',
       statement:
-        'Hanako has a bag that holds only black and white marbles. The ratio of black marbles to the total number of marbles is 2:5. If Hanako adds 4 black marbles and takes out 10 white marbles, there will be twice as many black marbles as white marbles. How many white marbles did Hanako start with?',
+        'Hanako has a bag that holds only black and white marbles. The ratio of black marbles to the total number of marbles is 2:5. If Hanako adds 4 black marbles and takes out 10 white marbles, there will be twice as many black marbles as white marbles. How many marbles did Hanako start with?',
       solution:
-        'Let b be the number of black marbles and w be the number of white marbles. From the ratio, b/(b+w) = 2/5, which simplifies to 3b = 2w. After the change, (b+4)/(w−10) = 2, which gives b+4 = 2w−20. Solving these two equations gives b = 12 and w = 18. So Hanako started with 18 white marbles.',
+        'Let b be the number of black marbles and w be the number of white marbles. From the ratio, b/(b+w) = 2/5, which simplifies to 3b = 2w. After the change, (b+4)/(w−10) = 2, which gives b+4 = 2w−20. Solving these two equations gives b = 12 and w = 18. So Hanako started with 30 marbles.',
       difficulty: 4,
       tags: ['algebra', 'ratios', 'word problems', 'AMC junior'],
       metadata: {
@@ -799,9 +799,9 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
         ],
         answer: {
           type: 'numeric',
-          value: 18,
-          success: 'Correct! Hanako started with 18 white marbles.',
-          failure: 'Form the equations: 3b = 2w and b + 4 = 2w − 20. Solve to find w = 18.',
+          value: 30,
+          success: 'Correct! Hanako started with 30 marbles.',
+          failure: 'Form the equations: 3b = 2w and b + 4 = 2w − 20. 2 equations, 2 unknowns.',
           tolerance: 0,
         },
         solutionSteps: [
@@ -827,7 +827,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           },
           {
             text: 'Solve to find b = 12 and w = 18. Total marbles to start = 30.',
-            expression: 'b = 12, w = 18',
+            expression: 'b = 12, w = 18, b + w = 30',
           }
         ],
       },
@@ -842,7 +842,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
         },
         {
           order: 3,
-          content: 'Translate the change condition: (b+4)/(w−10) = 2, then solve the two equations.',
+          content: 'Translate the change condition: (b+4)/(w−10) = 2, then solve the two equations and add the two unknowns to get the total number of marbles.',
         },
       ],
     },
