@@ -135,7 +135,7 @@ export const storyBeats: StoryBeat[] = [
       'Carl Friedrich walks alone under the moonlight, his boots crunching softly against the gravel path. The air is cool, and the night insects sing along the stream beside him.',
       'His thoughts race, replaying the strange encounter with Princess Emmy. “She was holding something back,” he murmurs, brow furrowed. “What on earth does that book have to do with me? I never even met Archimedes … all I know of him and the Order is what my father taught me during our lessons."',
       'Crossing the small stone bridge leading back to the stables, Carl feels a shiver course through him, not from the night air but from a strange, heavy sense of connection - like unseen eyes watching, or an echo of Archimedes’ presence carried in the current below. The moonlight glimmers on the water as if whispering secrets he cannot yet understand.',
-      
+
     ],
     image: '/story/algebraic-avengers/beat_7.png',
     imageAlt: 'Carl Friedrich walks home, thoughts swirling through this mind.',
@@ -153,7 +153,7 @@ export const storyBeats: StoryBeat[] = [
       'The first light of dawn creeps into the stable yard, pale and cold. Carl Friedrich rises after a restless night, his mind still crowded with questions. He moves with quiet purpose, leading Thunder - the proud steed of Sir Euler - into the aisle. The horse snorts gently, steam rising from its nostrils in the morning chill, as Carl rubs him down with steady strokes.',
       'As his hands work the brush through Thunder’s coat, Carl drifts back to memories of his father. Long evenings bent over parchment, ink smudged on their fingers, as they worked through mathematical problems by candlelight. His father’s eyes always burned with something more than simple curiosity - something Carl only half understood. Each lesson carried a story of the Order of the Olympiad, of Archimedes’ daring, of the struggle to preserve reason.',
       '“Fight for reason. Defend rationality, son,” his father had always insisted, voice steady with conviction. Carl remembered smiling at the time, thinking it was nothing more than romantic idealism. But now, in the quiet dawn, with the strange weight of Emmy’s summons still pressing on him, those words seemed less fanciful - and more like a warning.',
-      
+
     ],
     image: '/story/algebraic-avengers/beat_8.png',
     imageAlt: 'Carl Friedrich remembers.',
@@ -175,7 +175,7 @@ export const storyBeats: StoryBeat[] = [
     image: '/story/algebraic-avengers/beat_9.png',
     imageAlt: 'Carl Friedrich at his father’s funeral.',
     caption: 'Carl remembers his father’s final lesson as the rain falls.',
-  },  
+  },
   {
     id: 'algebra-avengers-problem-9',
     pathSlug: 'algebra-avengers',
@@ -195,7 +195,7 @@ export const storyBeats: StoryBeat[] = [
     image: '/story/algebraic-avengers/beat_10.png',
     imageAlt: 'Carl and his mother Dorothea at the kitchen table.',
     caption: 'Dorothea recalls the mysterious visitor who sparked Gebhard’s passion for mathematics.',
-  },  
+  },
   {
     id: 'algebra-avengers-problem-10',
     pathSlug: 'algebra-avengers',
@@ -214,7 +214,7 @@ export const storyBeats: StoryBeat[] = [
     image: '/story/algebraic-avengers/beat_11.png',
     imageAlt: 'Princess Emmy in the candlelit library discovering a hidden parchment.',
     caption: 'In the quiet library, Emmy uncovers a mysterious riddle hidden in the spine of the book.',
-  },  
+  },
   {
     id: 'algebra-avengers-problem-11',
     pathSlug: 'algebra-avengers',
@@ -232,7 +232,7 @@ export const storyBeats: StoryBeat[] = [
     image: '/story/algebraic-avengers/beat_12.png',
     imageAlt: 'The Red Baron slams his hand on a war table in a vaulted hall as soldiers cower.',
     caption: 'The Red Baron’s fury fills the hall with dread.',
-  },  
+  },
   {
     id: 'algebra-avengers-problem-12',
     pathSlug: 'algebra-avengers',
@@ -249,5 +249,23 @@ export const storyBeats: StoryBeat[] = [
     image: '/story/algebraic-avengers/beat_13.png',
     imageAlt: 'Soldiers in red coats scatter from the great hall courtyard at night, torches flaring.',
     caption: 'The Red Baron’s men scatter into the night, desperate to find the Stones.',
-  }  
+  },
+  {
+    id: 'algebra-avengers-problem-13',
+    pathSlug: 'algebra-avengers',
+    sequence: 14,
+    context: 'problem',
+    problemOrder: 13,
+    problemId: 'algebra-avengers-basic-1-problem-13',
+    title: 'Archimedes’ Last Instructions',
+    narrative: [
+      'Archimedes bent over his desk, quill scratching furiously across the parchment he had labored over for more than a week.',
+      'Before him lay the Stones, their facets catching the candlelight — constant reminders of what was at stake. He knew the net was closing in.',
+      'For years the Red Baron’s influence had spread like a shadow, and now his hunger for power had risen to a fever pitch. Only yesterday Archimedes had glimpsed two dark figures lurking beyond his cottage window at dusk, vanishing into the night when he cried out.',
+      'With every stroke of the quill he prepared his final instructions, a plan to spirit the Stones away from danger. He might fall, but so long as logic and reason endured, the Order would rise again.'
+    ],
+    image: '/story/algebraic-avengers/beat_14.png',
+    imageAlt: 'Archimedes frantically writes at his oak desk by candlelight, the four glowing Stones before him, shadowy figures faintly visible outside the window.',
+    caption: 'Archimedes prepares his final instructions to safeguard the Stones, knowing the Red Baron’s net is closing in.',
+  }
 ];

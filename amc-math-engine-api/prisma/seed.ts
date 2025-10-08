@@ -546,7 +546,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           content: 'Use elimination or substitution to solve the system.',
         },
       ],
-    },    
+    },
     {
       id: 'algebra-avengers-basic-1-problem-10',
       title: 'Fruity ratios.',
@@ -652,14 +652,14 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           content: 'Now subtract the item cost of $100 from the converted value.',
         },
       ],
-    },  
+    },
     {
       id: 'algebra-avengers-basic-1-problem-12',
       title: 'A walk in directions.',
       statement:
         'Mila walks 1 km east, then 2 km south, 3 km west and finally 4 km north. How far is she from her starting point?',
       solution:
-        'Track her net movement: East – West = 1 − 3 = − 2 km (2 km west). North – South = 4 − 2 = 2 km (2 km north). Her displacement is the diagonal of a right triangle with sides 2 and 2, so distance = √(2² + 2²) = √8 = 2√2 km.',
+        'Track her net movement: East – West = 1 − 3 = −2 km (2 km west). North – South = 4 − 2 = 2 km (2 km north). Her displacement is the diagonal of a right triangle with sides 2 and 2, so distance = √(2² + 2²) = √8 = 2√2 km.',
       difficulty: 4,
       tags: ['algebra', 'geometry', 'Pythagoras', 'AMC junior'],
       metadata: {
@@ -717,6 +717,67 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
         {
           order: 4,
           content: 'Use Pythagoras: √(a² + b²).',
+        },
+      ],
+    },
+    {
+      id: 'algebra-avengers-basic-1-problem-13',
+      title: 'Altitude of the 12-16-20 triangle.',
+      statement:
+        'In the triangle shown, the sides measure 16, 12, and 20 units as labelled. The height $h$ is drawn perpendicular to the base of length 20. Find the value of $h$.',
+      solution:
+        'Use the area of the right triangle to compute the altitude: $\\tfrac{1}{2} × 12 × 16 = 96$. Then $\\tfrac{1}{2} × 20 × h = 96$, giving $h = \\tfrac{192}{20} = 9.6$.',
+      difficulty: 4,
+      tags: ['algebra', 'geometry', 'area', 'AMC junior'],
+      metadata: {
+        tagline: 'Relate a right triangle’s area to the altitude on the hypotenuse.',
+        objectives: [
+          'Recall that two expressions for the area of the same triangle must match.',
+          'Use the altitude-on-hypotenuse formula $h = \\frac{ab}{c}$ for a right triangle if you remember it.',
+          'Solve a simple equation after equating the two area expressions.'
+        ],
+        diagram: {
+          type: 'image',
+          src: '/problems/algebra/basic/problem-13.svg',
+          alt: 'Right triangle with sides 16, 12, and 20 units and altitude h drawn to the base.',
+          caption: 'Use the area of the 12-16-20 right triangle to determine the altitude on the hypotenuse.'
+        },
+        answer: {
+          type: 'numeric',
+          value: 9.6,
+          tolerance: 0.01,
+          success: 'Correct! Equating the two area expressions gives $h = 9.6$.',
+          failure: 'Remember that the same triangle area can be written as $\\tfrac{1}{2}ab$ or $\\tfrac{1}{2}ch$ for a right triangle.',
+          supportsRadicals: false,
+          inputHint: 'Enter a decimal or fraction equivalent to 9.6.'
+        },
+        solutionSteps: [
+          {
+            text: 'Compute the area using the legs that form the right angle.',
+            expression: '\\tfrac{1}{2} × 12 × 16 = 96',
+          },
+          {
+            text: 'Express the same area using the hypotenuse (length 20) and altitude $h$.',
+            expression: '\\tfrac{1}{2} × 20 × h = 96',
+          },
+          {
+            text: 'Solve the equation for $h$.',
+            expression: 'h = \\frac{192}{20} = 9.6',
+          },
+        ],
+      },
+      hints: [
+        {
+          order: 1,
+          content: 'Compute the area using the two legs that meet at the right angle.',
+        },
+        {
+          order: 2,
+          content: 'The same area can also be written as $\\tfrac{1}{2} \\times$ (base) $\\times$ (height).',
+        },
+        {
+          order: 3,
+          content: 'Set $\\tfrac{1}{2} × 12 × 16$ equal to $\\tfrac{1}{2} × 20 × h$ and solve for $h$.',
         },
       ],
     },

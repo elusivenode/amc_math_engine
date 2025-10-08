@@ -326,6 +326,33 @@
     ];
   }
 
+  function getDiagram(metadata: Record<string, unknown>) {
+    const raw = metadata.diagram;
+    if (!raw || typeof raw !== 'object') {
+      return undefined;
+    }
+
+    const diagram = raw as Record<string, unknown>;
+    const type = typeof diagram.type === 'string' ? diagram.type : 'image';
+
+    if (type === 'image') {
+      const src = typeof diagram.src === 'string' ? diagram.src : null;
+      const alt = typeof diagram.alt === 'string' ? diagram.alt : '';
+      if (!src) {
+        return undefined;
+      }
+
+      return {
+        type: 'image' as const,
+        src,
+        alt,
+        caption: typeof diagram.caption === 'string' ? diagram.caption : undefined,
+      };
+    }
+
+    return undefined;
+  }
+
   function transformRemoteProblem(remote: RemoteProblem): ProblemDefinition {
     const metadata =
       (remote.metadata && typeof remote.metadata === 'object'
@@ -336,6 +363,7 @@
       typeof metadata.tagline === 'string' ? metadata.tagline : remote.level.subpath.title;
     const objectives = getObjectives(metadata);
     const solutionSteps = getSolutionSteps(metadata, remote.solution);
+    const diagram = getDiagram(metadata);
 
     return {
       id: remote.id,
@@ -344,6 +372,7 @@
       difficulty: `Worth ${remote.level.points} pts`,
       objectives: objectives.length > 0 ? objectives : [`Stage: ${remote.level.subpath.title}`],
       question: remote.statement,
+      diagram,
       hints: remote.hints
         .sort((a, b) => a.order - b.order)
         .map((hint, index) => ({
@@ -826,24 +855,24 @@
         </div>
       </div>
       <div class="mt-6 space-y-4 text-lg text-slate-800">
+        {#if problem.diagram}
+          <figure class="rounded-xl border border-slate-100 bg-slate-50 p-4 text-center">
+            {#if problem.diagram.type === 'image'}
+              <img
+                src={problem.diagram.src}
+                alt={problem.diagram.alt}
+                class="mx-auto h-auto max-h-80 w-full max-w-xl object-contain"
+                loading="lazy"
+              />
+            {:else if problem.diagram.type === 'component'}
+              <svelte:component this={problem.diagram.component} />
+            {/if}
+            {#if problem.diagram.caption}
+              <figcaption class="mt-3 text-sm text-slate-500">{problem.diagram.caption}</figcaption>
+            {/if}
+          </figure>
+        {/if}
         <TextWithMath text={problem.question} />
-          {#if problem.diagram}
-            <figure class="rounded-xl border border-slate-100 bg-slate-50 p-4 text-center">
-              {#if problem.diagram.type === 'image'}
-                <img
-                  src={problem.diagram.src}
-                  alt={problem.diagram.alt}
-                  class="mx-auto h-auto max-h-80 w-full max-w-xl object-contain"
-                  loading="lazy"
-                />
-              {:else if problem.diagram.type === 'component'}
-                <svelte:component this={problem.diagram.component} />
-              {/if}
-              {#if problem.diagram.caption}
-                <figcaption class="mt-3 text-sm text-slate-500">{problem.diagram.caption}</figcaption>
-              {/if}
-            </figure>
-          {/if}
           <p class="text-sm text-slate-500">
             {#if problem.answer.type === 'pair'}
               Enter your answer as two numbers separated by a comma — {problem.answer.firstLabel ?? 'first value'} first, {problem.answer.secondLabel ?? 'second value'} second. Example: "12,8".

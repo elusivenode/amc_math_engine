@@ -16,6 +16,7 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate:dev": "prisma migrate dev",
     "prisma:migrate:deploy": "prisma migrate deploy",
+    "preprisma:seed": "prisma generate",
     "prisma:seed": "prisma db seed",
     "test": "jest",
     "test:watch": "jest --watch",
