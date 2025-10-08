@@ -267,5 +267,25 @@ export const storyBeats: StoryBeat[] = [
     image: '/story/algebraic-avengers/beat_14.png',
     imageAlt: 'Archimedes frantically writes at his oak desk by candlelight, the four glowing Stones before him, shadowy figures faintly visible outside the window.',
     caption: 'Archimedes prepares his final instructions to safeguard the Stones, knowing the Red Baron’s net is closing in.',
+  },
+  {
+    id: 'algebra-avengers-problem-14',
+    pathSlug: 'algebra-avengers',
+    sequence: 15,
+    context: 'problem',
+    problemOrder: 14,
+    problemId: 'algebra-avengers-basic-1-problem-14',
+    title: 'Manfred’s Inheritance',
+    narrative: [
+      'Manfred Flintz was born into privilege, the son of a powerful family of landowners. His father, Sigfried Flintz, was a domineering, heartless man who cared more for wealth than for kin or community.',
+      'Through threats and intimidation, Sigfried bent political decisions in his county to his will. This was the shadow under which Manfred grew up.',
+      'At school he strove tirelessly for his father’s approval, hoping that academic success might earn a word of praise. It never came.',
+      '“These riddles and arithmetic nonsense serve no purpose,” Sigfried would sneer. “The only things that matter are wealth, power, and control. Something is true because we say it is — that is all the logic we need.”',
+      'And so, denied recognition, Manfred turned from his love of study. Year by year, he drifted away from curiosity and reason, until at last he became his father’s mirror — a man shaped by domination, not discovery.'
+    ],
+    image: '/story/algebraic-avengers/beat_15.png',
+    imageAlt: 'A young Manfred Flintz sits at a school desk under the looming shadow of his father Sigfried, who gestures dismissively at books and papers.',
+    caption: 'Raised in the shadow of his father’s tyranny, Manfred Flintz slowly abandoned reason and became his father’s mirror.',
   }
+
 ];

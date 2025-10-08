@@ -781,6 +781,71 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
         },
       ],
     },
+    {
+      id: 'algebra-avengers-basic-1-problem-14',
+      title: 'Hanako’s Marble Puzzle',
+      statement:
+        'Hanako has a bag that holds only black and white marbles. The ratio of black marbles to the total number of marbles is 2:5. If Hanako adds 4 black marbles and takes out 10 white marbles, there will be twice as many black marbles as white marbles. How many white marbles did Hanako start with?',
+      solution:
+        'Let b be the number of black marbles and w be the number of white marbles. From the ratio, b/(b+w) = 2/5, which simplifies to 3b = 2w. After the change, (b+4)/(w−10) = 2, which gives b+4 = 2w−20. Solving these two equations gives b = 12 and w = 18. So Hanako started with 18 white marbles.',
+      difficulty: 4,
+      tags: ['algebra', 'ratios', 'word problems', 'AMC junior'],
+      metadata: {
+        tagline: 'Use simultaneous equations from ratio conditions to find the initial marble counts.',
+        objectives: [
+          'Translate ratio conditions into algebraic equations.',
+          'Apply changes to both black and white marbles.',
+          'Solve simultaneous equations to find the unknowns.'
+        ],
+        answer: {
+          type: 'numeric',
+          value: 18,
+          success: 'Correct! Hanako started with 18 white marbles.',
+          failure: 'Form the equations: 3b = 2w and b + 4 = 2w − 20. Solve to find w = 18.',
+          tolerance: 0,
+        },
+        solutionSteps: [
+          {
+            text: 'Let b be the number of black marbles and w be the number of white marbles.',
+            expression: 'b, w',
+          },
+          {
+            text: 'Use the ratio: b / (b + w) = 2/5.',
+            expression: '3b = 2w',
+          },
+          {
+            text: 'After the change: (b + 4) / (w − 10) = 2.',
+            expression: 'b + 4 = 2w − 20',
+          },
+          {
+            text: 'Now you have 2 equations with 2 unknowns.',
+            expression: '3b = 2w and b + 4 = 2w − 20',
+          },
+          {
+            text: 'Substitute: b + 4 = 3b − 20.',
+            expression: 'b + 4 = 3b − 20',
+          },
+          {
+            text: 'Solve to find b = 12 and w = 18. Total marbles to start = 30.',
+            expression: 'b = 12, w = 18',
+          }
+        ],
+      },
+      hints: [
+        {
+          order: 1,
+          content: 'Let b be black marbles and w be white marbles.',
+        },
+        {
+          order: 2,
+          content: 'Translate the ratio condition: b/(b+w) = 2/5.',
+        },
+        {
+          order: 3,
+          content: 'Translate the change condition: (b+4)/(w−10) = 2, then solve the two equations.',
+        },
+      ],
+    },
   ],
 };
 
