@@ -81,7 +81,11 @@
             id={bodyId}
           >
             {#each panel.narrative as paragraph}
-              <p>{paragraph}</p>
+              {#if paragraph && paragraph.trim().length > 0}
+                <p class="whitespace-pre-line">{paragraph}</p>
+              {:else}
+                <div class="h-4" aria-hidden="true"></div>
+              {/if}
             {/each}
           </div>
 

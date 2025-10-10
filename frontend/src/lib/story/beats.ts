@@ -323,6 +323,6 @@ export const storyBeats: StoryBeat[] = [
     ],
     image: '/story/algebraic-avengers/beat_16.png',
     imageAlt: 'An ancient parchment sealed with wax, inscribed with a riddle about the four Stones.',
-    caption: 'Archimedes hides the locations of the Stones within a riddle, ending with a warning to destroy the letter but remember its code.',
+    caption: 'Archimedes’s letter for instruction to hide the Stones within a riddle.',
   }  
 ];
