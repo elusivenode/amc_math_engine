@@ -915,7 +915,9 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           content: 'Consider each has 100ml total. Therefore you know ml of milk given earlier ratios.',
         },
       ],
-    },    
+    },
+  ],
+  'algebra-avengers:INTERMEDIATE:1': [
     {
       id: 'algebra-avengers-intermediate-1-problem-1',
       title: 'Exponent Shenanigans',
@@ -986,7 +988,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           content: 'Simplify the reciprocal to get the final fraction.',
         },
       ],
-    },    
+    },
   ],
 };
 

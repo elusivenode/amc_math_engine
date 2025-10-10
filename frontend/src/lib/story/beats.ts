@@ -329,7 +329,7 @@ export const storyBeats: StoryBeat[] = [
     id: 'algebra-avengers-beat-17',
     pathSlug: 'algebra-avengers',
     sequence: 17,
-    context: 'story',
+    context: 'problem',
     problemOrder: 16,
     problemId: 'algebra-avengers-intermediate-1-problem-1',
     title: 'Father Mersenne Receives the Letter',

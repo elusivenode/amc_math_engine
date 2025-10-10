@@ -206,8 +206,17 @@
 
     problemOrderById = map;
     nextProblemOrder = candidate?.order ?? null;
+
+    const subpathProgress = path.subpaths.some((subpath) => {
+      const mastered = subpath.stats?.mastered ?? 0;
+      const inProgress = subpath.stats?.inProgress ?? 0;
+      return mastered > 0 || inProgress > 0;
+    });
+
     pathHasProgress =
-      (path.summary.mastered ?? 0) > 0 || (path.summary.inProgress ?? 0) > 0;
+      subpathProgress ||
+      (path.summary.mastered ?? 0) > 0 ||
+      (path.summary.inProgress ?? 0) > 0;
   } else {
     problemOrderById = new Map();
     nextProblemOrder = null;
