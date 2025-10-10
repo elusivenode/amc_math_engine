@@ -488,6 +488,28 @@
       }
     }
 
+    if (rawType === 'fraction') {
+      const value = typeof raw.value === 'string' ? raw.value.trim() : '';
+      if (value.length > 0) {
+        return {
+          type: 'fraction',
+          value,
+          success: typeof raw.success === 'string' ? raw.success : 'Great work!',
+          failure:
+            typeof raw.failure === 'string'
+              ? raw.failure
+              : 'Express the answer as a simplified fraction such as 3/4.',
+          format: typeof raw.format === 'string' ? raw.format : undefined,
+          inputHint:
+            typeof raw.inputHint === 'string'
+              ? raw.inputHint
+              : typeof raw.format === 'string'
+                ? `Answer format: ${raw.format}`
+                : undefined,
+        } satisfies AnswerDefinition;
+      }
+    }
+
     if (rawType === 'ratio') {
       const value = typeof raw.value === 'string' ? raw.value.trim() : '';
       if (value.length > 0) {
@@ -849,6 +871,28 @@
         outcome,
         attemptValue,
       });
+    } else if (answerDef.type === 'fraction') {
+      const normalizedFraction = normalizeFractionString(attemptValue);
+      if (!normalizedFraction) {
+        attemptStatus = 'incorrect';
+        feedback = answerDef.inputHint ?? answerDef.failure;
+        return;
+      }
+
+      const expectedNormalized = normalizeFractionString(answerDef.value);
+      const fallbackExpected = answerDef.value.replace(/\s+/g, '');
+
+      const compareAgainst = expectedNormalized ?? fallbackExpected;
+      isCorrect = normalizedFraction === compareAgainst;
+      outcome = isCorrect ? 'CORRECT' : 'INCORRECT';
+
+      console.log('Attempt prepared', {
+        normalizedFraction,
+        expectedNormalized,
+        compareAgainst,
+        outcome,
+        attemptValue,
+      });
     } else if (answerDef.type === 'ratio') {
       const normalized = attemptValue?.trim();
       if (!normalized) {
@@ -1031,6 +1075,46 @@
     }
 
     return [];
+  }
+
+  function gcdBigInt(a: bigint, b: bigint): bigint {
+    let x = a < 0n ? -a : a;
+    let y = b < 0n ? -b : b;
+    while (y !== 0n) {
+      const temp = x % y;
+      x = y;
+      y = temp;
+    }
+    return x;
+  }
+
+  function normalizeFractionString(raw: string): string | null {
+    if (!raw) return null;
+    const trimmed = raw.trim();
+    if (!trimmed) return null;
+
+    const compact = trimmed.replace(/\s+/g, '');
+    const match = compact.match(/^([-+]?\d+)\/([-+]?\d+)$/);
+    if (!match) {
+      return null;
+    }
+
+    let numerator = BigInt(match[1]);
+    let denominator = BigInt(match[2]);
+    if (denominator === 0n) {
+      return null;
+    }
+
+    if (denominator < 0n) {
+      numerator = -numerator;
+      denominator = -denominator;
+    }
+
+    const divisor = gcdBigInt(numerator, denominator);
+    const simplifiedNumerator = numerator / divisor;
+    const simplifiedDenominator = denominator / divisor;
+
+    return `${simplifiedNumerator}/${simplifiedDenominator}`;
   }
 
   function formatElapsed(seconds: number): string {

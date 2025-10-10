@@ -49,7 +49,16 @@ export type RatioAnswer = {
   inputHint?: string;
 };
 
-export type AnswerDefinition = NumericAnswer | PairAnswer | RatioAnswer;
+export type FractionAnswer = {
+  type: 'fraction';
+  value: string;
+  success: string;
+  failure: string;
+  format?: string;
+  inputHint?: string;
+};
+
+export type AnswerDefinition = NumericAnswer | PairAnswer | RatioAnswer | FractionAnswer;
 
 export type ProblemDiagram =
   | {
