@@ -939,8 +939,8 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           type: 'fraction',
           format: 'a/b',
           value: '25/36',
-          success: 'Correct! (-216/125)^(-2/3) simplifies to 25/36.',
-          failure: 'Check the cube root and the negative exponent carefully. Answer should be in simplest fractional form.',
+          success: 'Correct! $(-216/125)^{-2/3}$ simplifies to $25/36$.',
+          failure: 'Check the cube root and the negative exponent carefully. Make sure your answer is in simplest fractional form.',
           tolerance: 0,
         },
         solutionSteps: [
