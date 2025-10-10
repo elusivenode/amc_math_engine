@@ -41,7 +41,15 @@ export type PairAnswer = {
   failure: string;
 };
 
-export type AnswerDefinition = NumericAnswer | PairAnswer;
+export type RatioAnswer = {
+  type: 'ratio';
+  value: string;
+  success: string;
+  failure: string;
+  inputHint?: string;
+};
+
+export type AnswerDefinition = NumericAnswer | PairAnswer | RatioAnswer;
 
 export type ProblemDiagram =
   | {

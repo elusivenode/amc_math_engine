@@ -483,7 +483,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
       id: 'algebra-avengers-basic-1-problem-9',
       title: 'Counting heads and legs.',
       statement:
-        'A farmer has chickens and sheep. Together they have 20 heads and 56 legs. How many chickens and how many sheep are there? Enter your answer as "chickens,sheep" (for example, "12,8").',
+        'A farmer has chickens and sheep. Together they have 20 heads and 56 legs. How many chickens and how many sheep are there? Enter your answer as "chickens,sheep".',
       solution:
         'Use two equations: $c + s = 20$ (heads) and $2c + 4s = 56$ (legs). Solve for $c$ and $s$.',
       difficulty: 3,
@@ -867,7 +867,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           format: 'hamish_milk:becky_milk',
           value: '6:5',
           success: 'Correct! Hamish has 20 ml milk and Becky has 16.67 ml milk, so the ratio is 6:5.',
-          failure: 'Carefully track the amounts: Hamish ends with 20 ml milk, Becky ends with 16.67 ml milk, giving a 6:5 ratio. Answer should be written as hamish_milk:becky_milk.',
+          failure: 'Carefully track the amounts. Answer should be written as hamish_milk:becky_milk.',
           tolerance: 0,
         },
         solutionSteps: [
@@ -913,6 +913,77 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
         {
           order: 4,
           content: 'Consider each has 100ml total. Therefore you know ml of milk given earlier ratios.',
+        },
+      ],
+    },    
+    {
+      id: 'algebra-avengers-intermediate-1-problem-1',
+      title: 'Exponent Shenanigans',
+      statement:
+        'Evaluate (-216/125)^(-2/3). Give your answer as a simplified fraction.',
+      solution:
+        'We start with (-216/125)^(-2/3). Notice that -216/125 = (-6/5)^3. Therefore (-216/125)^(-2/3) = [(-6/5)^3]^(-2/3). Using the law (a^m)^n = a^(mn), this simplifies to (-6/5)^(-2). A negative exponent means we take the reciprocal: 1 / [(-6/5)^2]. Squaring gives (-6/5)^2 = 36/25. Taking the reciprocal gives 25/36. So the final answer is 25/36.',
+      difficulty: 5,
+      tags: ['algebra', 'exponents', 'fractional exponents', 'AMC intermediate'],
+      metadata: {
+        tagline: 'Apply the laws of exponents to simplify a rational base with a fractional exponent.',
+        objectives: [
+          'Recognize a rational number as a perfect cube.',
+          'Apply the rule (a^m)^n = a^(mn) with fractional exponents.',
+          'Handle negative exponents correctly by taking reciprocals.',
+          'Simplify the resulting fraction to lowest terms.'
+        ],
+        answer: {
+          type: 'fraction',
+          format: 'a/b',
+          value: '25/36',
+          success: 'Correct! (-216/125)^(-2/3) simplifies to 25/36.',
+          failure: 'Check the cube root and the negative exponent carefully. Answer should be in simplest fractional form.',
+          tolerance: 0,
+        },
+        solutionSteps: [
+          {
+            text: 'Rewrite the base: -216/125 = (-6/5)^3.',
+            expression: '(-6/5)^3',
+          },
+          {
+            text: 'Apply the exponent: [(-6/5)^3]^(-2/3).',
+            expression: '(-6/5)^(3 × -2/3)',
+          },
+          {
+            text: 'Simplify the exponents: 3 × -2/3 = -2.',
+            expression: '(-6/5)^(-2)',
+          },
+          {
+            text: 'Apply the negative exponent rule: a^(-n) = 1 / (a^n).',
+            expression: '1 / [(-6/5)^2]',
+          },
+          {
+            text: 'Compute the square: (-6/5)^2 = 36/25.',
+            expression: '36/25',
+          },
+          {
+            text: 'Take the reciprocal: 1 / (36/25) = 25/36.',
+            expression: '25/36',
+          }
+        ],
+      },
+      hints: [
+        {
+          order: 1,
+          content: 'Try to express -216/125 as a perfect cube. What fraction raised to the third power gives this?',
+        },
+        {
+          order: 2,
+          content: 'Apply the exponent law (a^m)^n = a^(mn). What do you get when you multiply 3 by -2/3?',
+        },
+        {
+          order: 3,
+          content: 'A negative exponent means take the reciprocal. What happens to (-6/5)^(-2)?',
+        },
+        {
+          order: 4,
+          content: 'Simplify the reciprocal to get the final fraction.',
         },
       ],
     },    

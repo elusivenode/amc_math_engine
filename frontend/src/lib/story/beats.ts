@@ -324,5 +324,32 @@ export const storyBeats: StoryBeat[] = [
     image: '/story/algebraic-avengers/beat_16.png',
     imageAlt: 'An ancient parchment sealed with wax, inscribed with a riddle about the four Stones.',
     caption: 'Archimedes’s letter of instruction telling its recipient hide the Stones within a riddle.',
+  },
+  {
+    id: 'algebra-avengers-beat-17',
+    pathSlug: 'algebra-avengers',
+    sequence: 17,
+    context: 'story',
+    problemOrder: 16,
+    problemId: 'algebra-avengers-intermediate-1-problem-1',
+    title: 'Father Mersenne Receives the Letter',
+    narrative: [
+      'Father Marin Mersenne was as much a scientist and mathematician as he was a Catholic priest.',
+      'His greatest joy came from unraveling the latest mathematical puzzles, often delivered in the steady stream of letters from his many correspondents.',
+      'In fact, Mersenne had become something of a clearinghouse for Europe’s thinkers — linking minds across borders, passing along conjectures, proofs, and problems.',
+      'Pierre de Fermat, for example, published little, but wrote often to Mersenne, trusting him to spread ideas through his vast network.',
+      '',
+      'So when the priest unfolded this strange, cryptic letter from Archimedes, he hesitated.',
+      'The words were dense, riddling, and unlike the usual academic queries.',
+      'Had the old master finally lost his reason? Mersenne frowned, then shook his head. No… there was intent here.',
+      '',
+      'He leaned back in his chair, candlelight flickering against the vaulted ceiling above.',
+      '"Is this a challenge? A summons? A plea for help?" he murmured.',
+      'His eyes lingered on the parchment, thoughts racing.',
+      'Whatever it was, Archimedes was stirring something deeper — a call that could not be ignored.'
+    ],
+    image: '/story/algebraic-avengers/beat_17.png',
+    imageAlt: 'Father Marin Mersenne, a 1700s priest and mathematician, sits at his desk by candlelight, holding a cryptic letter with a thoughtful expression.',
+    caption: 'Father Mersenne, Europe’s great communicator of ideas, receives Archimedes’s mysterious letter and wonders what it means.',
   }  
 ];

@@ -8,6 +8,7 @@
   import { apiFetch } from '$lib/api';
   import type { AnswerDefinition, NumericAnswer, ProblemDefinition } from '$lib/problems';
   import StoryPanelModal from '$lib/components/StoryPanelModal.svelte';
+  import SubpathCompletionModal from '$lib/components/SubpathCompletionModal.svelte';
   import {
     getStoryBeatForPath,
     getStoryBeatForProblem,
@@ -20,6 +21,8 @@
     markStoryBeatAcknowledged,
     hasAcknowledgedStoryBeat,
   } from '$lib/stores/story-progress';
+  import { hasCelebratedSubpath, markSubpathCelebrated } from '$lib/stores/subpath-celebrations';
+  import { resolveJourneyMessage } from '$lib/journey/messages';
   import type { PageData } from './$types';
 
   type AttemptStatus = 'idle' | 'correct' | 'incorrect';
@@ -79,6 +82,62 @@
     level: AttemptResponse['level'];
   };
 
+  type ProblemTileStatus = 'LOCKED' | 'READY' | 'IN_PROGRESS' | 'MASTERED' | 'COMING_SOON';
+
+  type ProblemTileSummary = {
+    order: number;
+    title: string;
+    status: ProblemTileStatus;
+    isPlaceholder: boolean;
+    isAccessible: boolean;
+    problemId?: string;
+  };
+
+  type LevelSummary = {
+    id: string;
+    title: string;
+    subtitle?: string | null;
+    description?: string | null;
+    tiles: ProblemTileSummary[];
+    isCompleted: boolean;
+  };
+
+  type SubpathStats = {
+    mastered: number;
+    total: number;
+    inProgress: number;
+  };
+
+  type SubpathSummary = {
+    id: string;
+    title: string;
+    description?: string | null;
+    stage: string;
+    isUnlocked: boolean;
+    isCompleted: boolean;
+    levels: LevelSummary[];
+    stats: SubpathStats;
+  };
+
+  type PathProgressResponse = {
+    id: string;
+    slug: string;
+    title: string;
+    description?: string | null;
+    subpaths: SubpathSummary[];
+  };
+
+  type SubpathContext = {
+    pathSlug: string;
+    pathTitle: string;
+    subpathId: string;
+    subpathTitle: string;
+    subpathStage: string;
+    nextStage: string | null;
+    nextSubpathTitle: string | null;
+    wasCompleted: boolean;
+  };
+
   export let data: PageData & {
     problemId: string;
     source: 'sample' | 'remote';
@@ -121,6 +180,15 @@
   let showContinueButton = false;
   let formattedFeedback = '';
   let showRadicalShortcut = false;
+  let subpathContext: SubpathContext | null = null;
+  let subpathContextLoading = false;
+  let journeyModalOpen = false;
+  let journeyHeading = 'Stage Complete';
+  let journeyMessageText = 'Well done.';
+  let journeyCtaLabel = 'CONTINUE YOUR JOURNEY';
+  let journeySubpathTitle: string | null = null;
+  let journeyNextSubpathTitle: string | null = null;
+  let lastProblemReference: string | null = null;
 
   $: {
     if (problem?.answer?.type === 'numeric') {
@@ -224,6 +292,150 @@
     storyAcknowledged = false;
   }
 
+  function findSubpathForProblem(
+    progress: PathProgressResponse,
+    targetProblemId: string,
+  ): { subpath: SubpathSummary; nextSubpath: SubpathSummary | null } | null {
+    for (let index = 0; index < progress.subpaths.length; index += 1) {
+      const subpath = progress.subpaths[index];
+      for (const level of subpath.levels) {
+        for (const tile of level.tiles) {
+          if (tile.problemId === targetProblemId) {
+            return {
+              subpath,
+              nextSubpath: progress.subpaths[index + 1] ?? null,
+            };
+          }
+        }
+      }
+    }
+
+    return null;
+  }
+
+  async function refreshSubpathContext(): Promise<void> {
+    if (!problem || source !== 'remote') {
+      return;
+    }
+
+    const slug = pathSlugHint ?? problem.pathSlug ?? null;
+    const auth = get(authStore);
+    if (!slug || !auth) {
+      return;
+    }
+
+    if (subpathContextLoading) {
+      return;
+    }
+
+    subpathContextLoading = true;
+
+    try {
+      const progress = await apiFetch<PathProgressResponse>(`/paths/progress/${slug}`, {
+        token: auth.token,
+      });
+
+      const located = findSubpathForProblem(progress, problem.id);
+      if (located) {
+        subpathContext = {
+          pathSlug: progress.slug,
+          pathTitle: progress.title,
+          subpathId: located.subpath.id,
+          subpathTitle: located.subpath.title,
+          subpathStage: located.subpath.stage,
+          nextStage: located.nextSubpath?.stage ?? null,
+          nextSubpathTitle: located.nextSubpath?.title ?? null,
+          wasCompleted: located.subpath.isCompleted,
+        } satisfies SubpathContext;
+      } else {
+        subpathContext = null;
+      }
+    } catch (error) {
+      console.warn('Failed to load subpath context', error);
+      subpathContext = null;
+    } finally {
+      subpathContextLoading = false;
+    }
+  }
+
+  async function maybeShowJourneyCelebration(previouslyCompleted: boolean): Promise<void> {
+    if (!problem || source !== 'remote') {
+      return;
+    }
+
+    const slug = subpathContext?.pathSlug ?? pathSlugHint ?? problem.pathSlug ?? null;
+    const auth = get(authStore);
+    if (!slug || !auth) {
+      return;
+    }
+
+    try {
+      const progress = await apiFetch<PathProgressResponse>(`/paths/progress/${slug}`, {
+        token: auth.token,
+      });
+
+      const located = findSubpathForProblem(progress, problem.id);
+      if (!located) {
+        subpathContext = null;
+        return;
+      }
+
+      subpathContext = {
+        pathSlug: progress.slug,
+        pathTitle: progress.title,
+        subpathId: located.subpath.id,
+        subpathTitle: located.subpath.title,
+        subpathStage: located.subpath.stage,
+        nextStage: located.nextSubpath?.stage ?? null,
+        nextSubpathTitle: located.nextSubpath?.title ?? null,
+        wasCompleted: located.subpath.isCompleted,
+      } satisfies SubpathContext;
+
+      if (previouslyCompleted || !located.subpath.isCompleted) {
+        return;
+      }
+
+      if (hasCelebratedSubpath(located.subpath.id)) {
+        return;
+      }
+
+      const message = await resolveJourneyMessage(
+        progress.slug,
+        located.subpath.stage,
+        located.nextSubpath?.stage ?? null,
+      );
+
+      journeyHeading = message.heading ?? 'Stage Complete';
+      journeyMessageText = message.message;
+      journeyCtaLabel = message.ctaLabel ?? 'CONTINUE YOUR JOURNEY';
+      journeySubpathTitle = located.subpath.title;
+      journeyNextSubpathTitle = located.nextSubpath?.title ?? null;
+      journeyModalOpen = true;
+
+      markSubpathCelebrated(located.subpath.id);
+    } catch (error) {
+      console.warn('Failed to verify subpath completion', error);
+    }
+  }
+
+  function closeJourneyModal() {
+    journeyModalOpen = false;
+  }
+
+  function handleJourneyContinue() {
+    closeJourneyModal();
+    const slug = subpathContext?.pathSlug ?? pathSlugHint ?? problem?.pathSlug ?? null;
+    if (slug) {
+      const pathBeat = getStoryBeatForPath(slug);
+      if (pathBeat) {
+        markStoryBeatAcknowledged(pathBeat.id);
+      }
+      void goto(`/path/${slug}`);
+    } else {
+      void goto('/dashboard');
+    }
+  }
+
   const defaultNumericAnswer: NumericAnswer = {
     type: 'numeric',
     value: 0,
@@ -272,6 +484,27 @@
           inputHint: typeof raw.inputHint === 'string' ? raw.inputHint : undefined,
           success: typeof raw.success === 'string' ? raw.success : 'Great work!',
           failure: typeof raw.failure === 'string' ? raw.failure : 'Keep exploring the algebraic steps.',
+        } satisfies AnswerDefinition;
+      }
+    }
+
+    if (rawType === 'ratio') {
+      const value = typeof raw.value === 'string' ? raw.value.trim() : '';
+      if (value.length > 0) {
+        return {
+          type: 'ratio',
+          value,
+          success: typeof raw.success === 'string' ? raw.success : 'Great work!',
+          failure:
+            typeof raw.failure === 'string'
+              ? raw.failure
+              : 'Follow the requested ratio format (e.g. 6:5).',
+          inputHint:
+            typeof raw.inputHint === 'string'
+              ? raw.inputHint
+              : typeof raw.format === 'string'
+                ? `Answer format: ${raw.format}`
+                : undefined,
         } satisfies AnswerDefinition;
       }
     }
@@ -554,6 +787,14 @@
 
   $: formattedFeedback = feedback ? renderTextWithMath(feedback) : '';
 
+  $: if (problem && problem.id !== lastProblemReference) {
+    lastProblemReference = problem.id;
+    subpathContext = null;
+    if (source === 'remote') {
+      void refreshSubpathContext();
+    }
+  }
+
   async function checkAnswer() {
     console.log('checkAnswer invoked', { problemPresent: !!problem, submitting, attemptValue });
     if (!problem || submitting) return;
@@ -608,6 +849,26 @@
         outcome,
         attemptValue,
       });
+    } else if (answerDef.type === 'ratio') {
+      const normalized = attemptValue?.trim();
+      if (!normalized) {
+        attemptStatus = 'incorrect';
+        feedback = answerDef.failure;
+        return;
+      }
+
+      const canonicalInput = normalized.replace(/\s+/g, '');
+      const canonicalExpected = answerDef.value.replace(/\s+/g, '');
+
+      isCorrect = canonicalInput === canonicalExpected;
+      outcome = isCorrect ? 'CORRECT' : 'INCORRECT';
+
+      console.log('Attempt prepared', {
+        canonicalInput,
+        canonicalExpected,
+        outcome,
+        attemptValue,
+      });
     } else {
       attemptStatus = 'incorrect';
       feedback = 'This problem is not configured to accept answers yet.';
@@ -618,7 +879,9 @@
     feedback = isCorrect ? answerDef.success : answerDef.failure;
     solutionUnlocked = solutionUnlocked || isCorrect;
 
+    let stageWasCompletedBeforeAttempt = false;
     if (isCorrect) {
+      stageWasCompletedBeforeAttempt = subpathContext?.wasCompleted ?? false;
       const storySlug = pathSlugHint ?? problem.pathSlug ?? null;
       const currentStoryBeat =
         storySlug && problem.id ? getStoryBeatByProblemId(storySlug, problem.id) : null;
@@ -647,6 +910,7 @@
       console.log('Attempt response', result);
       if (result && outcome === 'CORRECT') {
         feedback = `${answerDef.success} You earned ${result.level.points} pts.`;
+        await maybeShowJourneyCelebration(stageWasCompletedBeforeAttempt);
       }
     } catch (error) {
       // keep UI state but ensure user sees the submission error message
@@ -821,6 +1085,17 @@
   actionHint={storyPanel?.context === 'problem' ? 'leave' : 'close'}
   on:close={handleStoryClose}
   on:continue={handleStoryContinue}
+/>
+
+<SubpathCompletionModal
+  open={journeyModalOpen}
+  heading={journeyHeading}
+  message={journeyMessageText}
+  ctaLabel={journeyCtaLabel}
+  subpathTitle={journeySubpathTitle}
+  nextSubpathTitle={journeyNextSubpathTitle}
+  on:close={closeJourneyModal}
+  on:continue={handleJourneyContinue}
 />
 
 {#if storyAcknowledged || !storyPanel}
