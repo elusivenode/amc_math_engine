@@ -846,6 +846,76 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
         },
       ],
     },
+    {
+      id: 'algebra-avengers-basic-1-problem-15',
+      title: 'Coffee and Milk Mix-up',
+      statement:
+        'Hamish and Becky each bought 100 ml of coffee in a 150 ml cup. Hamish drank 20 ml of his coffee and then added 20 ml of milk. Becky added 20 ml of milk, stirred the coffee well, and then drank 20 ml. What is the resulting ratio of the amount of milk in Hamish\'s coffee to that in Becky\'s coffee? Submit your answer in the form hamish_milk:becky_milk.',
+      solution:
+        'Hamish: He drank 20 ml of pure coffee, leaving 80 ml of coffee. Then he added 20 ml of milk, giving 80 ml coffee and 20 ml milk. So his final milk amount is 20 ml. Becky: She added 20 ml of milk first, so her cup had 100 ml coffee + 20 ml milk = 120 ml total. Then she drank 20 ml of this mixture, which removed coffee and milk in the same proportion (coffee:milk = 100:20 = 5:1). So she drank away (100/120)×20 = 16.67 ml coffee and (20/120)×20 = 3.33 ml milk. Leftover = 83.33 ml coffee + 16.67 ml milk. So Becky has about 16.67 ml milk. The ratio of Hamish’s milk to Becky’s milk is 20:16.67, which simplifies to 6:5.',
+      difficulty: 4,
+      tags: ['algebra', 'ratios', 'mixtures', 'AMC junior'],
+      metadata: {
+        tagline: 'Compare how different mixing and drinking orders affect the final amount of milk.',
+        objectives: [
+          'Track step-by-step changes in volume for each person.',
+          'Use proportional reasoning when removing a mixed solution.',
+          'Compare final quantities to find a ratio.'
+        ],
+        answer: {
+          type: 'ratio',
+          format: 'hamish_milk:becky_milk',
+          value: '6:5',
+          success: 'Correct! Hamish has 20 ml milk and Becky has 16.67 ml milk, so the ratio is 6:5.',
+          failure: 'Carefully track the amounts: Hamish ends with 20 ml milk, Becky ends with 16.67 ml milk, giving a 6:5 ratio. Answer should be written as hamish_milk:becky_milk.',
+          tolerance: 0,
+        },
+        solutionSteps: [
+          {
+            text: 'Let’s consider Hamish first. He drinks 20 ml of pure coffee, leaving 80 ml coffee.',
+            expression: '80 ml coffee',
+          },
+          {
+            text: 'Hamish adds 20 ml milk.',
+            expression: '80 ml coffee + 20 ml milk',
+          },
+          {
+            text: 'Now consider Becky. She adds 20 ml milk first: 100 ml coffee + 20 ml milk = 120 ml mixture.',
+            expression: '100 ml coffee + 20 ml milk',
+          },
+          {
+            text: 'Becky drinks 20 ml of the mixture, which is 1/6 milk and 5/6 coffee.',
+            expression: 'removes 16.67 ml coffee and 3.33 ml milk',
+          },
+          {
+            text: 'So Becky has left 83.33 ml coffee + 16.67 ml milk.',
+            expression: '83.33 ml coffee + 16.67 ml milk',
+          },
+          {
+            text: 'Compare final milk amounts: Hamish 20 ml, Becky 16.67 ml, ratio 20:16.67 = 6:5.',
+            expression: 'hamish_milk:becky_milk = 6:5',
+          }
+        ],
+      },
+      hints: [
+        {
+          order: 1,
+          content: 'Work out Hamish’s situation first: he drinks coffee before adding milk. What is his ratio of milk:coffee after he adds the milk?',
+        },
+        {
+          order: 2,
+          content: 'Becky adds the milk first and mixes throughly. What is the ratio of milk:coffee for her? It will remain so after she drinks 20ml.',
+        },
+        {
+          order: 3,
+          content: 'After they have both drunk, each has 100ml in their cup.  Hamish 1:4 and Becky 1:5 ... coffee to milk. How can you assess the ratio of amount of milk, hamish:becky?',
+        },
+        {
+          order: 4,
+          content: 'Consider each has 100ml total. Therefore you know ml of milk given earlier ratios.',
+        },
+      ],
+    },    
   ],
 };
 
