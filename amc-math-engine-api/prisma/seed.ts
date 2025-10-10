@@ -922,16 +922,16 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
       id: 'algebra-avengers-intermediate-1-problem-1',
       title: 'Exponent Shenanigans',
       statement:
-        'Evaluate (-216/125)^(-2/3). Give your answer as a simplified fraction.',
+        'Evaluate $(-216/125)^{-2/3}$. Give your answer as a simplified fraction.',
       solution:
-        'We start with (-216/125)^(-2/3). Notice that -216/125 = (-6/5)^3. Therefore (-216/125)^(-2/3) = [(-6/5)^3]^(-2/3). Using the law (a^m)^n = a^(mn), this simplifies to (-6/5)^(-2). A negative exponent means we take the reciprocal: 1 / [(-6/5)^2]. Squaring gives (-6/5)^2 = 36/25. Taking the reciprocal gives 25/36. So the final answer is 25/36.',
+        'We start with $(-216/125)^{-2/3}$. Notice that $-216/125 = (-6/5)^3$. Therefore $(-216/125)^{-2/3} = [(-6/5)^3]^{-2/3}$. Using the law $(a^m)^n = a^{mn}$, this simplifies to $(-6/5)^{-2}$. A negative exponent means we take the reciprocal: $1 / [(-6/5)^2]$. Squaring gives $(-6/5)^2 = 36/25$. Taking the reciprocal gives $25/36$. So the final answer is $25/36$.',
       difficulty: 5,
       tags: ['algebra', 'exponents', 'fractional exponents', 'AMC intermediate'],
       metadata: {
         tagline: 'Apply the laws of exponents to simplify a rational base with a fractional exponent.',
         objectives: [
           'Recognize a rational number as a perfect cube.',
-          'Apply the rule (a^m)^n = a^(mn) with fractional exponents.',
+          'Apply the rule $(a^m)^n = a^{mn}$ with fractional exponents.',
           'Handle negative exponents correctly by taking reciprocals.',
           'Simplify the resulting fraction to lowest terms.'
         ],
@@ -945,27 +945,27 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
         },
         solutionSteps: [
           {
-            text: 'Rewrite the base: -216/125 = (-6/5)^3.',
+            text: 'Rewrite the base: $-216/125 = (-6/5)^3$.',
             expression: '(-6/5)^3',
           },
           {
-            text: 'Apply the exponent: [(-6/5)^3]^(-2/3).',
-            expression: '(-6/5)^(3 × -2/3)',
+            text: 'Apply the exponent: $[(-6/5)^3]^{-2/3}$.',
+            expression: '(-6/5)^{3 \times (-2/3)}',
           },
           {
-            text: 'Simplify the exponents: 3 × -2/3 = -2.',
-            expression: '(-6/5)^(-2)',
+            text: 'Simplify the exponents: $3 \times (-2/3) = -2$.',
+            expression: '(-6/5)^{-2}',
           },
           {
-            text: 'Apply the negative exponent rule: a^(-n) = 1 / (a^n).',
+            text: 'Apply the negative exponent rule: $a^{-n} = 1 / (a^n)$.',
             expression: '1 / [(-6/5)^2]',
           },
           {
-            text: 'Compute the square: (-6/5)^2 = 36/25.',
+            text: 'Compute the square: $(-6/5)^2 = 36/25$.',
             expression: '36/25',
           },
           {
-            text: 'Take the reciprocal: 1 / (36/25) = 25/36.',
+            text: 'Take the reciprocal: $1 / (36/25) = 25/36$.',
             expression: '25/36',
           }
         ],
@@ -973,15 +973,15 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
       hints: [
         {
           order: 1,
-          content: 'Try to express -216/125 as a perfect cube. What fraction raised to the third power gives this?',
+          content: 'Try to express $-216/125$ as a perfect cube. What fraction raised to the third power gives this?',
         },
         {
           order: 2,
-          content: 'Apply the exponent law (a^m)^n = a^(mn). What do you get when you multiply 3 by -2/3?',
+          content: 'Apply the exponent law $(a^m)^n = a^{mn}$. What do you get when you multiply $3$ by $-2/3$?',
         },
         {
           order: 3,
-          content: 'A negative exponent means take the reciprocal. What happens to (-6/5)^(-2)?',
+          content: 'A negative exponent means take the reciprocal. What happens to $(-6/5)^{-2}$?',
         },
         {
           order: 4,

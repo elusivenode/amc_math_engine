@@ -82,6 +82,7 @@
     total: number;
     inProgress: number;
     started: boolean;
+    pathStarted: boolean;
     currentStage?: SubpathSummary;
     nextLockedStage?: SubpathSummary;
     nextProblem?: NextProblem;
@@ -158,6 +159,7 @@
 
   function computeStats(path: PathProgress): PathStats {
     const { mastered, total, inProgress } = path.summary;
+    const pathStarted = (mastered ?? 0) + (inProgress ?? 0) > 0;
     const currentStage = path.subpaths.find((sub) => sub.isUnlocked && !sub.isCompleted);
     const nextLockedStage = path.subpaths.find((sub) => !sub.isUnlocked);
 
@@ -173,6 +175,7 @@
       total: displayTotal,
       inProgress: displayInProgress,
       started,
+      pathStarted,
       currentStage,
       nextLockedStage,
       nextProblem,
@@ -360,7 +363,13 @@
                     title={path.isUnlocked ? undefined : path.unlockRequirement ? `Master ${path.unlockRequirement} first` : 'Master the previous path first'}
                   >
                     {#if path.isUnlocked}
-                      {stats.started ? 'Continue path' : 'Begin path'}
+                      {#if stats.started}
+                        Continue path
+                      {:else if stats.pathStarted}
+                        Begin subpath
+                      {:else}
+                        Begin path
+                      {/if}
                     {:else}
                       Locked
                     {/if}
