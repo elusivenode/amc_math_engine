@@ -1009,24 +1009,24 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "format": "a",
           "value": "1",
           "success": "Correct! $0.032\\%$ of $5^5$ is $1$.",
-          "failure": "Remember to divide the percentage by 100 twice: once for the percent sign, and once to convert 0.032\\% to a decimal.",
+          "failure": "Remember to divide the percentage by $100$ twice—once for the percent sign, and once to convert $0.032\\% \\times 5^5$ into a decimal multiplication.",
           "tolerance": 0
         },
         "solutionSteps": [
           {
-            "text": "Compute the power: $5^5 = 3125$.",
-            "expression": "5^5 = 3125"
+            "text": "Interpret the expression as $0.032\\% \\times 5^5$.",
+            "expression": "0.032% * 5^5"
           },
           {
-            "text": "Convert the percentage to a decimal: $0.032\\% = 0.032 / 100 = 0.00032$.",
-            "expression": "0.00032"
+            "text": "Rewrite the percent: $0.032\\% = \\frac{32}{10^5}$, so the product becomes $\\frac{32}{10^5} \\times 5^5$.",
+            "expression": "32/10^5 * 5^5"
           },
           {
-            "text": "Multiply: $3125 \\times 0.00032 = 1.0$.",
-            "expression": "3125 * 0.00032 = 1"
+            "text": "Use $32 = 2^5$ to write $\\frac{32}{10^5} \\times 5^5 = \\frac{2^5}{10^5} \\times 5^5$.",
+            "expression": "2^5/10^5 * 5^5"
           },
           {
-            "text": "Therefore, $0.032\\%$ of $5^5$ is $1$.",
+            "text": "Combine the powers of $2$ and $5$: $\\frac{2^5 \\cdot 5^5}{10^5} = \\frac{10^5}{10^5} = 1$.",
             "expression": "1"
           }
         ]
@@ -1034,19 +1034,19 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
       "hints": [
         {
           "order": 1,
-          "content": "Interpret the problem as an expression. $0.032\\%$ x 5^5$."
+          "content": "Interpret the problem as the expression $0.032\\% \\times 5^5$."
         },
         {
           "order": 2,
-          "content": "Be careful of the %. Rewrite as $32/10^5 x 5^5$. There are factor 1/10^3 on 0.032 and 1/10^2 on a %."
+          "content": "Be careful with the percent sign. Rewrite $0.032\\% \\times 5^5$ as $\\frac{32}{10^5} \\times 5^5$; there is a factor of $\\frac{1}{10^3}$ in $0.032$ and another $\\frac{1}{10^2}$ coming from the percent."
         },
         {
           "order": 3,
-          "content": "$32 = 2^5$ => $2^5/10^5 x 5^5$."
+          "content": "Since $32 = 2^5$, you have $\\frac{32}{10^5} \\times 5^5 = \\frac{2^5}{10^5} \\times 5^5$."
         },
         {
           "order": 4,
-          "content": "You should find the answer simplifies to unity!"
+          "content": "The resulting product should simplify all the way to $1$."
         }
       ]
     }    
