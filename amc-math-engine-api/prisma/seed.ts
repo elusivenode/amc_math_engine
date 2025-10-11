@@ -1071,7 +1071,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "type": "numeric",
           "value": 324,
           "success": "Correct! $9^{x + 1} = 324.$",
-          "failure": "Try expressing $9^{x + 1}$ in terms of powers of $3$ and substitute $3^x = 6.$",
+          "failure": "This is a tricky one.  Remember your exponent rules. $(a^m)^n) = a^(mn)$, $a^m \\times a^n = a^(m+n)$ and $a^-n = \\frac{1}{a^n}",
           "tolerance": 0
         },
         "solutionSteps": [
