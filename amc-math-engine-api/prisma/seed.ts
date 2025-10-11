@@ -1052,6 +1052,78 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
         }
       ]
     },
+    {
+      "id": "algebra-avengers-intermediate-1-problem-3",
+      "title": "Exponent Substitution",
+      "statement": "If $3^{x - 1} = 2$, what is the value of $9^{x + 1}$?",
+      "solution": "We start with $3^{x - 1} = 2$. Rewrite this as $3^x / 3 = 2$, which gives $3^x = 6$. Next, note that $9^{x + 1} = 9^x \\times 9$. Since $9 = 3^2$, we can write $9^x = (3^2)^x = (3^x)^2$. Substituting $3^x = 6$, we get $9^{x + 1} = (3^x)^2 \\times 9 = 6^2 \\times 9 = 36 \\times 9 = 324$. Thus, $9^{x + 1} = 324.$",
+      "difficulty": 5,
+      "tags": ["algebra", "exponents", "substitution", "AMC intermediate"],
+      "metadata": {
+        "tagline": "Use exponent laws and substitution to connect two exponential expressions.",
+        "objectives": [
+          "Manipulate powers with variable exponents using exponent laws.",
+          "Express one exponential base in terms of another.",
+          "Substitute known expressions to simplify.",
+          "Evaluate the resulting numeric expression."
+        ],
+        "answer": {
+          "type": "numeric",
+          "value": 324,
+          "success": "Correct! $9^{x + 1} = 324.$",
+          "failure": "Try expressing $9^{x + 1}$ in terms of powers of $3$ and substitute $3^x = 6.$",
+          "tolerance": 0
+        },
+        "solutionSteps": [
+          {
+            "text": "Rewrite $3^{x - 1}$ as $\\frac{3^x}{3}$.",
+            "expression": "3^{x - 1} = \\frac{3^x}{3}"
+          },
+          {
+            "text": "Multiply both sides by $3$ to get $3^x = 6.$",
+            "expression": "3^x = 6"
+          },
+          {
+            "text": "Rewrite $9^{x + 1}$ as $9^x \\times 9.$",
+            "expression": "9^{x + 1} = 9^x \\times 9"
+          },
+          {
+            "text": "Since $9 = 3^2$, replace it: $9^x = (3^2)^x.$",
+            "expression": "(3^2)^x \\times 9"
+          },
+          {
+            "text": "Simplify using the power rule: $(3^2)^x = (3^x)^2.$",
+            "expression": "(3^x)^2 \\times 9"
+          },
+          {
+            "text": "Substitute $3^x = 6$: $(3^x)^2 \\times 9 = 6^2 \\times 9 = 36 \\times 9 = 324.$",
+            "expression": "9^{x + 1} = 324"
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "Rewrite $3^{x - 1}$ in a simpler form. Can you express it as $\\frac{3^x}{3}$?"
+        },
+        {
+          "order": 2,
+          "content": "Multiply both sides by $3$ to isolate $3^x.$"
+        },
+        {
+          "order": 3,
+          "content": "Express $9^{x + 1}$ as $9^x \\times 9.$"
+        },
+        {
+          "order": 4,
+          "content": "Since $9 = 3^2$, rewrite $9^x$ as $(3^2)^x = (3^x)^2.$"
+        },
+        {
+          "order": 5,
+          "content": "Now substitute $3^x = 6$ and simplify to find the final value."
+        }
+      ]
+    }    
   ],
 };
 

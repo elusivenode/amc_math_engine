@@ -379,5 +379,37 @@ export const storyBeats: StoryBeat[] = [
     "image": "/story/algebraic-avengers/beat_18.png",
     "imageAlt": "Pierre de Fermat, 17th-century mathematician and lawyer, sits at his desk surrounded by parchments, gazing thoughtfully at a red stone prism beside an open letter.",
     "caption": "Pierre de Fermat discovers a mysterious red stone and a cryptic verse, setting in motion a journey beyond the bounds of law and reason."
-  }  
+  },
+  {
+    "id": "algebra-avengers-beat-19",
+    "pathSlug": "algebra-avengers",
+    "sequence": 19,
+    "context": "problem",
+    "problemOrder": 18,
+    "problemId": "algebra-avengers-intermediate-1-problem-3",
+    "title": "The Blue Stone",
+    "narrative": [
+      "René Descartes was still feeling grumpy at being woken by a knock at the door. He disliked rising early, but the sharp chill of the morning air and the echo of boots in the street told him sleep was now lost for good.",
+      "A courier had delivered a small, leather-bound box containing a curious blue stone — smooth, translucent, and faintly humming in the dawn light — along with a folded letter sealed in red wax.",
+      "He broke the seal, eyes narrowing as he read the neat, deliberate script:",
+      "",
+      "'In azure bound where thought takes form,",
+      "The line of truth resists the storm.",
+      "Seek the priest of measured song,",
+      "Where numbers hide and faith grows strong.'",
+      "",
+      "'Fermat, no doubt,' Descartes grumbled, tossing the page onto the table. 'That vagabond is always trying to test my patience.'",
+      "",
+      "He paused, staring again at the blue stone, its surface catching the faintest shimmer of candlelight.",
+      "'How curious,' he murmured. 'Perhaps not Fermat.'",
+      "",
+      "He shuffled into the kitchen, cut himself a slice of bread, and leaned on the counter.",
+      "His mind — sharp, relentless, and unwilling to rest — began to turn the verse over and over.",
+      "The day would not proceed until he had untangled this riddle and the strange purpose of the stone."
+    ],
+    "image": "/story/algebraic-avengers/beat_19.png",
+    "imageAlt": "René Descartes, 17th-century philosopher and mathematician, stands in his Amsterdam doorway as a courier hands him a small leather box containing a glowing blue stone.",
+    "caption": "René Descartes receives a mysterious blue stone and a cryptic verse, hinting at a mission involving a 'priest of measured song.'"
+  }
+  
 ];
