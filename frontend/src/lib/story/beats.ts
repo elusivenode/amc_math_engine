@@ -351,5 +351,33 @@ export const storyBeats: StoryBeat[] = [
     image: '/story/algebraic-avengers/beat_17.png',
     imageAlt: 'Father Marin Mersenne, a 1700s priest and mathematician, sits at his desk by candlelight, holding a cryptic letter with a thoughtful expression.',
     caption: 'Father Mersenne, Europe’s great communicator of ideas, receives Archimedes’s mysterious letter and wonders what it means.',
+  },
+  {
+    "id": "algebra-avengers-beat-18",
+    "pathSlug": "algebra-avengers",
+    "sequence": 18,
+    "context": "problem",
+    problemOrder: 17,
+    problemId: 'algebra-avengers-intermediate-1-problem-2',
+    "title": "The Red Stone",
+    "narrative": [
+      "Pierre de Fermat sat in his law office, quill idle, the scent of old ink and parchment heavy in the air. Another case, another dispute over land and lineage — the kind of work that dulled the sharp edge of his mind.",
+      "His thoughts drifted instead to the strange parcel delivered that morning: a small leather box containing a red stone prism, glinting faintly even in the dim light. Beneath it lay a folded letter, its seal unmarked yet pressed with uncanny precision.",
+      "He unfolded it again, eyes tracing the neat, deliberate script:",
+      "",
+      "'When ratio bends and reason wanes,",
+      "Seek the Father where the silence reigns.",
+      "The prism guards what words conceal —",
+      "Deliver it whole, and thought made real.'",
+      "",
+      "Fermat frowned, tapping the letter against his palm.",
+      "'How singular? A prank from the old friar, perhaps? Or Descartes up to mischief.'",
+      "A faint smile tugged at his lips. 'I could do with a break from this tedium anyhow.'",
+      "",
+      "He closed the leather box, slipped it into his satchel, threw on his heavy coat, and stepped out into the chill of the afternoon — unaware that the quiet corridors of the courthouse would soon feel emptier without him."
+    ],
+    "image": "/story/algebraic-avengers/beat_18.png",
+    "imageAlt": "Pierre de Fermat, 17th-century mathematician and lawyer, sits at his desk surrounded by parchments, gazing thoughtfully at a red stone prism beside an open letter.",
+    "caption": "Pierre de Fermat discovers a mysterious red stone and a cryptic verse, setting in motion a journey beyond the bounds of law and reason."
   }  
 ];
