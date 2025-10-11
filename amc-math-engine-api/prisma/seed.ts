@@ -1071,7 +1071,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "type": "numeric",
           "value": 324,
           "success": "Correct! $9^{x + 1} = 324.$",
-          "failure": "This is a tricky one.  Remember your exponent rules. $(a^m)^n) = a^(mn)$, $a^m \\times a^n = a^(m+n)$ and $a^-n = \\frac{1}{a^n}",
+          "failure": "This is a tricky one. Remember your exponent rules: $(a^m)^n = a^{mn}$, $a^m \\cdot a^n = a^{m + n}$, and $a^{-n} = \\frac{1}{a^n}$.",
           "tolerance": 0
         },
         "solutionSteps": [
