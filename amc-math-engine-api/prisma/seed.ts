@@ -990,66 +990,68 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
       ],
     },
     {
-      "id": "algebra-avengers-intermediate-1-problem-2",
-      "title": "Tiny Percent, Big Power",
-      "statement": "What is $0.032\\%$ of $5^5$?",
-      "solution": "We start with $5^5 = 3125$. To find $0.032\\%$ of this number, recall that $1\\% = 1/100$, so $0.032\\% = 0.032/100 = 0.00032$. Then $0.00032 \\times 3125 = 1.0$. Therefore, $0.032\\%$ of $5^5$ is exactly $1$.",
-      "difficulty": 4,
-      "tags": ["algebra", "percentages", "powers", "AMC intermediate"],
-      "metadata": {
-        "tagline": "Convert a small percentage into a decimal and apply it to a power of 5.",
-        "objectives": [
-          "Convert a percentage with a decimal to its fractional or decimal form.",
-          "Evaluate powers of whole numbers.",
-          "Apply multiplication of a decimal by an integer.",
-          "Recognize exact simplifications that yield whole numbers."
+      id: 'algebra-avengers-intermediate-1-problem-2',
+      title: 'Tiny Percent, Big Power',
+      statement: 'What is $0.032\\%$ of $5^5$?',
+      solution:
+        'We start with $5^5 = 3125$. To find $0.032\\%$ of this number, recall that $1\\% = 1/100$, so $0.032\\% = 0.032/100 = 0.00032$. Then $0.00032 \\times 3125 = 1.0$. Therefore, $0.032\\%$ of $5^5$ is exactly $1$.',
+      difficulty: 4,
+      tags: ['algebra', 'percentages', 'powers', 'AMC intermediate'],
+      metadata: {
+        tagline: 'Convert a small percentage into a decimal and apply it to a power of 5.',
+        objectives: [
+          'Convert a percentage with a decimal to its fractional or decimal form.',
+          'Evaluate powers of whole numbers.',
+          'Apply multiplication of a decimal by an integer.',
+          'Recognize exact simplifications that yield whole numbers.'
         ],
-        "answer": {
-          "type": "integer",
-          "format": "a",
-          "value": "1",
-          "success": "Correct! $0.032\\%$ of $5^5$ is $1$.",
-          "failure": "Remember to divide the percentage by $100$ twice—once for the percent sign, and once to convert $0.032\\% \\times 5^5$ into a decimal multiplication.",
-          "tolerance": 0
+        answer: {
+          type: 'numeric',
+          value: 1,
+          success: 'Correct! $0.032\\%$ of $5^5$ is $1$.',
+          failure: 'Remember to divide the percentage by $100$ twice—once for the percent sign, and once to convert $0.032\\% \\times 5^5$ into a decimal multiplication.',
+          tolerance: 0,
         },
-        "solutionSteps": [
+        solutionSteps: [
           {
-            "text": "Interpret the expression as $0.032\\% \\times 5^5$.",
-            "expression": "0.032% * 5^5"
+            text: 'Interpret the expression as $0.032\\% \\times 5^5$.',
+            expression: '0.032\\% \\times 5^5',
           },
           {
-            "text": "Rewrite the percent: $0.032\\% = \\frac{32}{10^5}$, so the product becomes $\\frac{32}{10^5} \\times 5^5$.",
-            "expression": "32/10^5 * 5^5"
+            text: 'Rewrite the percent: $0.032\\% = \\frac{32}{10^5}$, so the product becomes $\\frac{32}{10^5} \\times 5^5$.',
+            expression: '\\frac{32}{10^5} \\times 5^5',
           },
           {
-            "text": "Use $32 = 2^5$ to write $\\frac{32}{10^5} \\times 5^5 = \\frac{2^5}{10^5} \\times 5^5$.",
-            "expression": "2^5/10^5 * 5^5"
+            text: 'Use $32 = 2^5$ to write $\\frac{32}{10^5} \\times 5^5 = \\frac{2^5}{10^5} \\times 5^5$.',
+            expression: '\\frac{2^5}{10^5} \\times 5^5',
           },
           {
-            "text": "Combine the powers of $2$ and $5$: $\\frac{2^5 \\cdot 5^5}{10^5} = \\frac{10^5}{10^5} = 1$.",
-            "expression": "1"
+            text: 'Combine the powers of $2$ and $5$: $\\frac{2^5 \\cdot 5^5}{10^5} = \\frac{10^5}{10^5} = 1$.',
+            expression: '1',
           }
-        ]
+        ],
       },
-      "hints": [
+      hints: [
         {
-          "order": 1,
-          "content": "Interpret the problem as the expression $0.032\\% \\times 5^5$."
+          order: 1,
+          content: 'Interpret the problem as the expression $0.032\\% \\times 5^5$.',
         },
         {
-          "order": 2,
-          "content": "Be careful with the percent sign. Rewrite $0.032\\% \\times 5^5$ as $\\frac{32}{10^5} \\times 5^5$; there is a factor of $\\frac{1}{10^3}$ in $0.032$ and another $\\frac{1}{10^2}$ coming from the percent."
+          order: 2,
+          content:
+            'Be careful with the percent sign. Rewrite $0.032\\% \\times 5^5$ as $\\frac{32}{10^5} \\times 5^5$; there is a factor of $\\frac{1}{10^3}$ in $0.032$ and another $\\frac{1}{10^2}$ coming from the percent.',
         },
         {
-          "order": 3,
-          "content": "Since $32 = 2^5$, you have $\\frac{32}{10^5} \\times 5^5 = \\frac{2^5}{10^5} \\times 5^5$."
+          order: 3,
+          content:
+            'Since $32 = 2^5$, you have $\\frac{32}{10^5} \\times 5^5 = \\frac{2^5}{10^5} \\times 5^5$.',
         },
         {
-          "order": 4,
-          "content": "The resulting product should simplify all the way to $1$."
+          order: 4,
+          content: 'The resulting product should simplify all the way to $1$.',
         }
       ]
-    }    
+    },
   ],
 };
 
