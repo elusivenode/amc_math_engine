@@ -438,5 +438,38 @@ export const storyBeats: StoryBeat[] = [
     "image": "/story/algebraic-avengers/beat_20.png",
     "imageAlt": "Karl Weierstrass in a 19th-century Berlin tavern, seated at the bar with a stein of beer, gazing at a small leather-bound box containing a glowing yellow prism.",
     "caption": "Weierstrass studies a mysterious yellow stone and a riddle pointing to a 'monk who counts in sound' — a summons wrapped in code."
+  },
+  {
+    "id": "algebra-avengers-beat-21",
+    "pathSlug": "algebra-avengers",
+    "sequence": 21,
+    "context": "problem",
+    "problemOrder": 20,
+    "problemId": "algebra-avengers-intermediate-1-problem-5",
+    "title": "The Green Stone",
+    "narrative": [
+      "Marie-Sophie Germain walked briskly along the gravel path toward the Mathematics department. It was Monday—her day to collect the latest set of lecture notes, passed discreetly by a kindly professor who sympathised with her cause. As a woman, she was barred from attending classes or earning a degree, but no decree of men could ever stand in the way of her passion for numbers and truth.",
+      "",
+      "Today, however, her mind felt curiously unfocused, as though wrapped in fog. She glanced again at the letter she had received that morning, its words looping elegantly in a hand she did not recognise. In her left hand she clutched a small leather box—light, yet oddly warm to the touch.",
+      "",
+      "Inside the envelope, beneath the salutation, were two short verses written in delicate ink:",
+      "",
+      "'He dwells where silence cloaks the chime,",
+      "A brother bound by code and rhyme.",
+      "His prayers are cast in measured tone,",
+      "Through numbers sung, his faith is shown.'",
+      "",
+      "'Where logic’s bounds in silence sleep,",
+      "Seek the hall where echoes keep.",
+      "Bring the green where numbers chime,",
+      "To one who counts the tones of time.'",
+      "",
+      "She read the lines again, her lips moving unconsciously as though testing their rhythm. “A brother bound by code and rhyme… how strange,” she murmured. Then, half smiling, she slipped the letter back into her coat.",
+      "",
+      "Her pace quickened, the box secure beneath her arm. Whatever mystery this was, she would not rest until it was solved. After all—was not every great discovery born from a riddle?"
+    ],
+    "image": "/story/algebraic-avengers/beat_21.png",
+    "imageAlt": "Marie-Sophie Germain walking between the limestone buildings of École Polytechnique, holding a small leather box and reading a mysterious letter.",
+    "caption": "Sophie Germain deciphers a riddle about a 'brother bound by code and rhyme' — a veiled summons to Father Mersenne, keeper of harmony and number."
   }  
 ];

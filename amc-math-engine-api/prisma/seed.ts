@@ -1186,6 +1186,79 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "content": "Factor out the common $\\sqrt{2}$ and examine the sum that remains."
         }
       ]
+    },
+    {
+      "id": "algebra-avengers-intermediate-1-problem-5",
+      "title": "Book Budget Breakdown",
+      "statement": "Jack has just spent $546 on new exercise books for the new school term. He goes through a notebook and an exercise book each week. There are 14 weeks in the term. Exercise books cost $1 more than notebooks. What is the ratio of exercise book : notebook in simplest terms? Submit your answer in the form $e:n$.",
+      "solution": "Let $n$ be the cost of a notebook. Then an exercise book costs $n + 1$, and each week Jack buys one of each, so the weekly cost is $n + (n + 1) = 2n + 1$. Over 14 weeks the total is $14(2n + 1) = 546$, which simplifies to $2n + 1 = 39$. Solving gives $n = 19$, so an exercise book costs $n + 1 = 20$. Therefore the ratio $e:n$ is $20:19$.",
+      "difficulty": 4,
+      "tags": ["algebra", "linear equations", "ratios", "AMC intermediate"],
+      "metadata": {
+        "tagline": "Translate a verbal price relationship into an equation and form a ratio.",
+        "objectives": [
+          "Introduce a variable to represent an unknown price.",
+          "Translate weekly purchases into a linear equation.",
+          "Solve for the unknown and adjust for the price difference.",
+          "Express the final answer as a ratio in the requested format."
+        ],
+        "answer": {
+          "type": "ratio",
+          "format": "e:n",
+          "value": "20:19",
+          "success": "Correct! Exercise books cost $20 and notebooks cost $19, so $e:n = 20:19$.",
+          "failure": "Let $n$ be the notebook price. Solve $14(2n + 1) = 546$, then express $e:n$ with $e = n + 1$.",
+          "tolerance": 0
+        },
+        "solutionSteps": [
+          {
+            "text": "Let $n$ represent the cost of a notebook in dollars.",
+            "expression": "n"
+          },
+          {
+            "text": "Set up the total cost equation: $14(n + (n + 1)) = 546$.",
+            "expression": "14(n + n + 1) = 546"
+          },
+          {
+            "text": "Simplify the parentheses to get $14(2n + 1) = 546$, so $2n + 1 = 39$ after dividing by 14.",
+            "expression": "2n + 1 = 39"
+          },
+          {
+            "text": "Solve for $n$: $n = 19$, hence $e = n + 1 = 20$.",
+            "expression": "n = 19, e = 20"
+          },
+          {
+            "text": "Write the ratio in the requested format $e:n = 20:19$.",
+            "expression": "20:19"
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "How many variables do you need to track the prices?"
+        },
+        {
+          "order": 2,
+          "content": "Let $n$ be the cost of a notebook in dollars."
+        },
+        {
+          "order": 3,
+          "content": "Translate the total $546$ into an equation using the weekly purchases."
+        },
+        {
+          "order": 4,
+          "content": "You should reach $14(n + n + 1) = 546$. Solve this equation for $n$."
+        },
+        {
+          "order": 5,
+          "content": "Once $n = 19$, compute the exercise book cost $e = n + 1 = 20$."
+        },
+        {
+          "order": 6,
+          "content": "Express the final answer as $e:n$."
+        }
+      ]
     }    
   ],
 };
