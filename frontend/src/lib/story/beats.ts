@@ -410,6 +410,33 @@ export const storyBeats: StoryBeat[] = [
     "image": "/story/algebraic-avengers/beat_19.png",
     "imageAlt": "René Descartes, 17th-century philosopher and mathematician, stands in his Amsterdam doorway as a courier hands him a small leather box containing a glowing blue stone.",
     "caption": "René Descartes receives a mysterious blue stone and a cryptic verse, hinting at a mission involving a 'priest of measured song.'"
-  }
-  
+  },
+  {
+    "id": "algebra-avengers-beat-20",
+    "pathSlug": "algebra-avengers",
+    "sequence": 20,
+    "context": "problem",
+    "problemOrder": 19,
+    "problemId": "algebra-avengers-intermediate-1-problem-4",
+    "title": "The Yellow Stone",
+    "narrative": [
+      "Karl Weierstrass sat thoughtfully in his local tavern, the soft din of conversation and clinking glasses fading into the background. He was getting through his stein of beer more slowly than usual today.",
+      "Between sips, his gaze kept drifting toward the small, leather-bound box on the counter before him.",
+      "He had opened it earlier that afternoon in his office at the University of Berlin, discovering within a brilliant yellow prism of polished stone — its glow almost alive — and a folded letter written in a careful, looping hand.",
+      "He read the verse again, lips moving silently as he traced the words with his finger:",
+      "",
+      "'Where reason meets the echoed tone,",
+      "Find the monk who counts in sound alone.",
+      "Give him the light that never dies,",
+      "Lest thought grow dim where silence lies.'",
+      "",
+      "\"What the devil?\" he muttered, eyes fixed on the stone’s shifting hues. \"Whatever can this be for?\"",
+      "He raised a hand toward the barkeep. \"Schmidt!\" he called, voice carrying above the din. \"This calls for another stein, I feel.\"",
+      "",
+      "As the foam settled in his glass once more, Weierstrass stared at the prism’s golden shimmer — unaware that, across centuries, other stones had already begun to move."
+    ],
+    "image": "/story/algebraic-avengers/beat_20.png",
+    "imageAlt": "Karl Weierstrass in a 19th-century Berlin tavern, seated at the bar with a stein of beer, gazing at a small leather-bound box containing a glowing yellow prism.",
+    "caption": "Weierstrass studies a mysterious yellow stone and a riddle pointing to a 'monk who counts in sound' — a summons wrapped in code."
+  }  
 ];

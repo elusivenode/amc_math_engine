@@ -1124,6 +1124,66 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "content": "Now substitute $3^x = 6$ and simplify to find the final value."
         }
       ]
+    },
+    {
+      "id": "algebra-avengers-intermediate-1-problem-4",
+      "title": "Radical Balancing Act",
+      "statement": "Evaluate $\\sqrt{50} + \\sqrt{32} + 2\\sqrt{8} - \\sqrt{338}$.",
+      "solution": "Factor $2$ out from each radicand to expose perfect squares: $\\sqrt{50} = \\sqrt{2 \\cdot 25}$, $\\sqrt{32} = \\sqrt{2 \\cdot 16}$, $2\\sqrt{8} = 2\\sqrt{2 \\cdot 4}$, and $\\sqrt{338} = \\sqrt{2 \\cdot 169}$. Simplifying the perfect squares yields $5\\sqrt{2} + 4\\sqrt{2} + 4\\sqrt{2} - 13\\sqrt{2}$. Factoring out $\\sqrt{2}$ gives $\\sqrt{2} (5 + 4 + 4 - 13) = \\sqrt{2} \\cdot 0 = 0$. Therefore, the expression evaluates to $0$.",
+      "difficulty": 4,
+      "tags": ["algebra", "radicals", "simplification", "AMC intermediate"],
+      "metadata": {
+        "tagline": "Combine square roots by exposing common radicals and simplifying perfect squares.",
+        "objectives": [
+          "Factor constants from radicands to identify common radicals.",
+          "Recognize and simplify perfect squares within square roots.",
+          "Factor common radical terms to combine like terms.",
+          "Evaluate the resulting simplified expression."
+        ],
+        "answer": {
+          "type": "numeric",
+          "value": 0,
+          "success": "Correct! $\\sqrt{50} + \\sqrt{32} + 2\\sqrt{8} - \\sqrt{338} = 0.$",
+          "failure": "Rewrite each radical as $\\sqrt{2\\cdot k}$ for some perfect square $k$, simplify the roots, and then combine the like terms carefully.",
+          "tolerance": 0
+        },
+        "solutionSteps": [
+          {
+            "text": "Factor $2$ out from each radicand: $\\sqrt{50} = \\sqrt{2 \\cdot 25}$, $\\sqrt{32} = \\sqrt{2 \\cdot 16}$, $2\\sqrt{8} = 2\\sqrt{2 \\cdot 4}$, and $\\sqrt{338} = \\sqrt{2 \\cdot 169}$.",
+            "expression": "\\sqrt{2 \\cdot 25} + \\sqrt{2 \\cdot 16} + 2\\sqrt{2 \\cdot 4} - \\sqrt{2 \\cdot 169}"
+          },
+          {
+            "text": "Simplify the perfect squares: $\\sqrt{2 \\cdot 25} = 5\\sqrt{2}$, $\\sqrt{2 \\cdot 16} = 4\\sqrt{2}$, $2\\sqrt{2 \\cdot 4} = 4\\sqrt{2}$, and $\\sqrt{2 \\cdot 169} = 13\\sqrt{2}$.",
+            "expression": "5\\sqrt{2} + 4\\sqrt{2} + 4\\sqrt{2} - 13\\sqrt{2}"
+          },
+          {
+            "text": "Factor out the common $\\sqrt{2}$ factor.",
+            "expression": "\\sqrt{2}(5 + 4 + 4 - 13)"
+          },
+          {
+            "text": "Evaluate the sum inside the parentheses: $5 + 4 + 4 - 13 = 0$, giving $\\sqrt{2} \\cdot 0 = 0$.",
+            "expression": "0"
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "Look for a common factor inside each radical. Does the $\\sqrt{8}$ term suggest anything?"
+        },
+        {
+          "order": 2,
+          "content": "Factor a $2$ out of every radicand so each square root looks like $\\sqrt{2 \\cdot k}$."
+        },
+        {
+          "order": 3,
+          "content": "Once you see perfect squares under the radicals, simplify them to coefficients times $\\sqrt{2}$."
+        },
+        {
+          "order": 4,
+          "content": "Factor out the common $\\sqrt{2}$ and examine the sum that remains."
+        }
+      ]
     }    
   ],
 };
