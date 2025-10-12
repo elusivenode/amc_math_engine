@@ -1281,7 +1281,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "variables": ["x", "y"],
           "success": "Correct! $\\dfrac{5y}{6x^2} - \\dfrac{4}{3xy}$ collapses to $\\dfrac{5y^2 - 8x}{6x^2y}.$",
           "failure": "Rewrite each term over $6x^2y$ by multiplying by a form of $1$, then combine the numerators.",
-          "inputHint": "Enter a single simplified fraction, for example (3a^2 - 2b)/(6ab). Equivalent algebraic forms are accepted."
+          "inputHint": "Enter a single simplified fraction—for example $\\dfrac{3a^2 - 2b}{6ab}$. Equivalent algebraic forms are accepted."
         },
         "solutionSteps": [
           {

@@ -180,6 +180,7 @@
   let showContinueButton = false;
   let formattedFeedback = '';
   let showRadicalShortcut = false;
+  let showExpressionShortcuts = false;
   let subpathContext: SubpathContext | null = null;
   let subpathContextLoading = false;
   let journeyModalOpen = false;
@@ -198,15 +199,28 @@
     } else {
       showRadicalShortcut = false;
     }
+
+    showExpressionShortcuts = problem?.answer?.type === 'expression';
+  }
+
+  function insertToken(token: string) {
+    if (mathInputRef?.insertAtCursor) {
+      mathInputRef.insertAtCursor(token);
+    } else {
+      attemptValue = `${attemptValue ?? ''}${token}`;
+    }
   }
 
   function insertSquareRootSymbol() {
-    if (mathInputRef?.insertAtCursor) {
-      mathInputRef.insertAtCursor('√');
-      return;
-    }
+    insertToken('√');
+  }
 
-    attemptValue = `${attemptValue ?? ''}√`;
+  function insertVariable(variable: string) {
+    insertToken(variable);
+  }
+
+  function insertExponentTwo() {
+    insertToken('²');
   }
 
   function formatStatusLabel(status: string): string {
@@ -691,11 +705,11 @@
         return `Enter your answer as two numbers separated by "${separator}" — ${firstLabel} first, ${secondLabel} second. Example: "12${separator}8".`;
       }
       case 'fraction':
-        return 'Enter your answer as a simplified fraction such as 3/4.';
+        return 'Enter your answer as a simplified fraction such as $\\tfrac{3}{4}$.';
       case 'ratio':
         return 'Enter the ratio in the requested format (e.g. 6:5).';
       case 'expression':
-        return 'Enter the simplified algebraic fraction, such as (5y^2 - 8x)/(6x^2y).';
+        return 'Enter the simplified algebraic fraction, such as $\\dfrac{5y^2 - 8x}{6x^2y}$.';
       default:
         return 'Try to reason it out before revealing hints. You can submit a simplified numeric answer or a fraction.';
     }
@@ -1248,6 +1262,7 @@
       .replace(/\\,/g, '')
       .replace(/\\sqrt\s*\{([^{}]+)\}/g, 'sqrt($1)')
       .replace(/√/g, 'sqrt')
+      .replace(/²/g, '^2')
       .replace(/\\ /g, '')
       .replace(/\{/g, '(')
       .replace(/\}/g, ')')
@@ -1372,7 +1387,11 @@
       }
 
       if (token.type === 'paren') {
-        normalizedTokens.push({ type: token.value === '(' ? 'paren-open' : 'paren-close', value: token.value });
+        if (token.value === '(') {
+          normalizedTokens.push({ type: 'paren-open', value: '(' });
+        } else {
+          normalizedTokens.push({ type: 'paren-close', value: ')' });
+        }
         continue;
       }
 
@@ -1394,7 +1413,7 @@
       }
     }
 
-    const sanitized = segments.join('');
+    const sanitized = wrapImplicitDenominator(segments.join(''));
     if (!sanitized) {
       return null;
     }
@@ -1432,6 +1451,85 @@
     }
 
     return false;
+  }
+
+  function wrapImplicitDenominator(expr: string): string {
+    if (!expr.includes('/')) {
+      return expr;
+    }
+
+    let result = '';
+    for (let index = 0; index < expr.length; index += 1) {
+      const char = expr[index];
+      if (char !== '/') {
+        result += char;
+        continue;
+      }
+
+      result += '/';
+      let cursor = index + 1;
+
+      while (cursor < expr.length && expr[cursor] === ' ') {
+        result += ' ';
+        cursor += 1;
+      }
+
+      if (cursor >= expr.length) {
+        index = cursor - 1;
+        continue;
+      }
+
+      if (expr[cursor] === '(') {
+        index = cursor - 1;
+        continue;
+      }
+
+      let denominator = '';
+      let depth = 0;
+      let captured = false;
+
+      for (; cursor < expr.length; cursor += 1) {
+        const current = expr[cursor];
+
+        if (current === '(') {
+          depth += 1;
+          denominator += current;
+          captured = true;
+          continue;
+        }
+
+        if (current === ')') {
+          if (depth > 0) {
+            depth -= 1;
+            denominator += current;
+            captured = true;
+            continue;
+          }
+          break;
+        }
+
+        if (depth === 0 && (current === '+' || current === '-' || current === '/' || current === ',')) {
+          if (!captured) {
+            denominator += current;
+            captured = true;
+            continue;
+          }
+          break;
+        }
+
+        denominator += current;
+        captured = true;
+      }
+
+      const trimmed = denominator.trim();
+      if (trimmed.length > 0) {
+        result += `(${trimmed})`;
+      }
+
+      index = cursor - 1;
+    }
+
+    return result;
   }
 
   function prepareExpression(
@@ -1669,7 +1767,9 @@
         {/if}
         <TextWithMath text={problem.question} />
         {#if answerInstruction}
-          <p class="text-sm text-slate-500">{answerInstruction}</p>
+          <p class="text-sm text-slate-500">
+            <TextWithMath text={answerInstruction} />
+          </p>
         {/if}
       </div>
     </section>
@@ -1744,20 +1844,55 @@
                 placeholder="Type your answer or expression"
               />
             </div>
-            {#if showRadicalShortcut}
-              <button
-                class="rounded-lg border border-slate-300 px-3 py-2 text-xl leading-none text-slate-600 transition hover:border-indigo-300 hover:text-indigo-600"
-                type="button"
-                on:click={insertSquareRootSymbol}
-                aria-label="Insert square root symbol"
-                title="Insert √"
-              >
-                √
-              </button>
+            {#if showRadicalShortcut || showExpressionShortcuts}
+              <div class="flex flex-col gap-2">
+                {#if showRadicalShortcut}
+                  <button
+                    class="rounded-lg border border-slate-300 px-3 py-2 text-xl leading-none text-slate-600 transition hover:border-indigo-300 hover:text-indigo-600"
+                    type="button"
+                    on:click={insertSquareRootSymbol}
+                    aria-label="Insert square root symbol"
+                    title="Insert √"
+                  >
+                    √
+                  </button>
+                {/if}
+                {#if showExpressionShortcuts}
+                  <button
+                    class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-slate-600 transition hover:border-indigo-300 hover:text-indigo-600"
+                    type="button"
+                    on:click={() => insertVariable('x')}
+                    aria-label="Insert x"
+                    title="Insert x"
+                  >
+                    x
+                  </button>
+                  <button
+                    class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-slate-600 transition hover:border-indigo-300 hover:text-indigo-600"
+                    type="button"
+                    on:click={() => insertVariable('y')}
+                    aria-label="Insert y"
+                    title="Insert y"
+                  >
+                    y
+                  </button>
+                  <button
+                    class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-slate-600 transition hover:border-indigo-300 hover:text-indigo-600"
+                    type="button"
+                    on:click={insertExponentTwo}
+                    aria-label="Insert squared"
+                    title="Insert ^2"
+                  >
+                    <span aria-hidden="true" class="text-base leading-none">^<sup>2</sup></span>
+                  </button>
+                {/if}
+              </div>
             {/if}
           </div>
           {#if problem.answer.inputHint}
-            <p class="text-xs text-slate-500">{problem.answer.inputHint}</p>
+            <p class="text-xs text-slate-500">
+              <TextWithMath text={problem.answer.inputHint} />
+            </p>
           {/if}
           <div class="flex flex-wrap gap-3">
             <button
@@ -1871,3 +2006,4 @@
     </div>
   {/if}
   </div>
+{/if}
