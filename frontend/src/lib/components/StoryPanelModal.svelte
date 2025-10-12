@@ -50,11 +50,11 @@
         ×
       </button>
 
-      <div class="grid gap-0 lg:grid-cols-[1.5fr_1fr] lg:items-stretch">
-        <figure class="relative flex max-h-[60vh] items-center justify-center bg-slate-100 landscape:max-h-[70vh] lg:max-h-[85vh] lg:landscape:max-h-[85vh]">
+      <div class="grid gap-0 lg:h-[85vh] lg:grid-cols-[1.5fr_1fr] lg:items-stretch">
+        <figure class="relative flex h-full max-h-[60vh] items-center justify-center bg-slate-100 landscape:max-h-[70vh] lg:h-full lg:max-h-full lg:landscape:max-h-[85vh]">
           {#if panel.image}
             <img
-              class="h-full max-h-[60vh] w-full object-contain landscape:max-h-[70vh] lg:max-h-[85vh] lg:landscape:max-h-[85vh]"
+              class="h-full max-h-[60vh] w-full object-contain landscape:max-h-[70vh] lg:h-full lg:max-h-full lg:landscape:max-h-[85vh]"
               src={panel.image}
               alt={panel.imageAlt}
             />
@@ -71,13 +71,13 @@
           {/if}
         </figure>
 
-        <div class="flex h-full min-h-[280px] flex-col p-6 md:p-8 lg:min-h-[320px]">
+        <div class="flex h-full min-h-[280px] flex-col p-6 md:p-8 lg:h-full lg:min-h-[320px]">
           <div class="shrink-0">
             <h2 class="text-2xl font-semibold text-slate-900" id={titleId}>{panel.title}</h2>
           </div>
 
           <div
-            class="mt-4 flex-1 space-y-4 overflow-y-auto pr-1 text-base leading-relaxed text-slate-600"
+            class="mt-4 flex-1 space-y-4 overflow-y-auto pr-1 text-base leading-relaxed text-slate-600 lg:pr-2"
             id={bodyId}
           >
             {#each panel.narrative as paragraph}
