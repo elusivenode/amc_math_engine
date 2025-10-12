@@ -189,6 +189,7 @@
   let journeySubpathTitle: string | null = null;
   let journeyNextSubpathTitle: string | null = null;
   let lastProblemReference: string | null = null;
+  let answerInstruction = '';
 
   $: {
     if (problem?.answer?.type === 'numeric') {
@@ -510,6 +511,37 @@
       }
     }
 
+    if (rawType === 'expression') {
+      const value = typeof raw.value === 'string' ? raw.value.trim() : '';
+      if (value.length > 0) {
+        const variables =
+          Array.isArray(raw.variables) && raw.variables.length > 0
+            ? Array.from(
+                new Set(
+                  raw.variables
+                    .map((item) => (typeof item === 'string' ? item.trim().toLowerCase() : ''))
+                    .filter((item) => item.length > 0),
+                ),
+              )
+            : undefined;
+
+        return {
+          type: 'expression',
+          value,
+          variables,
+          success: typeof raw.success === 'string' ? raw.success : 'Great work!',
+          failure:
+            typeof raw.failure === 'string'
+              ? raw.failure
+              : 'Express the answer as a single simplified fraction.',
+          inputHint:
+            typeof raw.inputHint === 'string'
+              ? raw.inputHint
+              : 'Enter an algebraic expression such as (5y^2 - 8x)/(6x^2y).',
+        } satisfies AnswerDefinition;
+      }
+    }
+
     if (rawType === 'ratio') {
       const value = typeof raw.value === 'string' ? raw.value.trim() : '';
       if (value.length > 0) {
@@ -645,6 +677,31 @@
       },
     };
   }
+
+  function computeAnswerInstruction(answer: AnswerDefinition): string {
+    if ('inputHint' in answer && typeof answer.inputHint === 'string' && answer.inputHint.length > 0) {
+      return answer.inputHint;
+    }
+
+    switch (answer.type) {
+      case 'pair': {
+        const separator = answer.separator ?? ',';
+        const firstLabel = answer.firstLabel ?? 'first value';
+        const secondLabel = answer.secondLabel ?? 'second value';
+        return `Enter your answer as two numbers separated by "${separator}" — ${firstLabel} first, ${secondLabel} second. Example: "12${separator}8".`;
+      }
+      case 'fraction':
+        return 'Enter your answer as a simplified fraction such as 3/4.';
+      case 'ratio':
+        return 'Enter the ratio in the requested format (e.g. 6:5).';
+      case 'expression':
+        return 'Enter the simplified algebraic fraction, such as (5y^2 - 8x)/(6x^2y).';
+      default:
+        return 'Try to reason it out before revealing hints. You can submit a simplified numeric answer or a fraction.';
+    }
+  }
+
+  $: answerInstruction = problem ? computeAnswerInstruction(problem.answer) : '';
 
   $: if (!storyInitialized && problem) {
     storyPanel = null;
@@ -913,6 +970,28 @@
         outcome,
         attemptValue,
       });
+    } else if (answerDef.type === 'expression') {
+      const equivalence = expressionsEquivalent(
+        attemptValue ?? '',
+        answerDef.value,
+        answerDef.variables,
+      );
+
+      if (equivalence === null) {
+        attemptStatus = 'incorrect';
+        feedback = answerDef.inputHint ?? answerDef.failure;
+        return;
+      }
+
+      isCorrect = equivalence;
+      outcome = isCorrect ? 'CORRECT' : 'INCORRECT';
+
+      console.log('Attempt prepared', {
+        attemptValue,
+        expected: answerDef.value,
+        allowedVariables: answerDef.variables,
+        equivalence,
+      });
     } else {
       attemptStatus = 'incorrect';
       feedback = 'This problem is not configured to accept answers yet.';
@@ -1117,6 +1196,363 @@
     return `${simplifiedNumerator}/${simplifiedDenominator}`;
   }
 
+  type AlgebraicToken =
+    | { type: 'number'; value: string }
+    | { type: 'identifier'; value: string }
+    | { type: 'operator'; value: string }
+    | { type: 'paren'; value: '(' | ')' }
+    | { type: 'comma'; value: ',' };
+
+  type NormalizedToken =
+    | { type: 'number'; value: string }
+    | { type: 'identifier'; value: string }
+    | { type: 'function'; value: string }
+    | { type: 'operator'; value: string }
+    | { type: 'paren-open'; value: '(' }
+    | { type: 'paren-close'; value: ')' }
+    | { type: 'comma'; value: ',' };
+
+  const algebraicFunctions = new Set(['sqrt']);
+
+  function normalizeLatexLikeExpression(input: string): string | null {
+    if (typeof input !== 'string') {
+      return null;
+    }
+
+    let output = input.replace(/\r?\n/g, ' ').trim();
+    if (!output) {
+      return null;
+    }
+
+    const fractionPattern = /\\(dfrac|tfrac|frac)\s*\{([^{}]+)\}\{([^{}]+)\}/g;
+
+    const replaceFractions = (value: string): string => {
+      let previous: string;
+      let current = value;
+      do {
+        previous = current;
+        current = current.replace(fractionPattern, (_match, _type, numerator, denominator) => {
+          return `(${numerator})/(${denominator})`;
+        });
+      } while (current !== previous);
+      return current;
+    };
+
+    output = replaceFractions(output);
+
+    output = output
+      .replace(/\\left|\\right/g, '')
+      .replace(/\\cdot|\\times/g, '*')
+      .replace(/\\div/g, '/')
+      .replace(/\\!/g, '')
+      .replace(/\\,/g, '')
+      .replace(/\\sqrt\s*\{([^{}]+)\}/g, 'sqrt($1)')
+      .replace(/√/g, 'sqrt')
+      .replace(/\\ /g, '')
+      .replace(/\{/g, '(')
+      .replace(/\}/g, ')')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    return output.length > 0 ? output : null;
+  }
+
+  function tokenizeAlgebraicExpression(expr: string): AlgebraicToken[] | null {
+    const tokens: AlgebraicToken[] = [];
+    for (let index = 0; index < expr.length; ) {
+      const char = expr[index];
+
+      if (/\s/.test(char)) {
+        index += 1;
+        continue;
+      }
+
+      if (/[0-9]/.test(char) || (char === '.' && /[0-9]/.test(expr[index + 1] ?? ''))) {
+        let end = index + 1;
+        let hasDecimal = char === '.';
+        while (end < expr.length) {
+          const next = expr[end];
+          if (/[0-9]/.test(next)) {
+            end += 1;
+            continue;
+          }
+          if (next === '.' && !hasDecimal) {
+            hasDecimal = true;
+            end += 1;
+            continue;
+          }
+          break;
+        }
+
+        const value = expr.slice(index, end);
+        if (value === '.' || value === '-.' || value === '+.') {
+          return null;
+        }
+        tokens.push({ type: 'number', value });
+        index = end;
+        continue;
+      }
+
+      if (/[a-zA-Z]/.test(char)) {
+        let end = index + 1;
+        while (end < expr.length && /[a-zA-Z0-9_]/.test(expr[end])) {
+          end += 1;
+        }
+        tokens.push({ type: 'identifier', value: expr.slice(index, end) });
+        index = end;
+        continue;
+      }
+
+      if (char === '*' && expr[index + 1] === '*') {
+        tokens.push({ type: 'operator', value: '**' });
+        index += 2;
+        continue;
+      }
+
+      if ('+-*/^()'.includes(char)) {
+        if (char === '(' || char === ')') {
+          tokens.push({ type: 'paren', value: char });
+        } else {
+          tokens.push({ type: 'operator', value: char });
+        }
+        index += 1;
+        continue;
+      }
+
+      if (char === ',') {
+        tokens.push({ type: 'comma', value: char });
+        index += 1;
+        continue;
+      }
+
+      return null;
+    }
+
+    return tokens;
+  }
+
+  function buildNormalizedExpression(
+    tokens: AlgebraicToken[],
+    allowedVariables?: string[],
+  ): { sanitized: string; variables: string[] } | null {
+    if (tokens.length === 0) {
+      return null;
+    }
+
+    const allowedSet = allowedVariables
+      ? new Set(allowedVariables.map((variable) => variable.toLowerCase()))
+      : null;
+    const normalizedTokens: NormalizedToken[] = [];
+    const variables = new Set<string>();
+
+    for (const token of tokens) {
+      if (token.type === 'number') {
+        normalizedTokens.push({ type: 'number', value: token.value });
+        continue;
+      }
+
+      if (token.type === 'identifier') {
+        const lower = token.value.toLowerCase();
+        if (algebraicFunctions.has(lower)) {
+          normalizedTokens.push({ type: 'function', value: `Math.${lower}` });
+        } else {
+          if (allowedSet && !allowedSet.has(lower)) {
+            return null;
+          }
+          variables.add(lower);
+          normalizedTokens.push({ type: 'identifier', value: lower });
+        }
+        continue;
+      }
+
+      if (token.type === 'operator') {
+        const op = token.value === '^' ? '**' : token.value;
+        normalizedTokens.push({ type: 'operator', value: op });
+        continue;
+      }
+
+      if (token.type === 'paren') {
+        normalizedTokens.push({ type: token.value === '(' ? 'paren-open' : 'paren-close', value: token.value });
+        continue;
+      }
+
+      if (token.type === 'comma') {
+        normalizedTokens.push({ type: 'comma', value: ',' });
+        continue;
+      }
+    }
+
+    const segments: string[] = [];
+    for (let index = 0; index < normalizedTokens.length; index += 1) {
+      const current = normalizedTokens[index];
+      segments.push(current.value);
+      if (index < normalizedTokens.length - 1) {
+        const next = normalizedTokens[index + 1];
+        if (needsImplicitMultiplication(current, next)) {
+          segments.push('*');
+        }
+      }
+    }
+
+    const sanitized = segments.join('');
+    if (!sanitized) {
+      return null;
+    }
+
+    if (!/^[-+*/0-9a-zA-Z().,* ]+$/.test(sanitized.replace(/Math\.sqrt/g, 'Mathsqrt'))) {
+      return null;
+    }
+
+    return { sanitized, variables: Array.from(variables) };
+  }
+
+  function needsImplicitMultiplication(left: NormalizedToken, right: NormalizedToken): boolean {
+    if (left.type === 'operator' || left.type === 'comma' || left.type === 'paren-open') {
+      return false;
+    }
+
+    if (right.type === 'operator' || right.type === 'comma' || right.type === 'paren-close') {
+      return false;
+    }
+
+    if (left.type === 'function' && right.type === 'paren-open') {
+      return false;
+    }
+
+    if (right.type === 'function') {
+      return left.type === 'number' || left.type === 'identifier' || left.type === 'paren-close';
+    }
+
+    if (right.type === 'paren-open') {
+      return left.type === 'number' || left.type === 'identifier' || left.type === 'paren-close';
+    }
+
+    if (right.type === 'number' || right.type === 'identifier') {
+      return left.type === 'number' || left.type === 'identifier' || left.type === 'paren-close';
+    }
+
+    return false;
+  }
+
+  function prepareExpression(
+    raw: string | undefined,
+    allowedVariables?: string[],
+  ): { sanitized: string; variables: string[] } | null {
+    if (!raw || typeof raw !== 'string') {
+      return null;
+    }
+
+    const normalized = normalizeLatexLikeExpression(raw);
+    if (!normalized) {
+      return null;
+    }
+
+    const tokens = tokenizeAlgebraicExpression(normalized);
+    if (!tokens) {
+      return null;
+    }
+
+    return buildNormalizedExpression(tokens, allowedVariables);
+  }
+
+  function createExpressionFunction(
+    sanitized: string,
+    variables: string[],
+  ): ((...args: number[]) => number) | null {
+    const params = Array.from(new Set(variables.map((name) => name.toLowerCase())));
+    try {
+      return new Function(...params, `return (${sanitized});`) as (...args: number[]) => number;
+    } catch (error) {
+      console.warn('Failed to compile expression', sanitized, error);
+      return null;
+    }
+  }
+
+  function expressionsEquivalent(
+    rawInput: string,
+    expected: string,
+    allowedVariables?: string[],
+  ): boolean | null {
+    const expectedPrepared = prepareExpression(expected, allowedVariables);
+    if (!expectedPrepared) {
+      console.warn('Unable to prepare expected expression', expected);
+      return null;
+    }
+
+    const allowed = allowedVariables
+      ? Array.from(new Set(allowedVariables.map((variable) => variable.toLowerCase())))
+      : expectedPrepared.variables;
+
+    const userPrepared = prepareExpression(rawInput, allowed);
+    if (!userPrepared) {
+      return null;
+    }
+
+    const variableSet = new Set<string>([
+      ...expectedPrepared.variables,
+      ...userPrepared.variables,
+    ]);
+
+    for (const variable of variableSet) {
+      if (allowed && !allowed.includes(variable)) {
+        return null;
+      }
+    }
+
+    const variables = Array.from(variableSet);
+    const expectedFn = createExpressionFunction(expectedPrepared.sanitized, variables);
+    const userFn = createExpressionFunction(userPrepared.sanitized, variables);
+
+    if (!expectedFn || !userFn) {
+      return null;
+    }
+
+    const tolerance = 1e-6;
+
+    if (variables.length === 0) {
+      try {
+        const expectedValue = expectedFn();
+        const userValue = userFn();
+        if (!Number.isFinite(expectedValue) || !Number.isFinite(userValue)) {
+          return null;
+        }
+        return Math.abs(expectedValue - userValue) <= tolerance;
+      } catch (error) {
+        console.warn('Failed to evaluate constant expression', error);
+        return null;
+      }
+    }
+
+    const sampleValues = [2, 3, 5, 7, 11, 13, 17];
+    let evaluations = 0;
+
+    for (let offset = 0; offset < sampleValues.length && evaluations < 6; offset += 1) {
+      const scopeValues = variables.map(
+        (_variable, index) => sampleValues[(offset + index) % sampleValues.length],
+      );
+
+      try {
+        const expectedValue = expectedFn(...scopeValues);
+        const userValue = userFn(...scopeValues);
+        if (!Number.isFinite(expectedValue) || !Number.isFinite(userValue)) {
+          continue;
+        }
+        if (Math.abs(expectedValue - userValue) > tolerance) {
+          return false;
+        }
+        evaluations += 1;
+      } catch {
+        continue;
+      }
+    }
+
+    if (evaluations === 0) {
+      return null;
+    }
+
+    return true;
+  }
+
   function formatElapsed(seconds: number): string {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -1232,15 +1668,11 @@
           </figure>
         {/if}
         <TextWithMath text={problem.question} />
-          <p class="text-sm text-slate-500">
-            {#if problem.answer.type === 'pair'}
-              Enter your answer as two numbers separated by a comma — {problem.answer.firstLabel ?? 'first value'} first, {problem.answer.secondLabel ?? 'second value'} second. Example: "12,8".
-            {:else}
-              Try to reason it out before revealing hints. You can submit a simplified numeric answer or a fraction.
-            {/if}
-          </p>
-        </div>
-   </section>
+        {#if answerInstruction}
+          <p class="text-sm text-slate-500">{answerInstruction}</p>
+        {/if}
+      </div>
+    </section>
     <div class="grid gap-6 lg:grid-cols-[minmax(0,260px)_minmax(0,1fr)]">
       <aside class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         <h2 class="text-lg font-semibold text-slate-900">Your progress</h2>
@@ -1439,4 +1871,3 @@
     </div>
   {/if}
   </div>
-{/if}

@@ -471,5 +471,33 @@ export const storyBeats: StoryBeat[] = [
     "image": "/story/algebraic-avengers/beat_21.png",
     "imageAlt": "Marie-Sophie Germain walking between the limestone buildings of École Polytechnique, holding a small leather box and reading a mysterious letter.",
     "caption": "Sophie Germain deciphers a riddle about a 'brother bound by code and rhyme' — a veiled summons to Father Mersenne, keeper of harmony and number."
+  },
+  {
+    "id": "algebra-avengers-beat-22",
+    "pathSlug": "algebra-avengers",
+    "sequence": 22,
+    "context": "problem",
+    "problemOrder": 21,
+    "problemId": "algebra-avengers-intermediate-1-problem-6",
+    "title": "The Symbol of Circles",
+    "narrative": [
+      "Carl Friedrich sat at the teacher’s desk, patiently guiding two village children through the geometry problem that had stumped them. The other pupils had already dashed out into the bright field beyond the hall, their laughter echoing through the open windows, but these two lingered—curious, earnest, and unwilling to let the puzzle go unsolved.",
+      "",
+      "On the slate before them lay half-drawn circles and faint equations, the chalk dusted like snow across Carl’s sleeve.",
+      "“The circle,” he explained, tapping the diagram gently, “is a most perfect of shapes. Its mystery lies in how the length around and the space within are bound by the same constant.”",
+      "",
+      "A sudden knock interrupted the lesson. The door creaked open, and Genevieve—Sir Euler’s junior maid—curtsied in the doorway.",
+      "“A letter for you, Squire Gauss. Sir Euler said it should reach you at once.”",
+      "",
+      "“Thank you, Miss Reeve,” Carl replied with a polite nod, taking the folded parchment and placing it absently upon the desk. His mind was still on the problem before him.",
+      "",
+      "Turning back to the children, he drew a final symbol on the slate: π.",
+      "“This curious mark,” he said with a smile, “ties the circle’s edge to its heart. A strange and powerful thing it is indeed.”",
+      "",
+      "The two young students gazed at the sign in wonder as Genevieve slipped quietly from the room. The letter lay unopened beside the chalkboard, its wax seal glinting faintly in the afternoon light."
+    ],
+    "image": "/story/algebraic-avengers/beat_22.png",
+    "imageAlt": "Carl Friedrich Gauss sits at the teacher’s desk tutoring two village children in geometry while a sealed letter lies unopened beside him.",
+    "caption": "Gauss explains the meaning of π to his young students as an unexpected letter arrives — another summons written in the language of riddles."
   }  
 ];

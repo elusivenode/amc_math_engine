@@ -1259,6 +1259,75 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "content": "Express the final answer as $e:n$."
         }
       ]
+    },
+    {
+      "id": "algebra-avengers-intermediate-1-problem-6",
+      "title": "Common Denominator Collapse",
+      "statement": "An expression reads $\\frac{5y}{6x^2} - \\frac{4}{3xy}$. Convert it into a single fraction in simplest terms.",
+      "solution": "Find a common denominator that covers both terms: $6x^2y$. Multiply $\\tfrac{5y}{6x^2}$ by $\\tfrac{y}{y}$ and $\\tfrac{4}{3xy}$ by $\\tfrac{2x}{2x}$ so each term shares the denominator $6x^2y$. This produces $\\tfrac{5y^2}{6x^2y} - \\tfrac{8x}{6x^2y}$. Combine the numerators over the common denominator to obtain $\\tfrac{5y^2 - 8x}{6x^2y}$. Thus the expression simplifies to a single fraction $\\dfrac{5y^2 - 8x}{6x^2y}$.",
+      "difficulty": 5,
+      "tags": ["algebra", "rational expressions", "simplification", "AMC intermediate"],
+      "metadata": {
+        "tagline": "Merge rational terms over a common denominator and simplify.",
+        "objectives": [
+          "Choose an appropriate common denominator for rational expressions.",
+          "Multiply by forms of $1$ to match denominators without changing value.",
+          "Combine like terms in the numerator once denominators align.",
+          "Express the final answer as a single simplified fraction."
+        ],
+        "answer": {
+          "type": "expression",
+          "value": "(5y^2 - 8x)/(6x^2y)",
+          "variables": ["x", "y"],
+          "success": "Correct! $\\dfrac{5y}{6x^2} - \\dfrac{4}{3xy}$ collapses to $\\dfrac{5y^2 - 8x}{6x^2y}.$",
+          "failure": "Rewrite each term over $6x^2y$ by multiplying by a form of $1$, then combine the numerators.",
+          "inputHint": "Enter a single simplified fraction, for example (3a^2 - 2b)/(6ab). Equivalent algebraic forms are accepted."
+        },
+        "solutionSteps": [
+          {
+            "text": "Identify a common denominator that covers both terms; $6x^2y$ works for $\\frac{5y}{6x^2}$ and $\\frac{4}{3xy}$.",
+            "expression": "6x^2y"
+          },
+          {
+            "text": "Multiply each term by a form of $1$ so both share that denominator: $\\frac{5y}{6x^2} \\cdot \\frac{y}{y}$ and $\\frac{4}{3xy} \\cdot \\frac{2x}{2x}$.",
+            "expression": "\\frac{5y}{6x^2} \\cdot \\frac{y}{y} - \\frac{4}{3xy} \\cdot \\frac{2x}{2x}"
+          },
+          {
+            "text": "Write the adjusted terms over the common denominator.",
+            "expression": "\\frac{5y^2}{6x^2y} - \\frac{8x}{6x^2y}"
+          },
+          {
+            "text": "Combine the numerators: $\\frac{5y^2 - 8x}{6x^2y}$.",
+            "expression": "\\frac{5y^2 - 8x}{6x^2y}"
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "Recall how to express fractions over a common denominator. What denominator captures both terms?"
+        },
+        {
+          "order": 2,
+          "content": "$6x^2y$ is the simplest common denominator that covers both terms."
+        },
+        {
+          "order": 3,
+          "content": "To convert the first term, multiply by a form of $1$ so that the denominator becomes $6x^2y$."
+        },
+        {
+          "order": 4,
+          "content": "Use $\\frac{y}{y}$ for the first term and $\\frac{2x}{2x}$ for the second to reach the common denominator."
+        },
+        {
+          "order": 5,
+          "content": "After adjustment, the terms should read $\\frac{5y^2}{6x^2y}$ and $-\\frac{8x}{6x^2y}$."
+        },
+        {
+          "order": 6,
+          "content": "Combine the numerators over $6x^2y$ to finish the simplification."
+        }
+      ]
     }    
   ],
 };

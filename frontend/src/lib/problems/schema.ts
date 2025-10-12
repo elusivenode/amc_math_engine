@@ -58,7 +58,21 @@ export type FractionAnswer = {
   inputHint?: string;
 };
 
-export type AnswerDefinition = NumericAnswer | PairAnswer | RatioAnswer | FractionAnswer;
+export type ExpressionAnswer = {
+  type: 'expression';
+  value: string;
+  success: string;
+  failure: string;
+  variables?: string[];
+  inputHint?: string;
+};
+
+export type AnswerDefinition =
+  | NumericAnswer
+  | PairAnswer
+  | RatioAnswer
+  | FractionAnswer
+  | ExpressionAnswer;
 
 export type ProblemDiagram =
   | {
