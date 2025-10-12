@@ -1190,7 +1190,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
     {
       "id": "algebra-avengers-intermediate-1-problem-5",
       "title": "Book Budget Breakdown",
-      "statement": "Jack has just spent $546 on new exercise books for the new school term. He goes through a notebook and an exercise book each week. There are 14 weeks in the term. Exercise books cost $1 more than notebooks. What is the ratio of exercise book : notebook in simplest terms? Submit your answer in the form $e:n$.",
+      "statement": "Jack has just spent \\$546 on new exercise books for the new school term. He goes through a notebook and an exercise book each week. There are 14 weeks in the term. Exercise books cost \\$1 more than notebooks. What is the ratio of exercise book : notebook in simplest terms? Submit your answer in the form $e:n$.",
       "solution": "Let $n$ be the cost of a notebook. Then an exercise book costs $n + 1$, and each week Jack buys one of each, so the weekly cost is $n + (n + 1) = 2n + 1$. Over 14 weeks the total is $14(2n + 1) = 546$, which simplifies to $2n + 1 = 39$. Solving gives $n = 19$, so an exercise book costs $n + 1 = 20$. Therefore the ratio $e:n$ is $20:19$.",
       "difficulty": 4,
       "tags": ["algebra", "linear equations", "ratios", "AMC intermediate"],
@@ -1206,7 +1206,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "type": "ratio",
           "format": "e:n",
           "value": "20:19",
-          "success": "Correct! Exercise books cost $20 and notebooks cost $19, so $e:n = 20:19$.",
+          "success": "Correct! Exercise books cost \\$20 and notebooks cost \\$19, so $e:n = 20:19$.",
           "failure": "Let $n$ be the notebook price. Solve $14(2n + 1) = 546$, then express $e:n$ with $e = n + 1$.",
           "tolerance": 0
         },
