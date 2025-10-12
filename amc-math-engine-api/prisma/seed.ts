@@ -1145,7 +1145,9 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "value": 0,
           "success": "Correct! $\\sqrt{50} + \\sqrt{32} + 2\\sqrt{8} - \\sqrt{338} = 0.$",
           "failure": "Rewrite each radical as $\\sqrt{2\\cdot k}$ for some perfect square $k$, simplify the roots, and then combine the like terms carefully.",
-          "tolerance": 0
+          "tolerance": 0,
+          "supportsRadicals": true,
+          "inputHint": "Tap the √ button to enter radicals like √2 or 2√5, or submit the simplified value."
         },
         "solutionSteps": [
           {
