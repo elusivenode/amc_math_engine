@@ -1328,7 +1328,304 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "content": "Combine the numerators over $6x^2y$ to finish the simplification."
         }
       ]
-    }    
+    },
+    {
+      "id": "algebra-avengers-intermediate-1-problem-7",
+      "title": "Cake Weight Confusion",
+      "statement": "Hamish and Becky have been eating a lot of cakes. \"Goodness,\" says Hamish. \"The sum of your weight and twice mine is now 361 kg!\" \"You're getting confused,\" Becky replies. \"The sum of your weight and twice mine is 362 kg.\" How much do Hamish and Becky weigh in kilograms combined?",
+      "solution": "Let $h$ be Hamish's weight and $b$ Becky's weight. Hamish's comment translates to $h + 2b = 361$, while Becky's statement gives $2h + b = 362$. Multiply the first equation by $2$ to get $2h + 4b = 722$. Subtract the second equation to eliminate $h$, producing $3b = 360$ and $b = 120$. Substitute back into $h + 2b = 361$ to obtain $h + 2(120) = 361$, so $h = 121$. Together they weigh $h + b = 121 + 120 = 241$ kilograms.",
+      "difficulty": 4,
+      "tags": ["algebra", "systems of equations", "linear equations", "AMC intermediate"],
+      "metadata": {
+        "tagline": "Resolve conflicting weight claims with a simple system of equations.",
+        "objectives": [
+          "Define variables representing each person's weight.",
+          "Translate the story statements into simultaneous linear equations.",
+          "Use elimination to solve the system for one variable.",
+          "Substitute to find the remaining weight and the requested sum."
+        ],
+        "answer": {
+          "type": "numeric",
+          "value": 241,
+          "success": "Correct! Together Hamish and Becky weigh 241 kilograms.",
+          "failure": "Set up the equations $h + 2b = 361$ and $2h + b = 362$, use elimination to solve for one variable, then find the sum.",
+          "tolerance": 0,
+          "inputHint": "Enter the total weight of Hamish and Becky as a whole number."
+        },
+        "solutionSteps": [
+          {
+            "text": "Let $h$ represent Hamish's weight in kilograms and $b$ represent Becky's weight.",
+            "expression": "h, b"
+          },
+          {
+            "text": "Translate the statements into equations: $h + 2b = 361$ and $2h + b = 362$.",
+            "expression": "h + 2b = 361; 2h + b = 362"
+          },
+          {
+            "text": "Multiply the first equation by $2$ and subtract the second to eliminate $h$: $2(h + 2b) - (2h + b) = 360$, yielding $3b = 360$ so $b = 120$.",
+            "expression": "b = 120"
+          },
+          {
+            "text": "Substitute $b = 120$ into $h + 2b = 361$ to solve for $h$: $h + 2(120) = 361$, so $h = 121$.",
+            "expression": "h = 121"
+          },
+          {
+            "text": "Add the weights to answer the question: $h + b = 121 + 120 = 241$ kilograms.",
+            "expression": "241"
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "How many variables should you use for this scenario?"
+        },
+        {
+          "order": 2,
+          "content": "Model it as 2 equations with 2 unknowns."
+        },
+        {
+          "order": 3,
+          "content": "$h + 2b = 361$ and $2h + b = 362.$"
+        },
+        {
+          "order": 4,
+          "content": "You want to eliminate $h$ or $b$."
+        },
+        {
+          "order": 5,
+          "content": "Compute $2(h + 2b = 361) - (2h + b = 362)$ to eliminate $h$, giving $3b = 360$ and $b = 120.$"
+        },
+        {
+          "order": 6,
+          "content": "Can you get $h$ now, knowing $b$?"
+        },
+        {
+          "order": 7,
+          "content": "Plug $b = 120$ into either equation. You should find $h = 121.$"
+        },
+        {
+          "order": 8,
+          "content": "The question requires the combined weight. $h + b = 241.$"
+        }
+      ]
+    },
+    {
+      "id": "algebra-avengers-intermediate-1-problem-8",
+      "title": "Nested Radical Face-Off",
+      "statement": "Which is larger: $\\sqrt{3\\sqrt{6\\sqrt{2}}}$ or $\\sqrt{6\\sqrt{2\\sqrt{3}}}$?",
+      "solution": "Label the expressions $A = \\sqrt{3\\sqrt{6\\sqrt{2}}}$ and $B = \\sqrt{6\\sqrt{2\\sqrt{3}}}$. Simplify $A$ by working from the innermost radical outward. First, $\\sqrt{6\\sqrt{2}} = (6\\cdot 2^{1/2})^{1/2} = 6^{1/2} \\cdot 2^{1/4}$. Multiplying by $3$ gives $3 \\cdot 6^{1/2} \\cdot 2^{1/4} = 3^{3/2} \\cdot 2^{3/4}$, and taking the outer square root yields $A = 3^{3/4} \\cdot 2^{3/8}$. The same process on $B$ gives $\\sqrt{2\\sqrt{3}} = (2\\cdot 3^{1/2})^{1/2} = 2^{1/2} \\cdot 3^{1/4}$, so $6\\sqrt{2\\sqrt{3}} = 2^{3/2} \\cdot 3^{5/4}$ and $B = 2^{3/4} \\cdot 3^{5/8}$. Compare $A$ and $B$ by examining the ratio $\\frac{A}{B} = 2^{-3/8} \\cdot 3^{1/8} = \\left(\\frac{3}{8}\\right)^{1/8}$, which is less than $1$. Therefore $A < B$, so $\\sqrt{6\\sqrt{2\\sqrt{3}}}$ is larger.",
+      "difficulty": 5,
+      "tags": ["algebra", "radicals", "exponents", "comparison", "AMC intermediate"],
+      "metadata": {
+        "tagline": "Tame deeply nested radicals by turning everything into fractional exponents.",
+        "objectives": [
+          "Rewrite nested radicals using fractional exponents.",
+          "Systematically simplify from the innermost radical outward.",
+          "Compare two expressions by forming their ratio.",
+          "Decide which radical expression is larger from the comparison."
+        ],
+        "answer": {
+          "type": "expression",
+          "value": "B",
+          "success": "Correct! $\\sqrt{6\\sqrt{2\\sqrt{3}}}$ (choice B) is larger.",
+          "failure": "Simplify both expressions into powers of $2$ and $3$, then compare by taking their ratio.",
+          "inputHint": "Enter either A or B.",
+          "variables": ["A", "B"],
+          "shortcuts": ["A", "B"],
+          "includeExponentTwo": false
+        },
+        "solutionSteps": [
+          {
+            "text": "Let $A = \\sqrt{3\\sqrt{6\\sqrt{2}}}$ and $B = \\sqrt{6\\sqrt{2\\sqrt{3}}}$ so you can track the two expressions.",
+            "expression": "A = \\sqrt{3\\sqrt{6\\sqrt{2}}},\\ B = \\sqrt{6\\sqrt{2\\sqrt{3}}}"
+          },
+          {
+            "text": "Simplify the inner radicals for $A$: $\\sqrt{6\\sqrt{2}} = 6^{1/2} \\cdot 2^{1/4}$, so $A = (3 \\cdot 6^{1/2} \\cdot 2^{1/4})^{1/2} = 3^{3/4} \\cdot 2^{3/8}.$",
+            "expression": "A = 3^{3/4} \\cdot 2^{3/8}"
+          },
+          {
+            "text": "Do the same for $B$: $\\sqrt{2\\sqrt{3}} = 2^{1/2} \\cdot 3^{1/4}$, so $B = (6 \\cdot 2^{1/2} \\cdot 3^{1/4})^{1/2} = 2^{3/4} \\cdot 3^{5/8}.$",
+            "expression": "B = 2^{3/4} \\cdot 3^{5/8}"
+          },
+          {
+            "text": "Compare by forming $A/B = 2^{-3/8} \\cdot 3^{1/8} = \\left(\\frac{3}{8}\\right)^{1/8}$, which is less than $1$ because $\\frac{3}{8} < 1.$",
+            "expression": "\\frac{A}{B} = \\left(\\frac{3}{8}\\right)^{1/8}"
+          },
+          {
+            "text": "Since $A/B < 1$, $A < B$ and choice $B$ is larger.",
+            "expression": "B"
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "Which exponent rules let you convert nested square roots into fractional powers?"
+        },
+        {
+          "order": 2,
+          "content": "Work from the innermost radical outward, rewriting each square root as a $1/2$ power."
+        },
+        {
+          "order": 3,
+          "content": "Once each expression is in terms of powers of $2$ and $3$, line them up for comparison."
+        },
+        {
+          "order": 4,
+          "content": "Form the ratio $A/B$ to see which expression is larger."
+        }
+      ]
+    },
+    {
+      "id": "algebra-avengers-intermediate-1-problem-9",
+      "title": "Scanning a Feasible Window",
+      "statement": "Find the sum of the maximum and minimum values of $4x + y$ over all $(x, y)$ that satisfy the system $-2 \\le y \\le 2$, $y \\le -3x + 5$, and $y \\le 3x + 5$. These inequalities carve out a trapezoid in the coordinate plane.",
+      "solution": "The inequalities create a bounded window in the plane. The horizontal lines $y = 2$ and $y = -2$ sandwich the region vertically, while $y = -3x + 5$ and $y = 3x + 5$ provide slanted upper bounds. Their intersection points give the trapezoid's vertices: $y = 2$ with $y = -3x + 5$ gives $(1, 2)$; $y = -2$ with $y = -3x + 5$ gives $(\\tfrac{7}{3}, -2)$; $y = 2$ with $y = 3x + 5$ gives $(-1, 2)$; and $y = -2$ with $y = 3x + 5$ gives $(-\\tfrac{7}{3}, -2)$. Evaluate $4x + y$ at each vertex: $4(1) + 2 = 6$, $4(\\tfrac{7}{3}) - 2 = \\tfrac{22}{3}$, $4(-1) + 2 = -2$, and $4(-\\tfrac{7}{3}) - 2 = -\\tfrac{34}{3}$. The maximum value is $\\tfrac{22}{3}$ at $(\\tfrac{7}{3}, -2)$ and the minimum is $-\\tfrac{34}{3}$ at $(-\\tfrac{7}{3}, -2)$. Their sum is $\\tfrac{22}{3} + (-\\tfrac{34}{3}) = -\\tfrac{12}{3} = -4$.",
+      "difficulty": 5,
+      "tags": ["algebra", "inequalities", "optimization", "AMC intermediate"],
+      "metadata": {
+        "tagline": "Sweep a linear objective across a trapezoidal feasible region.",
+        "objectives": [
+          "Interpret a system of linear inequalities as a bounded region in the coordinate plane.",
+          "Find intersection points of boundary lines to identify feasible vertices.",
+          "Evaluate a linear objective function at candidate vertices.",
+          "Combine extreme values according to the problem's request."
+        ],
+        "diagram": {
+          "type": "image",
+          "src": "/problems/algebra/intermediate/problem-9.png",
+          "alt": "Trapezoid formed by the lines y = 2, y = -2, y = -3x + 5, and y = 3x + 5.",
+          "caption": "Feasible region bounded by the four inequalities.",
+          "display": "popover"
+        },
+        "answer": {
+          "type": "numeric",
+          "value": -4,
+          "success": "Correct! The maximum and minimum values of $4x + y$ sum to $-4$.",
+          "failure": "Identify the feasible region's corner points, evaluate $4x + y$ at each, and then add the extreme values.",
+          "tolerance": 0,
+          "inputHint": "Enter the sum of the maximum and minimum values of $4x + y$."
+        },
+        "solutionSteps": [
+          {
+            "text": "Sketch the feasible region defined by $-2 \\le y \\le 2$, $y \\le -3x + 5$, and $y \\le 3x + 5$; it forms a trapezoid (see graph).",
+            "expression": "Feasible region = trapezoid"
+          },
+          {
+            "text": "Find the vertices by intersecting the boundary lines: $(1, 2)$, $(\\tfrac{7}{3}, -2)$, $(-1, 2)$, and $(-\\tfrac{7}{3}, -2)$.",
+            "expression": "(1,2), (7/3,-2), (-1,2), (-7/3,-2)"
+          },
+          {
+            "text": "Evaluate $4x + y$ at each vertex: $6$, $\\tfrac{22}{3}$, $-2$, and $-\\tfrac{34}{3}$.",
+            "expression": "4x + y = \\{6,\\ 22/3,\\ -2,\\ -34/3\\}"
+          },
+          {
+            "text": "Identify the extreme values: maximum $\\tfrac{22}{3}$ and minimum $-\\tfrac{34}{3}$.",
+            "expression": "max = 22/3, min = -34/3"
+          },
+          {
+            "text": "Add the extremes: $\\tfrac{22}{3} + (-\\tfrac{34}{3}) = -4$.",
+            "expression": "sum = -4"
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "Can you picture the lines in these inequalities on the coordinate plane?"
+        },
+        {
+          "order": 2,
+          "content": "Sketch the trapezoid bounded by the lines to orient yourself."
+        },
+        {
+          "order": 3,
+          "content": "Sliding lines of the form $4x + y = k$ across the region will touch the extremes at the vertices."
+        },
+        {
+          "order": 4,
+          "content": "Compute the intersection points of the four boundary lines to list the vertices."
+        },
+        {
+          "order": 5,
+          "content": "Evaluate $4x + y$ at each vertex, then add the maximum and minimum results."
+        }
+      ]
+    },
+    {
+      "id": "algebra-avengers-intermediate-1-problem-10",
+      "title": "Factoring for Roots",
+      "statement": "Suppose $(x + r)(x + s) = x^2 + 8x + 15$. Find all solutions to $x^2 + 8x + 15 = 0$ without using the quadratic formula. Submit your answer as $x_1,x_2$.",
+      "solution": "Start by expanding $(x + r)(x + s)$ into $x^2 + (r + s)x + rs$. Matching coefficients with $x^2 + 8x + 15$ shows that $r + s = 8$ and $rs = 15$. A quick search of factor pairs of $15$ that also sum to $8$ reveals $r = 3$ and $s = 5$. Therefore $x^2 + 8x + 15$ factors as $(x + 3)(x + 5)$. Setting each factor equal to zero gives the roots $x = -3$ and $x = -5$, so the requested answer is $-3,-5$ (order does not matter).",
+      "difficulty": 3,
+      "tags": ["algebra", "quadratics", "factoring", "AMC intermediate"],
+      "metadata": {
+        "tagline": "Match factor sums and products to bypass the quadratic formula.",
+        "objectives": [
+          "Expand a binomial product to express coefficients in terms of $r$ and $s$.",
+          "Set up equations for the sum and product of the constants based on coefficient comparison.",
+          "Identify constants that satisfy both conditions and factor the quadratic.",
+          "Read the roots directly from the factored form."
+        ],
+        "answer": {
+          "type": "pair",
+          "expected": {
+            "first": -3,
+            "second": -5
+          },
+          "separator": ",",
+          "orderMatters": false,
+          "success": "Correct! $(x + 3)(x + 5) = x^2 + 8x + 15$, so the roots are $-3$ and $-5$.",
+          "failure": "Compare $(x + r)(x + s)$ with $x^2 + 8x + 15$ to find $r$ and $s$, factor, then write the roots.",
+          "inputHint": "Enter the two roots separated by a comma, e.g. 1,1."
+        },
+        "solutionSteps": [
+          {
+            "text": "Expand $(x + r)(x + s)$ to obtain $x^2 + (r + s)x + rs$.",
+            "expression": "x^2 + (r + s)x + rs"
+          },
+          {
+            "text": "Match coefficients with $x^2 + 8x + 15$ so that $r + s = 8$ and $rs = 15$.",
+            "expression": "r + s = 8,\\ rs = 15"
+          },
+          {
+            "text": "Find constants satisfying both conditions: $r = 3$ and $s = 5$ work.",
+            "expression": "r = 3,\\ s = 5"
+          },
+          {
+            "text": "Rewrite the quadratic as $(x + 3)(x + 5) = 0$.",
+            "expression": "(x + 3)(x + 5)"
+          },
+          {
+            "text": "Set each factor equal to zero to get $x = -3$ and $x = -5$.",
+            "expression": "x = -3,\\ x = -5"
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "Expand $(x + r)(x + s)$ so you can compare it with $x^2 + 8x + 15$."
+        },
+        {
+          "order": 2,
+          "content": "What value must $rs$ take to match the constant term?"
+        },
+        {
+          "order": 3,
+          "content": "Search for numbers with sum $8$ and product $15$ to determine $r$ and $s$."
+        },
+        {
+          "order": 4,
+          "content": "Substitute your $r$ and $s$ back into $(x + r)(x + s)$ to factor the quadratic."
+        },
+        {
+          "order": 5,
+          "content": "Which $x$ values make each factor zero?"
+        }
+      ]
+    }
   ],
 };
 

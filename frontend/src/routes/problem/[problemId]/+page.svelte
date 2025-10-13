@@ -6,7 +6,7 @@
   import TextWithMath from '$components/TextWithMath.svelte';
   import KatexBlock from '$components/KatexBlock.svelte';
   import { apiFetch } from '$lib/api';
-  import type { AnswerDefinition, NumericAnswer, ProblemDefinition } from '$lib/problems';
+  import type { AnswerDefinition, ExpressionAnswer, NumericAnswer, ProblemDefinition } from '$lib/problems';
   import StoryPanelModal from '$lib/components/StoryPanelModal.svelte';
   import SubpathCompletionModal from '$lib/components/SubpathCompletionModal.svelte';
   import {
@@ -181,6 +181,11 @@
   let formattedFeedback = '';
   let showRadicalShortcut = false;
   let showExpressionShortcuts = false;
+  let expressionShortcuts: string[] = [];
+  let includeExponentShortcut = false;
+  let diagramPopoverVisible = false;
+  let diagramPopoverElement: HTMLDivElement | null = null;
+  let diagramTriggerButton: HTMLButtonElement | null = null;
   let subpathContext: SubpathContext | null = null;
   let subpathContextLoading = false;
   let journeyModalOpen = false;
@@ -200,7 +205,24 @@
       showRadicalShortcut = false;
     }
 
-    showExpressionShortcuts = problem?.answer?.type === 'expression';
+    if (problem?.answer?.type === 'expression') {
+      const expressionAnswer = problem.answer as ExpressionAnswer;
+      expressionShortcuts =
+        Array.isArray(expressionAnswer.shortcuts) && expressionAnswer.shortcuts.length > 0
+          ? expressionAnswer.shortcuts
+          : expressionAnswer.variables && expressionAnswer.variables.length > 0
+            ? expressionAnswer.variables
+            : ['x', 'y'];
+      includeExponentShortcut =
+        expressionAnswer.includeExponentTwo === undefined
+          ? true
+          : expressionAnswer.includeExponentTwo;
+      showExpressionShortcuts = expressionShortcuts.length > 0 || includeExponentShortcut;
+    } else {
+      expressionShortcuts = [];
+      includeExponentShortcut = false;
+      showExpressionShortcuts = false;
+    }
   }
 
   function insertToken(token: string) {
@@ -215,12 +237,24 @@
     insertToken('√');
   }
 
-  function insertVariable(variable: string) {
-    insertToken(variable);
-  }
-
   function insertExponentTwo() {
     insertToken('²');
+  }
+
+  function showDiagramPopover() {
+    diagramPopoverVisible = true;
+  }
+
+  function hideDiagramPopover() {
+    diagramPopoverVisible = false;
+  }
+
+  function handleDiagramBlur(event: FocusEvent) {
+    const related = event.relatedTarget as HTMLElement | null;
+    if (related && diagramPopoverElement && diagramPopoverElement.contains(related)) {
+      return;
+    }
+    hideDiagramPopover();
   }
 
   function formatStatusLabel(status: string): string {
@@ -496,6 +530,7 @@
                 second: typeof tolerance.second === 'number' ? tolerance.second : undefined,
               }
             : undefined,
+          orderMatters: raw.orderMatters === false ? false : true,
           inputHint: typeof raw.inputHint === 'string' ? raw.inputHint : undefined,
           success: typeof raw.success === 'string' ? raw.success : 'Great work!',
           failure: typeof raw.failure === 'string' ? raw.failure : 'Keep exploring the algebraic steps.',
@@ -538,11 +573,25 @@
                 ),
               )
             : undefined;
+        const shortcuts =
+          Array.isArray(raw.shortcuts) && raw.shortcuts.length > 0
+            ? Array.from(
+                new Set(
+                  raw.shortcuts
+                    .map((item) => (typeof item === 'string' ? item.trim() : ''))
+                    .filter((item) => item.length > 0),
+                ),
+              )
+            : undefined;
+        const includeExponentTwo =
+          raw.includeExponentTwo === undefined ? true : raw.includeExponentTwo === true;
 
         return {
           type: 'expression',
           value,
           variables,
+          shortcuts,
+          includeExponentTwo,
           success: typeof raw.success === 'string' ? raw.success : 'Great work!',
           failure:
             typeof raw.failure === 'string'
@@ -643,11 +692,15 @@
         return undefined;
       }
 
+      const displayRaw = typeof diagram.display === 'string' ? diagram.display : 'inline';
+      const display: 'inline' | 'popover' = displayRaw === 'popover' ? 'popover' : 'inline';
+
       return {
         type: 'image' as const,
         src,
         alt,
         caption: typeof diagram.caption === 'string' ? diagram.caption : undefined,
+        display,
       };
     }
 
@@ -886,6 +939,7 @@
     if (source === 'remote') {
       void refreshSubpathContext();
     }
+    diagramPopoverVisible = false;
   }
 
   async function checkAnswer() {
@@ -928,10 +982,17 @@
 
       const toleranceFirst = answerDef.tolerance?.first ?? 0;
       const toleranceSecond = answerDef.tolerance?.second ?? 0;
+      const orderMatters = answerDef.orderMatters !== false;
 
       const firstOk = Math.abs(pair.first - answerDef.expected.first) <= toleranceFirst;
       const secondOk = Math.abs(pair.second - answerDef.expected.second) <= toleranceSecond;
-      isCorrect = firstOk && secondOk;
+      if (orderMatters) {
+        isCorrect = firstOk && secondOk;
+      } else {
+        const swappedFirstOk = Math.abs(pair.first - answerDef.expected.second) <= toleranceSecond;
+        const swappedSecondOk = Math.abs(pair.second - answerDef.expected.first) <= toleranceFirst;
+        isCorrect = (firstOk && secondOk) || (swappedFirstOk && swappedSecondOk);
+      }
       outcome = isCorrect ? 'CORRECT' : 'INCORRECT';
 
       console.log('Attempt prepared', {
@@ -939,6 +1000,7 @@
         expected: answerDef.expected,
         toleranceFirst,
         toleranceSecond,
+        orderMatters,
         outcome,
         attemptValue,
       });
@@ -1748,24 +1810,79 @@
         </div>
       </div>
       <div class="mt-6 space-y-4 text-lg text-slate-800">
-        {#if problem.diagram}
-          <figure class="rounded-xl border border-slate-100 bg-slate-50 p-4 text-center">
-            {#if problem.diagram.type === 'image'}
-              <img
-                src={problem.diagram.src}
-                alt={problem.diagram.alt}
-                class="mx-auto h-auto max-h-80 w-full max-w-xl object-contain"
-                loading="lazy"
-              />
-            {:else if problem.diagram.type === 'component'}
-              <svelte:component this={problem.diagram.component} />
-            {/if}
-            {#if problem.diagram.caption}
-              <figcaption class="mt-3 text-sm text-slate-500">{problem.diagram.caption}</figcaption>
-            {/if}
-          </figure>
-        {/if}
         <TextWithMath text={problem.question} />
+        {#if problem.diagram}
+          {#if problem.diagram.display === 'popover'}
+            <div
+              class="relative inline-block"
+              on:mouseenter={showDiagramPopover}
+              on:mouseleave={hideDiagramPopover}
+              role="presentation"
+            >
+              <button
+                class="rounded-full border border-indigo-200 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-indigo-600 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                type="button"
+                on:click={showDiagramPopover}
+                on:focus={showDiagramPopover}
+                on:blur={handleDiagramBlur}
+                aria-expanded={diagramPopoverVisible}
+                aria-haspopup="dialog"
+                bind:this={diagramTriggerButton}
+              >
+                Visualise
+              </button>
+              {#if diagramPopoverVisible}
+                <div
+                  class="absolute left-1/2 z-30 mt-3 w-[32rem] -translate-x-1/2 rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-xl"
+                  role="dialog"
+                  aria-label="Visual diagram"
+                  bind:this={diagramPopoverElement}
+                >
+                  <button
+                    class="absolute right-3 top-3 rounded-full border border-slate-200 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500 transition hover:border-slate-300 hover:text-slate-700"
+                    type="button"
+                    on:click={() => {
+                      hideDiagramPopover();
+                      diagramTriggerButton?.focus();
+                    }}
+                    aria-label="Close diagram"
+                  >
+                    Close
+                  </button>
+                  {#if problem.diagram.type === 'image'}
+                    <img
+                      src={problem.diagram.src}
+                      alt={problem.diagram.alt}
+                      class="mx-auto h-auto max-h-[28rem] w-full object-contain"
+                      loading="lazy"
+                    />
+                  {:else if problem.diagram.type === 'component'}
+                    <svelte:component this={problem.diagram.component} />
+                  {/if}
+                  {#if problem.diagram.caption}
+                    <p class="mt-3 text-sm text-slate-500">{problem.diagram.caption}</p>
+                  {/if}
+                </div>
+              {/if}
+            </div>
+          {:else}
+            <figure class="rounded-xl border border-slate-100 bg-slate-50 p-4 text-center">
+              {#if problem.diagram.type === 'image'}
+                <img
+                  src={problem.diagram.src}
+                  alt={problem.diagram.alt}
+                  class="mx-auto h-auto max-h-80 w-full max-w-xl object-contain"
+                  loading="lazy"
+                />
+              {:else if problem.diagram.type === 'component'}
+                <svelte:component this={problem.diagram.component} />
+              {/if}
+              {#if problem.diagram.caption}
+                <figcaption class="mt-3 text-sm text-slate-500">{problem.diagram.caption}</figcaption>
+              {/if}
+            </figure>
+          {/if}
+        {/if}
         {#if answerInstruction}
           <p class="text-sm text-slate-500">
             <TextWithMath text={answerInstruction} />
@@ -1858,33 +1975,28 @@
                   </button>
                 {/if}
                 {#if showExpressionShortcuts}
-                  <button
-                    class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-slate-600 transition hover:border-indigo-300 hover:text-indigo-600"
-                    type="button"
-                    on:click={() => insertVariable('x')}
-                    aria-label="Insert x"
-                    title="Insert x"
-                  >
-                    x
-                  </button>
-                  <button
-                    class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-slate-600 transition hover:border-indigo-300 hover:text-indigo-600"
-                    type="button"
-                    on:click={() => insertVariable('y')}
-                    aria-label="Insert y"
-                    title="Insert y"
-                  >
-                    y
-                  </button>
-                  <button
-                    class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-slate-600 transition hover:border-indigo-300 hover:text-indigo-600"
-                    type="button"
-                    on:click={insertExponentTwo}
-                    aria-label="Insert squared"
-                    title="Insert ^2"
-                  >
-                    <span aria-hidden="true" class="text-base leading-none">^<sup>2</sup></span>
-                  </button>
+                  {#each expressionShortcuts as shortcut}
+                    <button
+                      class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-slate-600 transition hover:border-indigo-300 hover:text-indigo-600"
+                      type="button"
+                      on:click={() => insertToken(shortcut)}
+                      aria-label={`Insert ${shortcut}`}
+                      title={`Insert ${shortcut}`}
+                    >
+                      {shortcut}
+                    </button>
+                  {/each}
+                  {#if includeExponentShortcut}
+                    <button
+                      class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-slate-600 transition hover:border-indigo-300 hover:text-indigo-600"
+                      type="button"
+                      on:click={insertExponentTwo}
+                      aria-label="Insert squared"
+                      title="Insert ^2"
+                    >
+                      <span aria-hidden="true" class="text-base leading-none">^<sup>2</sup></span>
+                    </button>
+                  {/if}
                 {/if}
               </div>
             {/if}

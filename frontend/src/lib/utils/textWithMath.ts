@@ -86,7 +86,49 @@ export function renderTextWithMath(text: string): string {
     .map((segment) =>
       segment.type === 'math'
         ? `<span class="inline-math" aria-hidden="false" role="math">${renderMath(segment.value)}</span>`
-        : escapeHtml(segment.value),
+        : renderTextSegment(segment.value),
     )
     .join('');
+}
+
+function renderTextSegment(value: string): string {
+  if (!value) {
+    return '';
+  }
+
+  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+  let lastIndex = 0;
+  let output = '';
+
+  const highlightStyle = 'color:#4f46e5;font-weight:600;text-decoration:underline;';
+
+  for (let match = linkRegex.exec(value); match !== null; match = linkRegex.exec(value)) {
+    const [fullMatch, label, hrefRaw] = match;
+    const start = match.index;
+
+    if (start > lastIndex) {
+      output += escapeHtml(value.slice(lastIndex, start));
+    }
+
+    const href = hrefRaw.trim();
+    const isSafeLink = /^https?:\/\//i.test(href) || href.startsWith('/') || href.startsWith('./');
+
+    if (isSafeLink) {
+      output += `<a href="${escapeHtml(
+        href,
+      )}" target="_blank" rel="noopener noreferrer" style="${highlightStyle}">${escapeHtml(
+        label,
+      )}</a>`;
+    } else {
+      output += escapeHtml(fullMatch);
+    }
+
+    lastIndex = start + fullMatch.length;
+  }
+
+  if (lastIndex < value.length) {
+    output += escapeHtml(value.slice(lastIndex));
+  }
+
+  return output;
 }

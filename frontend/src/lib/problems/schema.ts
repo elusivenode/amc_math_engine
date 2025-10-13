@@ -36,6 +36,7 @@ export type PairAnswer = {
     first?: number;
     second?: number;
   };
+  orderMatters?: boolean;
   inputHint?: string;
   success: string;
   failure: string;
@@ -64,6 +65,8 @@ export type ExpressionAnswer = {
   success: string;
   failure: string;
   variables?: string[];
+  shortcuts?: string[];
+  includeExponentTwo?: boolean;
   inputHint?: string;
 };
 
@@ -80,11 +83,13 @@ export type ProblemDiagram =
       src: string;
       alt: string;
       caption?: string;
+      display?: 'inline' | 'popover';
     }
   | {
       type: 'component';
       component: ComponentType;
       caption?: string;
+      display?: 'inline' | 'popover';
     };
 
 export type ProblemMetadata = {

@@ -118,16 +118,22 @@
     <div class="flex gap-2 rounded-full bg-slate-100 p-1 text-sm font-medium">
       <button
         type="button"
-        class="flex-1 rounded-full px-3 py-2 transition"
-        class:selected={mode === 'login'}
+        class={`flex-1 rounded-full px-3 py-2 transition ${
+          mode === 'login'
+            ? 'bg-white text-indigo-900 shadow-[0_1px_3px_rgba(15,23,42,0.1)]'
+            : 'text-slate-600 hover:text-indigo-600'
+        }`}
         on:click={() => switchMode('login')}
       >
         Sign in
       </button>
       <button
         type="button"
-        class="flex-1 rounded-full px-3 py-2 transition"
-        class:selected={mode === 'register'}
+        class={`flex-1 rounded-full px-3 py-2 transition ${
+          mode === 'register'
+            ? 'bg-white text-indigo-900 shadow-[0_1px_3px_rgba(15,23,42,0.1)]'
+            : 'text-slate-600 hover:text-indigo-600'
+        }`}
         on:click={() => switchMode('register')}
       >
         Register
@@ -185,8 +191,11 @@
             <legend class="text-sm font-medium text-slate-700">Choose your access plan</legend>
             {#each planOptions as option}
               <label
-                class="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 px-4 py-3 transition hover:border-indigo-400"
-                class:active={selectedPlan === option.value}
+                class={`flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 px-4 py-3 transition hover:border-indigo-400 ${
+                  selectedPlan === option.value
+                    ? 'border-indigo-600 shadow-[0_1px_4px_rgba(99,102,241,0.18)]'
+                    : ''
+                }`}
               >
                 <input
                   class="mt-1"
@@ -228,16 +237,3 @@
     Your credentials are stored securely with hashed passwords. Tokens are kept in your browser for this prototype.
   </p>
 </div>
-
-<style>
-  button.selected {
-    background: white;
-    color: #312e81;
-    box-shadow: 0 1px 3px rgb(15 23 42 / 0.1);
-  }
-
-  label.active {
-    border-color: #4338ca;
-    box-shadow: 0 1px 4px rgb(99 102 241 / 0.18);
-  }
-</style>
