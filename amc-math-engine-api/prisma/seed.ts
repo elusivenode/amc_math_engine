@@ -1648,7 +1648,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "shortcuts": ["x"],
           "success": "Correct! Feeding Machine F into Machine G yields $g(f(x)) = (x^2 - 3) + 3 = x^2.$",
           "failure": "Find $f(x)$ and $g(x)$, then substitute the output of F into G to simplify $g(f(x)).$",
-          "inputHint": "Enter the resulting expression in terms of $x$, e.g. x^2."
+          "inputHint": "Enter the resulting expression in terms of $x$."
         },
         "solutionSteps": [
           {
@@ -1711,7 +1711,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "type": "numeric",
           "value": 108,
           "success": "Correct! $2^{3x - 1} = \\frac{(2^x)^3}{2} = \\frac{6^3}{2} = 108.$",
-          "failure": "Rewrite $2^{3x - 1}$ as $\\frac{2^{3x}}{2}$, express $2^{3x}$ as $(2^x)^3$, and substitute $2^x = 6.$",
+          "failure": "This is a fiddly one, but yields to careful application of the exponent rules.",
           "inputHint": "Enter the simplified numeric value."
         },
         "solutionSteps": [
@@ -1747,7 +1747,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
     {
       "id": "algebra-avengers-intermediate-1-problem-13",
       "title": "Exponent Tangle",
-      "statement": "Solve for $x$ if $$25^{-2} = \\frac{5^{48/x}}{5^{26/x} \\cdot 25^{17/x}}.$$",
+      "statement": "Solve for $x$ if $25^{-2} = \\dfrac{5^{48/x}}{5^{26/x} \\cdot 25^{17/x}}.$",
       "solution": "Rewrite powers of 25 in terms of 5. The left-hand side becomes $25^{-2} = (5^2)^{-2} = 5^{-4}$. On the right-hand side, divide the numerator and denominator exponents: $\\frac{5^{48/x}}{5^{26/x} \\cdot 25^{17/x}} = 5^{48/x} \\cdot 5^{-26/x} \\cdot (5^2)^{-17/x} = 5^{48/x} \\cdot 5^{-26/x} \\cdot 5^{-34/x}$. Combine exponents to get $5^{48/x - 26/x - 34/x} = 5^{-12/x}$. Setting $5^{-4} = 5^{-12/x}$ gives $-4 = -12/x$, so $x = 3.$",
       "difficulty": 4,
       "tags": ["algebra", "exponents", "AMC intermediate"],
