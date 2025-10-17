@@ -751,7 +751,7 @@ export const storyBeats: StoryBeat[] = [
       "",
       "The defense of reason had begun."
     ],
-    "image": "/story/algebra-avengers/beat_30.png",
+    "image": "/story/algebraic-avengers/beat_30.png",
     "imageAlt": "Eudoxus sits on the observatory steps at dawn, eyes lifting to a fading sky as ethereal words seem to shimmer in the air.",
     "caption": "At the edge of night and day, Eudoxus hears a celestial summons — a verse naming him Keeper of the Stones and defender of reason."
   }  
