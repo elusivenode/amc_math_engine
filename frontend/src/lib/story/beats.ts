@@ -720,5 +720,39 @@ export const storyBeats: StoryBeat[] = [
     "imageAlt": "Euclid walks the dusty road from the Library of Alexandria at sunset, scrolls under one arm, as faint ethereal words echo on the wind.",
     "caption": "As twilight falls over Alexandria, Euclid hears the ancient call — a verse summoning him as the first Keeper of the Stones, guardian of reason and logic."
   },
-
+  {
+    "id": "algebra-avengers-beat-30",
+    "pathSlug": "algebra-avengers",
+    "sequence": 30,
+    "context": "problem",
+    "problemOrder": 29,
+    "problemId": "algebra-avengers-intermediate-1-problem-14",
+    "title": "The Keeper of the Heavens",
+    "narrative": [
+      "Eudoxus of Cnidus sat wearily on the stone steps leading up to his observatory. The night had been long and cold, the stars fading now into the pale wash of dawn. He had spent the hours tracing the celestial spheres, refining his planetary models — another small attempt to understand the order of the heavens.",
+      "",
+      "He exhaled slowly, feeling the ache of sleeplessness settle behind his eyes. The gentle hum of morning insects mingled with the rhythm of the waves far below. For a moment, his thoughts drifted toward the eternal — the harmony that must bind all motion, from the turning of the Earth to the paths of the wandering stars.",
+      "",
+      "His head nodded, then snapped upright. A faint rhythm seemed to echo from his dreams into waking. It pulsed softly at first, like the measured beat of a pendulum. Then words began to form within it — distant yet clear, resonant as if spoken by the heavens themselves:",
+      "",
+      "“Through stars and spheres thy reason flies,",
+      "To chart the truth that darkness hides;",
+      "From circle’s law to measured flame,",
+      "Guard thought from those who’d mar its name.”",
+      "",
+      "“When shadow clouds the scholar’s art,",
+      "Let logic’s compass guide thy heart;",
+      "Rise, Eudoxus — keeper bright,",
+      "To stand for reason, flame, and light.”",
+      "",
+      "The final word lingered in the air long after the sound had faded. Eudoxus sat motionless, his heart thudding softly beneath his robes. He looked up at the paling sky, where the last star flickered out like a signal answered.",
+      "",
+      "He understood now. He had been called — not merely as a mathematician, but as a Keeper of the Stones.",
+      "",
+      "The defense of reason had begun."
+    ],
+    "image": "/story/algebra-avengers/beat_30.png",
+    "imageAlt": "Eudoxus sits on the observatory steps at dawn, eyes lifting to a fading sky as ethereal words seem to shimmer in the air.",
+    "caption": "At the edge of night and day, Eudoxus hears a celestial summons — a verse naming him Keeper of the Stones and defender of reason."
+  }  
 ];

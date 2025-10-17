@@ -1803,6 +1803,82 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "content": "Combine exponents with $a^m \\cdot a^n = a^{m + n}$ to simplify."
         }
       ]
+    },
+    {
+      "id": "algebra-avengers-intermediate-1-problem-14",
+      "title": "Chocolate Factory Timing",
+      "statement": "Amy, Bomani, and Charlie work in a chocolate factory. On Monday, they started working at 1:00 PM and were able to pack 4, 3, and 3 packages, respectively, every 3 minutes. At some later time, Daria joined the group. Daria was able to pack 5 packages every 4 minutes. Together, they finished packing 450 packages at exactly 2:45 PM. At what time did Daria join the group? Please answer with a time under a 12-hour clock, e.g. 5:45. [Source: AMC 10A, 2024]",
+      "solution": "Between 1:00 PM and 2:45 PM there are 105 minutes. Amy, Bomani, and Charlie collectively pack $(4 + 3 + 3) = 10$ packages every 3 minutes, or $\\tfrac{10}{3}$ packages per minute. Let $t$ be the number of minutes after 1:00 PM when Daria starts. She packs for $105 - t$ minutes at a rate of $\\tfrac{5}{4}$ packages per minute. The total packages are $\\frac{10}{3} \\cdot 105 + \\frac{5}{4} (105 - t) = 450$. Simplifying gives $350 + \\frac{5}{4}(105 - t) = 450$, so $\\frac{5}{4}(105 - t) = 100$ and $105 - t = 80$. Therefore $t = 25$ and Daria arrived 25 minutes after 1:00 PM, which is 1:25 PM.",
+      "difficulty": 4,
+      "tags": ["algebra", "rates", "word problems", "AMC intermediate"],
+      "metadata": {
+        "tagline": "Track staggered work rates to pinpoint a late arrival.",
+        "objectives": [
+          "Interpret a multi-person rate problem and translate it into equations.",
+          "Introduce a variable for missing time and relate it to total work.",
+          "Convert individual rates into combined rates over matching units.",
+          "Solve the resulting linear equation and interpret the time."
+        ],
+        "answer": {
+          "type": "ratio",
+          "value": "1:25",
+          "success": "Correct! Daria joined at 1:25 PM.",
+          "failure": "Let $t$ be the minutes Daria was late. Combine the packages packed by the first three workers and by Daria to total 450 packages.",
+          "inputHint": "Enter the time Daria arrived in the form h:mm, e.g. 1:25."
+        },
+        "solutionSteps": [
+          {
+            "text": "Compute the total minutes of work: $2{:}45 - 1{:}00 = 105$ minutes.",
+            "expression": "105 \\text{ minutes}"
+          },
+          {
+            "text": "Amy, Bomani, and Charlie together pack $10$ packages every 3 minutes, or $\\tfrac{10}{3}$ packages per minute.",
+            "expression": "\\frac{10}{3} \\text{ packages/minute}"
+          },
+          {
+            "text": "Let $t$ be the number of minutes after 1:00 PM when Daria arrives; she works for $105 - t$ minutes at $\\tfrac{5}{4}$ packages per minute.",
+            "expression": "t \\text{ minutes late}"
+          },
+          {
+            "text": "Set up the total package equation: $\\tfrac{10}{3} \\cdot 105 + \\tfrac{5}{4}(105 - t) = 450.$",
+            "expression": "\\frac{10}{3} \\cdot 105 + \\frac{5}{4}(105 - t) = 450"
+          },
+          {
+            "text": "Solve for $t$: the equation simplifies to $t = 25$, so Daria arrived 25 minutes after 1:00 PM, which is 1:25 PM.",
+            "expression": "t = 25 \\Rightarrow 1{:}25"
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "Think in terms of rates and total work—check the units."
+        },
+        {
+          "order": 2,
+          "content": "Introduce a variable for how late Daria arrives."
+        },
+        {
+          "order": 3,
+          "content": "Let $t$ be the number of minutes Daria is late; you will convert that to a time at the end."
+        },
+        {
+          "order": 4,
+          "content": "Write an equation that sums the packages packed by the original trio and by Daria."
+        },
+        {
+          "order": 5,
+          "content": "How many minutes do Amy, Bomani, and Charlie work, and at what combined rate?"
+        },
+        {
+          "order": 6,
+          "content": "They pack 10 packages every 3 minutes, so $\\tfrac{10}{3}$ packages per minute."
+        },
+        {
+          "order": 7,
+          "content": "Daria packs at $\\tfrac{5}{4}$ packages per minute but only for $105 - t$ minutes."
+        }
+      ]
     }
   ],
 };
