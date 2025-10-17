@@ -1625,6 +1625,184 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "content": "Which $x$ values make each factor zero?"
         }
       ]
+    },
+    {
+      "id": "algebra-avengers-intermediate-1-problem-11",
+      "title": "Function Composition Rig",
+      "statement": "A company designs two machines, Machine F and Machine G, to process data values. Machine F squares an input value and then reduces the result by 3. Machine G takes any value it receives and adds 3 to it. A new machinist rigs up a machine that feeds the output of Machine F directly into Machine G, creating a combined process. What does the new machine return for every $x$ entered?",
+      "solution": "Model the two machines as functions. Machine F squares the input and subtracts 3, so $f(x) = x^2 - 3$. Machine G adds 3, so $g(x) = x + 3$. The combined machine calculates $g(f(x))$, which becomes $g(f(x)) = f(x) + 3 = (x^2 - 3) + 3 = x^2$. Therefore, the new machine returns $x^2$ for any input $x$.",
+      "difficulty": 3,
+      "tags": ["algebra", "functions", "composition", "AMC intermediate"],
+      "metadata": {
+        "tagline": "Track a composite machine by composing its component functions.",
+        "objectives": [
+          "Represent verbal machine descriptions as function definitions.",
+          "Compose two functions to build a combined process.",
+          "Simplify the composed expression carefully.",
+          "Identify the resulting function returned by the combined machine."
+        ],
+        "answer": {
+          "type": "expression",
+          "value": "x^2",
+          "variables": ["x"],
+          "shortcuts": ["x"],
+          "success": "Correct! Feeding Machine F into Machine G yields $g(f(x)) = (x^2 - 3) + 3 = x^2.$",
+          "failure": "Find $f(x)$ and $g(x)$, then substitute the output of F into G to simplify $g(f(x)).$",
+          "inputHint": "Enter the resulting expression in terms of $x$, e.g. x^2."
+        },
+        "solutionSteps": [
+          {
+            "text": "Describe Machine F as $f(x) = x^2 - 3$ since it squares the input and subtracts 3.",
+            "expression": "f(x) = x^2 - 3"
+          },
+          {
+            "text": "Describe Machine G as $g(x) = x + 3$ because it adds 3 to whatever it receives.",
+            "expression": "g(x) = x + 3"
+          },
+          {
+            "text": "Compose the machines: $g(f(x)) = (x^2 - 3) + 3 = x^2$.",
+            "expression": "g(f(x)) = x^2"
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "Do you recall how composition of functions works?"
+        },
+        {
+          "order": 2,
+          "content": "Think of a function as a machine that maps an input to an output."
+        },
+        {
+          "order": 3,
+          "content": "Write equations for the two machines, calling them $f(x)$ and $g(x)$."
+        },
+        {
+          "order": 4,
+          "content": "Machine F squares the input, then subtracts 3: $f(x) = x^2 - 3$."
+        },
+        {
+          "order": 5,
+          "content": "Machine G adds 3, so $g(x) = x + 3$."
+        },
+        {
+          "order": 6,
+          "content": "Feed the output of Machine F into Machine G: compute $g(f(x))."
+        }
+      ]
+    },
+    {
+      "id": "algebra-avengers-intermediate-1-problem-12",
+      "title": "Exponential Cascade",
+      "statement": "Given $2^x = 6$, evaluate $2^{3x - 1}.$",
+      "solution": "Start by rewriting the target exponent: $2^{3x - 1} = \\frac{2^{3x}}{2^1}$. Use the rule $(2^x)^3 = 2^{3x}$ to get $(2^x)^3 = 6^3 = 216$. Dividing by $2$ gives $2^{3x - 1} = \\frac{216}{2} = 108.$",
+      "difficulty": 3,
+      "tags": ["algebra", "exponents", "AMC intermediate"],
+      "metadata": {
+        "tagline": "Chain exponent rules to evaluate a disguised power.",
+        "objectives": [
+          "Apply $a^{m - n} = \\frac{a^m}{a^n}$ to separate an exponent difference.",
+          "Use $(a^m)^n = a^{mn}$ to raise a substituted power.",
+          "Substitute the known value $2^x = 6$ to evaluate higher powers.",
+          "Simplify the resulting expression to a numeric value."
+        ],
+        "answer": {
+          "type": "numeric",
+          "value": 108,
+          "success": "Correct! $2^{3x - 1} = \\frac{(2^x)^3}{2} = \\frac{6^3}{2} = 108.$",
+          "failure": "Rewrite $2^{3x - 1}$ as $\\frac{2^{3x}}{2}$, express $2^{3x}$ as $(2^x)^3$, and substitute $2^x = 6.$",
+          "inputHint": "Enter the simplified numeric value."
+        },
+        "solutionSteps": [
+          {
+            "text": "Rewrite the exponent using $a^{m - n} = \\frac{a^m}{a^n}$: $2^{3x - 1} = \\frac{2^{3x}}{2^1}$.",
+            "expression": "2^{3x - 1} = \\frac{2^{3x}}{2}"
+          },
+          {
+            "text": "Convert $2^{3x}$ using $(2^x)^3 = 2^{3x}$ and substitute $2^x = 6$: $2^{3x} = (2^x)^3 = 6^3 = 216.$",
+            "expression": "(2^x)^3 = 6^3 = 216"
+          },
+          {
+            "text": "Divide by $2$ to obtain $2^{3x - 1} = \\frac{216}{2} = 108.$",
+            "expression": "108"
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "List the exponent rules you might need."
+        },
+        {
+          "order": 2,
+          "content": "Use $a^{m - n} = \\frac{a^m}{a^n}$ to separate $2^{3x - 1}$."
+        },
+        {
+          "order": 3,
+          "content": "Remember that $(a^m)^n = a^{mn}$ when raising powers."
+        }
+      ]
+    },
+    {
+      "id": "algebra-avengers-intermediate-1-problem-13",
+      "title": "Exponent Tangle",
+      "statement": "Solve for $x$ if $$25^{-2} = \\frac{5^{48/x}}{5^{26/x} \\cdot 25^{17/x}}.$$",
+      "solution": "Rewrite powers of 25 in terms of 5. The left-hand side becomes $25^{-2} = (5^2)^{-2} = 5^{-4}$. On the right-hand side, divide the numerator and denominator exponents: $\\frac{5^{48/x}}{5^{26/x} \\cdot 25^{17/x}} = 5^{48/x} \\cdot 5^{-26/x} \\cdot (5^2)^{-17/x} = 5^{48/x} \\cdot 5^{-26/x} \\cdot 5^{-34/x}$. Combine exponents to get $5^{48/x - 26/x - 34/x} = 5^{-12/x}$. Setting $5^{-4} = 5^{-12/x}$ gives $-4 = -12/x$, so $x = 3.$",
+      "difficulty": 4,
+      "tags": ["algebra", "exponents", "AMC intermediate"],
+      "metadata": {
+        "tagline": "Tame a messy tower of exponents by rewriting everything with the same base.",
+        "objectives": [
+          "Express all powers using a common base to compare exponents.",
+          "Apply quotient and power rules for exponents systematically.",
+          "Combine exponent terms by adding and subtracting appropriately.",
+          "Solve the resulting linear equation in the exponent."
+        ],
+        "answer": {
+          "type": "numeric",
+          "value": 3,
+          "success": "Correct! Rewriting in base 5 leads to $5^{-4} = 5^{-12/x}$, so $x = 3.$",
+          "failure": "Rewrite $25$ as $5^2$, simplify the exponents, equate $5^a = 5^b$, and solve for $x$.",
+          "inputHint": "Enter the value of $x$."
+        },
+        "solutionSteps": [
+          {
+            "text": "Convert the left side to base 5: $25^{-2} = (5^2)^{-2} = 5^{-4}.$",
+            "expression": "25^{-2} = 5^{-4}"
+          },
+          {
+            "text": "Rewrite the right side using base 5: $\\frac{5^{48/x}}{5^{26/x} \\cdot 25^{17/x}} = 5^{48/x} \\cdot 5^{-26/x} \\cdot (5^2)^{-17/x}.$",
+            "expression": "5^{48/x} \\cdot 5^{-26/x} \\cdot 5^{-34/x}"
+          },
+          {
+            "text": "Combine exponents: $5^{48/x - 26/x - 34/x} = 5^{-12/x}.$",
+            "expression": "5^{-12/x}"
+          },
+          {
+            "text": "Match exponents: $5^{-4} = 5^{-12/x}$ implies $-4 = -12/x$, giving $x = 3.$",
+            "expression": "x = 3"
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "List the exponent rules you may need."
+        },
+        {
+          "order": 2,
+          "content": "Remember $a^{m - n} = \\frac{a^m}{a^n}$."
+        },
+        {
+          "order": 3,
+          "content": "Use $(a^m)^n = a^{mn}$ to rewrite powers of powers."
+        },
+        {
+          "order": 4,
+          "content": "Combine exponents with $a^m \\cdot a^n = a^{m + n}$ to simplify."
+        }
+      ]
     }
   ],
 };
