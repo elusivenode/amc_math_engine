@@ -1879,6 +1879,66 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "content": "Daria packs at $\\tfrac{5}{4}$ packages per minute but only for $105 - t$ minutes."
         }
       ]
+    },
+    {
+      "id": "algebra-avengers-intermediate-1-problem-15",
+      "title": "Nested Linear Function",
+      "statement": "Let $f(x) = ax + b$ where $a$ and $b$ are real numbers. Suppose that for all real $x$, $$f(f(x)) = 4x + 3.$$ Find $a + b.$",
+      "solution": "Start from $f(x) = ax + b$. Then $f(f(x)) = a(ax + b) + b = a^2 x + ab + b$. Set this equal to $4x + 3$, giving $a^2 = 4$ and $b(a + 1) = 3$. Since $f$ must be increasing like $4x + 3$, take $a = 2$, yielding $(2 + 1)b = 3$ so $b = 1$. Thus $a + b = 3.$",
+      "difficulty": 5,
+      "tags": ["algebra", "functions", "composition", "AMC intermediate"],
+      "metadata": {
+        "tagline": "Compare coefficients after composing a linear function with itself.",
+        "objectives": [
+          "Recognize that composing a linear function produces another linear function.",
+          "Set up equations by equating coefficients of like terms.",
+          "Resolve multiple cases for parameters and interpret the context to select the valid one.",
+          "Compute the requested sum once parameters are determined."
+        ],
+        "answer": {
+          "type": "numeric",
+          "value": 3,
+          "success": "Correct! $a = 2$ and $b = 1$, so $a + b = 3.$",
+          "failure": "Write $f(f(x))$ using $f(x) = ax + b$, compare coefficients with $4x + 3$, and choose the solution that keeps $f$ increasing.",
+          "inputHint": "Enter the value of $a + b.$"
+        },
+        "solutionSteps": [
+          {
+            "text": "Write $f(f(x)) = a(ax + b) + b$ and expand to get $a^2 x + ab + b.$",
+            "expression": "f(f(x)) = a^2 x + ab + b"
+          },
+          {
+            "text": "Match coefficients with $4x + 3$: $a^2 = 4$ and $ab + b = 3.$",
+            "expression": "a^2 = 4,\\ b(a + 1) = 3"
+          },
+          {
+            "text": "Assuming $f$ is increasing like $4x + 3$, take $a = 2$ and solve $3b = 3$ to get $b = 1.$",
+            "expression": "a = 2,\\ b = 1"
+          },
+          {
+            "text": "Compute $a + b = 2 + 1 = 3.$",
+            "expression": "a + b = 3"
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "When you compose a linear function with itself, the result is still linear."
+        },
+        {
+          "order": 2,
+          "content": "Compute $f(f(x))$ explicitly in terms of $a$ and $b$."
+        },
+        {
+          "order": 3,
+          "content": "Match coefficients with $4x + 3$ to form equations for $a$ and $b$."
+        },
+        {
+          "order": 4,
+          "content": "Use the fact that $f(f(x))$ is increasing like $4x + 3$ to select the correct value of $a$."
+        }
+      ]
     }
   ],
 };

@@ -754,5 +754,40 @@ export const storyBeats: StoryBeat[] = [
     "image": "/story/algebraic-avengers/beat_30.png",
     "imageAlt": "Eudoxus sits on the observatory steps at dawn, eyes lifting to a fading sky as ethereal words seem to shimmer in the air.",
     "caption": "At the edge of night and day, Eudoxus hears a celestial summons — a verse naming him Keeper of the Stones and defender of reason."
+  },
+  {
+    "id": "algebra-avengers-beat-31",
+    "pathSlug": "algebra-avengers",
+    "sequence": 31,
+    "context": "problem",
+    "problemOrder": 30,
+    "problemId": "algebra-avengers-intermediate-1-problem-15",
+    "title": "The Keeper of the Curve",
+    "narrative": [
+      "Apollonius of Perga scratched out conic sections on his parchment. His concentration was unbreakable — his mind like a relentless machine, pressing statements back to first principles.",
+      "",
+      "“Where is the link?” he murmured. “One devolves to the other… parabola to ellipse… ellipse to circle…”",
+      "",
+      "A cool breeze tugged at his sleeve though no window was open. He looked up. Then, without warning, something inside him shifted — as though the axis of thought itself had tilted — and he heard a faint, harmonious humming resolve into words:",
+      "",
+      "“O master of the curve and line,",
+      "Who bent the cone to truth’s design,",
+      "Whose hand revealed in ordered grace",
+      "The hidden laws of shape and space;”",
+      "",
+      "“Arise, Apollonius — stand once more,",
+      "As reason buckles under war;",
+      "Guard what the ages learned and own,",
+      "Keeper of thought, and shield of stone.”",
+      "",
+      "The sound faded like mist burned from sunlight. Apollonius stared at the still air, breathing deeply.",
+      "",
+      "“And so the day comes,” he said aloud — though no one stood there to hear him.",
+      "",
+      "He set down his quill with calm resolve. He was ready."
+    ],
+    "image": "/story/algebraic-avengers/beat_31.png",
+    "imageAlt": "Apollonius seated at his writing table over parchment of conic sections as an unseen voice seems to echo in the still air.",
+    "caption": "A verse calls Apollonius of Perga to rise as a Keeper of the Stones — guardian of reason drawn from curves, cones, and pure deduction."
   }  
 ];
