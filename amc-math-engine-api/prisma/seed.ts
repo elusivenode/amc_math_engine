@@ -1824,7 +1824,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "value": "1:25",
           "success": "Correct! Daria joined at 1:25 PM.",
           "failure": "Let $t$ be the minutes Daria was late. Combine the packages packed by the first three workers and by Daria to total 450 packages.",
-          "inputHint": "Enter the time Daria arrived in the form h:mm, e.g. 1:25."
+          "inputHint": "Enter the time Daria arrived in the form h:mm, e.g. 5:55."
         },
         "solutionSteps": [
           {
