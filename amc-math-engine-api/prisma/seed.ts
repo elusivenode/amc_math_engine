@@ -1896,11 +1896,16 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "Compute the requested sum once parameters are determined."
         ],
         "answer": {
-          "type": "expression",
-          "value": ["3,-5", "-5,3"],
+          "type": "pair",
+          "expected": {
+            "first": 3,
+            "second": -5
+          },
+          "separator": ",",
+          "orderMatters": false,
           "success": "Correct! The two cases yield $a + b = 3$ and $a + b = -5$.",
-          "failure": "If $f(x) = ax + b$, what is $f(f(x)$?). Once you have that, match coefficients and go from there.",
-          "inputHint": "There are 2 cases. Evaluate a+b for both. Enter both values separated by a comma."
+          "failure": "Compute both cases from $a^2 = 4$ and enter the two values of $a + b$ separated by a comma.",
+          "inputHint": "Enter the two values separated by a comma."
         },
         "solutionSteps": [
           {
