@@ -796,7 +796,7 @@ export const storyBeats: StoryBeat[] = [
     "sequence": 32,
     "context": "problem",
     "problemOrder": 31,
-    "problemId": "algebra-avengers-intermediate-1-problem-16",
+    "problemId": "algebra-avengers-advancedintermediate-1-problem-1",
     "title": "The Final Keeper",
     "narrative": [
       "Diophantus of Alexandria sat among the colonnades of the Great Library, the polished marble cool beneath his hands. Before him lay a worn copy of his own Arithmetica, its margins crowded with trials of unknowns and half-finished equations.",
