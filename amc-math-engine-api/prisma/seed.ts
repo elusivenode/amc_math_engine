@@ -1970,7 +1970,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "type": "expression",
           "value": "(-b ± sqrt(b^2 - 4*a*(c - H)))/(2*a)",
           "variables": ["a", "b", "c", "H"],
-          "shortcuts": ["t", "a", "b", "c", "H", "√", "±"],
+          "shortcuts": ["t", "a", "b", "c", "H", "√", "±", "(", ")", "-"],
           "includeExponentTwo": true,
           "success": "Correct! Completing the square yields $t = \\frac{-b \pm \sqrt{b^2 - 4a(c - H)}}{2a}$.",
           "failure": "Complete the square on $t^2 + \\frac{b}{a}t = -\\frac{c - H}{a}$, add $(\\frac{b}{2a})^2$, and then isolate $t$ with the $\pm$ term.",
