@@ -1883,8 +1883,8 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
     {
       "id": "algebra-avengers-intermediate-1-problem-15",
       "title": "Nested Linear Function",
-      "statement": "Let $f(x) = ax + b$ where $a$ and $b$ are real numbers. Suppose that for all real $x$, $$f(f(x)) = 4x + 3.$$ Find $a + b.$",
-      "solution": "Start from $f(x) = ax + b$. Then $f(f(x)) = a(ax + b) + b = a^2 x + ab + b$. Set this equal to $4x + 3$, giving $a^2 = 4$ and $b(a + 1) = 3$. Since $f$ must be increasing like $4x + 3$, take $a = 2$, yielding $(2 + 1)b = 3$ so $b = 1$. Thus $a + b = 3.$",
+      "statement": "Let $f(x) = ax + b$ where $a$ and $b$ are real numbers. Suppose that for all real $x$, $f(f(x)) = 4x + 3$. Find all possible values of $a + b$.",
+      "solution": "Start from $f(x) = ax + b$. Then $f(f(x)) = a(ax + b) + b = a^2 x + ab + b$. Matching coefficients with $4x + 3$ gives $a^2 = 4$ and $b(a + 1) = 3.\n\nCase 1: $a = 2$. Then $(2 + 1)b = 3$, so $b = 1$ and $a + b = 3$.\n\nCase 2: $a = -2$. Then $(-2 + 1)b = 3$, so $-b = 3$ giving $b = -3$ and $a + b = -5$. Thus the possible values are $3$ and $-5$.",
       "difficulty": 5,
       "tags": ["algebra", "functions", "composition", "AMC intermediate"],
       "metadata": {
@@ -1896,28 +1896,24 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "Compute the requested sum once parameters are determined."
         ],
         "answer": {
-          "type": "numeric",
-          "value": 3,
-          "success": "Correct! $a = 2$ and $b = 1$, so $a + b = 3.$",
-          "failure": "Write $f(f(x))$ using $f(x) = ax + b$, compare coefficients with $4x + 3$, and choose the solution that keeps $f$ increasing.",
-          "inputHint": "Enter the value of $a + b.$"
+          "type": "expression",
+          "value": ["3,-5", "-5,3"],
+          "success": "Correct! The two cases yield $a + b = 3$ and $a + b = -5$.",
+          "failure": "Compute both cases from $a^2 = 4$ and list the two values of $a + b$ separated by a comma.",
+          "inputHint": "Enter both values separated by a comma, e.g. 3,-5."
         },
         "solutionSteps": [
           {
-            "text": "Write $f(f(x)) = a(ax + b) + b$ and expand to get $a^2 x + ab + b.$",
-            "expression": "f(f(x)) = a^2 x + ab + b"
+            "text": "Compute $f(f(x)) = a(ax + b) + b = a^2 x + ab + b$ and match it with $4x + 3$ to obtain $a^2 = 4$ and $b(a + 1) = 3$.",
+            "expression": "a^2 = 4,\ b(a + 1) = 3"
           },
           {
-            "text": "Match coefficients with $4x + 3$: $a^2 = 4$ and $ab + b = 3.$",
-            "expression": "a^2 = 4,\\ b(a + 1) = 3"
+            "text": "Case 1: $a = 2$. Solve $(2 + 1)b = 3$ to get $b = 1$ and $a + b = 3$.",
+            "expression": "a = 2,\ b = 1 \Rightarrow a + b = 3"
           },
           {
-            "text": "Assuming $f$ is increasing like $4x + 3$, take $a = 2$ and solve $3b = 3$ to get $b = 1.$",
-            "expression": "a = 2,\\ b = 1"
-          },
-          {
-            "text": "Compute $a + b = 2 + 1 = 3.$",
-            "expression": "a + b = 3"
+            "text": "Case 2: $a = -2$. Solve $(-2 + 1)b = 3$ to get $b = -3$ and $a + b = -5$.",
+            "expression": "a = -2,\ b = -3 \Rightarrow a + b = -5"
           }
         ]
       },
@@ -1936,7 +1932,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
         },
         {
           "order": 4,
-          "content": "Use the fact that $f(f(x))$ is increasing like $4x + 3$ to select the correct value of $a$."
+          "content": "Solve both cases for $a$ and list the resulting $a + b$ values."
         }
       ]
     }
