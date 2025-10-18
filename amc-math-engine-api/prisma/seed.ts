@@ -1950,6 +1950,72 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
       ]
     }
   ],
+  'algebra-avengers:ADVANCED:1': [
+    {
+      "id": "algebra-avengers-advanced-1-problem-1",
+      "title": "Completing the Trajectory",
+      "statement": "A ball's height (in metres) above the ground $t$ seconds after it is thrown is $h(t) = at^2 + bt + c$, where $a \ne 0$, $a < 0$, and $c > 0$. Suppose the ball hits a target at height $H$ metres with $0 \le H \le c$. Find an explicit formula for all times $t$ when $h(t) = H$. Express $t$ solely in terms of $a$, $b$, $c$, and $H$.",
+      "solution": "Set $at^2 + bt + c = H$, so $at^2 + bt + (c - H) = 0$. Divide by $a$ (nonzero) to obtain $t^2 + \frac{b}{a}t + \frac{c - H}{a} = 0$, or $t^2 + \frac{b}{a}t = -\frac{c - H}{a}$. To match $(u + v)^2 = u^2 + 2uv + v^2$, take $u = t$ and choose $v = \frac{b}{2a}$; add $(\frac{b}{2a})^2$ to both sides so the left becomes $(t + \frac{b}{2a})^2$. This yields $(t + \frac{b}{2a})^2 = \frac{b^2}{4a^2} - \frac{c - H}{a}$. Taking square roots gives $t + \frac{b}{2a} = \pm \frac{\sqrt{b^2 - 4a(c - H)}}{2a}$, hence $t = \frac{-b \pm \sqrt{b^2 - 4a(c - H)}}{2a}$.",
+      "difficulty": 7,
+      "tags": ["algebra", "quadratics", "quadratic formula", "AMC advanced"],
+      "metadata": {
+        "tagline": "Complete the square on a translated height equation to uncover the quadratic formula.",
+        "objectives": [
+          "Translate the target height condition into a quadratic equation.",
+          "Complete the square by introducing $(\frac{b}{2a})^2$.",
+          "Isolate the squared binomial and take square roots carefully.",
+          "Write the solutions using radical notation in terms of $a$, $b$, $c$, and $H$."
+        ],
+        "answer": {
+          "type": "expression",
+          "value": "(-b ± sqrt(b^2 - 4*a*(c - H)))/(2*a)",
+          "variables": ["a", "b", "c", "H"],
+          "shortcuts": ["t", "a", "b", "c", "H", "√", "±"],
+          "includeExponentTwo": true,
+          "success": "Correct! Completing the square yields $t = \frac{-b \pm \sqrt{b^2 - 4a(c - H)}}{2a}$.",
+          "failure": "Complete the square on $t^2 + \frac{b}{a}t = -\frac{c - H}{a}$, add $(\frac{b}{2a})^2$, and then isolate $t$ with the $\pm$ term.",
+          "inputHint": "Enter the quadratic-formula expression for $t$ in terms of $a$, $b$, $c$, and $H$ (you may use ± or write both branches explicitly)."
+        },
+        "solutionSteps": [
+          {
+            "text": "Set up the equation $at^2 + bt + (c - H) = 0$ by moving $H$ to the left-hand side.",
+            "expression": "at^2 + bt + (c - H) = 0"
+          },
+          {
+            "text": "Divide by $a$ (nonzero) to obtain $t^2 + \frac{b}{a}t + \frac{c - H}{a} = 0$ and rearrange to $t^2 + \frac{b}{a}t = -\frac{c - H}{a}$.",
+            "expression": "t^2 + \frac{b}{a}t = -\frac{c - H}{a}"
+          },
+          {
+            "text": "Add $(\frac{b}{2a})^2$ to both sides so $t^2 + \frac{b}{a}t + (\frac{b}{2a})^2$ matches $(u + v)^2$ with $u = t$ and $v = \frac{b}{2a}$, turning the left-hand side into $(t + \frac{b}{2a})^2$ while the right-hand side gains the same term.",
+            "expression": "(t + \frac{b}{2a})^2 = \frac{b^2}{4a^2} - \frac{c - H}{a}"
+          },
+          {
+            "text": "Take square roots and solve for $t$: $t = \frac{-b \pm \sqrt{b^2 - 4a(c - H)}}{2a}$.",
+            "expression": "t = \frac{-b \pm \sqrt{b^2 - 4a(c - H)}}{2a}"
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "This feels tough — break it down. Set $h(t) = H$ and write the quadratic explicitly."
+        },
+        {
+          "order": 2,
+          "content": "Expand $(u + v)^2 = u^2 + 2uv + v^2$. Try taking $u = t$ and choose $v$ so that $2uv$ matches $\frac{b}{a}t$."
+        },
+        {
+          "order": 3,
+          "content": "Add $(\frac{b}{2a})^2$ to both sides so the left becomes $(t + \frac{b}{2a})^2$ — and add the same term to the right-hand side."
+        },
+        {
+          "order": 4,
+          "content": "After completing the square, take square roots and carefully isolate $t$."
+        }
+      ]
+    }
+
+  ],
 };
 
 const PATH_SEEDS: PathSeed[] = [

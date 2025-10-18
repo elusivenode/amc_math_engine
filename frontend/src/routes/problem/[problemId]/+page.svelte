@@ -1628,37 +1628,38 @@
     }
   }
 
-  function expressionsEquivalent(
-    rawInput: string,
-    expected: string,
-    allowedVariables?: string[],
-  ): boolean | null {
-    const expectedPrepared = prepareExpression(expected, allowedVariables);
-    if (!expectedPrepared) {
-      console.warn('Unable to prepare expected expression', expected);
-      return null;
+  function expandPlusMinusVariants(expression: string): string[] {
+    if (!expression) {
+      return [''];
     }
-
-    const allowed = allowedVariables
-      ? Array.from(new Set(allowedVariables.map((variable) => variable.toLowerCase())))
-      : expectedPrepared.variables;
-
-    const userPrepared = prepareExpression(rawInput, allowed);
-    if (!userPrepared) {
-      return null;
+    const normalized = expression.replace(/\\pm/g, '±');
+    if (!normalized.includes('±')) {
+      return [normalized];
     }
-
-    const variableSet = new Set<string>([
-      ...expectedPrepared.variables,
-      ...userPrepared.variables,
-    ]);
-
-    for (const variable of variableSet) {
-      if (allowed && !allowed.includes(variable)) {
-        return null;
+    let variants = [''];
+    for (const char of normalized) {
+      if (char === '±') {
+        const expanded: string[] = [];
+        for (const prefix of variants) {
+          expanded.push(`${prefix}+`);
+          expanded.push(`${prefix}-`);
+        }
+        variants = expanded;
+      } else {
+        variants = variants.map((prefix) => `${prefix}${char}`);
       }
     }
+    return variants;
+  }
 
+  function comparePreparedExpressions(
+    expectedPrepared: { sanitized: string; variables: string[] },
+    userPrepared: { sanitized: string; variables: string[] },
+  ): boolean | null {
+    const variableSet = new Set<string>([
+      ...expectedPrepared.variables.map((variable) => variable.toLowerCase()),
+      ...userPrepared.variables.map((variable) => variable.toLowerCase()),
+    ]);
     const variables = Array.from(variableSet);
     const expectedFn = createExpressionFunction(expectedPrepared.sanitized, variables);
     const userFn = createExpressionFunction(userPrepared.sanitized, variables);
@@ -1683,7 +1684,7 @@
       }
     }
 
-    const sampleValues = [2, 3, 5, 7, 11, 13, 17];
+    const sampleValues = [2, -3, 5, -7, 11, -13, 17];
     let evaluations = 0;
 
     for (let offset = 0; offset < sampleValues.length && evaluations < 6; offset += 1) {
@@ -1708,6 +1709,85 @@
 
     if (evaluations === 0) {
       return null;
+    }
+
+    return true;
+  }
+
+  function expressionsEquivalent(
+    rawInput: string,
+    expected: string,
+    allowedVariables?: string[],
+  ): boolean | null {
+    const expectedVariants = expandPlusMinusVariants(expected);
+    const expectedPrepared = [];
+
+    for (const variant of expectedVariants) {
+      const prepared = prepareExpression(variant, allowedVariables);
+      if (!prepared) {
+        console.warn('Unable to prepare expected expression', variant);
+        return null;
+      }
+      expectedPrepared.push(prepared);
+    }
+
+    const allowedVars =
+      allowedVariables ??
+      Array.from(new Set(expectedPrepared.flatMap((prepared) => prepared.variables)));
+    const allowedSet = new Set(allowedVars.map((variable) => variable.toLowerCase()));
+
+    const inputVariants = expandPlusMinusVariants(rawInput);
+    const userPrepared: { sanitized: string; variables: string[] }[] = [];
+
+    for (const variant of inputVariants) {
+      const prepared = prepareExpression(variant, allowedVars);
+      if (prepared) {
+        userPrepared.push(prepared);
+      }
+    }
+
+    if (userPrepared.length === 0) {
+      return null;
+    }
+
+    if (userPrepared.length !== expectedPrepared.length) {
+      return false;
+    }
+
+    const used = new Array(userPrepared.length).fill(false);
+
+    for (const expectedPrep of expectedPrepared) {
+      let matched = false;
+      for (let index = 0; index < userPrepared.length; index += 1) {
+        if (used[index]) {
+          continue;
+        }
+        const candidate = userPrepared[index];
+        const variableSet = new Set<string>([
+          ...expectedPrep.variables.map((variable) => variable.toLowerCase()),
+          ...candidate.variables.map((variable) => variable.toLowerCase()),
+        ]);
+
+        for (const variable of variableSet) {
+          if (!allowedSet.has(variable)) {
+            return null;
+          }
+        }
+
+        const comparison = comparePreparedExpressions(expectedPrep, candidate);
+        if (comparison === null) {
+          return null;
+        }
+        if (comparison) {
+          used[index] = true;
+          matched = true;
+          break;
+        }
+      }
+
+      if (!matched) {
+        return false;
+      }
     }
 
     return true;
