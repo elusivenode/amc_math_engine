@@ -789,5 +789,40 @@ export const storyBeats: StoryBeat[] = [
     "image": "/story/algebraic-avengers/beat_31.png",
     "imageAlt": "Apollonius seated at his writing table over parchment of conic sections as an unseen voice seems to echo in the still air.",
     "caption": "A verse calls Apollonius of Perga to rise as a Keeper of the Stones — guardian of reason drawn from curves, cones, and pure deduction."
+  },
+  {
+    "id": "algebra-avengers-beat-32",
+    "pathSlug": "algebra-avengers",
+    "sequence": 32,
+    "context": "problem",
+    "problemOrder": 31,
+    "problemId": "algebra-avengers-intermediate-1-problem-16",
+    "title": "The Final Keeper",
+    "narrative": [
+      "Diophantus of Alexandria sat among the colonnades of the Great Library, the polished marble cool beneath his hands. Before him lay a worn copy of his own Arithmetica, its margins crowded with trials of unknowns and half-finished equations.",
+      "",
+      "He leaned in closer, lips moving silently as he traced a problem whose structure still pleased him after years of toil. The hush of the vast hall was complete — until, without warning, a cool breeze slipped between the shelves and ruffled the parchment beneath his fingers.",
+      "",
+      "He looked up sharply. The air wavered — not with sound, but with something like meaning — and then a voice emerged, steady as a proof recited from memory:",
+      "",
+      "“Through unknowns bound in ciphered art,",
+      "You tamed the sums that rend apart;",
+      "Where numbers wrestle without end,",
+      "You made the rational their friend.”",
+      "",
+      "“Rise, Diophantus — answer now,",
+      "As doubt would break what minds allow;",
+      "Guard thought where proof and order stand,",
+      "Last Keeper called to stay the hand.”",
+      "",
+      "The final consonant faded into the cavernous dome of the library. Diophantus remained still — not fearful, but sharpened, like iron struck to edge.",
+      "",
+      "He closed the book with deliberate care. “So the mantle falls to me,” he said softly, as if naming a theorem at last complete.",
+      "",
+      "The last of the four Keepers had risen."
+    ],
+    "image": "/story/algebraic-avengers/beat_32.png",
+    "imageAlt": "Diophantus seated among towering shelves in the Great Library of Alexandria as a sudden breeze stirs the parchment of Arithmetica before him.",
+    "caption": "In the silence of the Great Library, Diophantus receives the final summons — called to rise as the last Keeper of the Stones and defender of reason."
   }  
 ];
