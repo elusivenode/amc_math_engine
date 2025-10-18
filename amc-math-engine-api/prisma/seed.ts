@@ -1928,10 +1928,18 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
         },
         {
           "order": 3,
-          "content": "Match coefficients with $4x + 3$ to form equations for $a$ and $b$."
+          "content": "If $f(x) = ax + b$ then $f(f(x)) = a(ax + b) + b$. Note $f(x)$ playing the role of $x$ in the nested case."
         },
         {
           "order": 4,
+          "content": "$f(f(x)) = a(ax + b) + b = (a^2)x + ab + b$. A quadratic term in a has appeared, but the equation is linear in $x$."
+        },
+        {
+          "order": 5,
+          "content": "Match coefficients with $4x + 3$ to form equations for $a$ and $b$."
+        },
+        {
+          "order": 6,
           "content": "Solve both cases for $a$ and list the resulting $a + b$ values."
         }
       ]
