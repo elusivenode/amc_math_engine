@@ -1972,7 +1972,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "variables": ["a", "b", "c", "H"],
           "shortcuts": ["t", "a", "b", "c", "H", "√", "±", "(", ")", "-"],
           "includeExponentTwo": true,
-          "success": "Correct! Completing the square yields $t = \\frac{-b \pm \sqrt{b^2 - 4a(c - H)}}{2a}$.",
+          "success": "Correct! Completing the square yields $t = \\frac{-b ± \\sqrt{b^2 - 4a(c - H)}}{2a}$.",
           "failure": "Complete the square on $t^2 + \\frac{b}{a}t = -\\frac{c - H}{a}$, add $(\\frac{b}{2a})^2$, and then isolate $t$ with the $\pm$ term.",
           "inputHint": "Enter the quadratic-formula expression for $t$ in terms of $a$, $b$, $c$, and $H$ (you may use ± or write both branches explicitly)."
         },
@@ -1990,8 +1990,8 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
             "expression": "(t + \\frac{b}{2a})^2 = \\frac{b^2}{4a^2} - \\frac{c - H}{a}"
           },
           {
-            "text": "Take square roots and solve for $t$: $t = \\frac{-b \pm \sqrt{b^2 - 4a(c - H)}}{2a}$.",
-            "expression": "t = \\frac{-b \pm \sqrt{b^2 - 4a(c - H)}}{2a}"
+            "text": "Take square roots and solve for $t$: $t = \\frac{-b ± \\sqrt{b^2 - 4a(c - H)}}{2a}$.",
+            "expression": "t = \\frac{-b ± \\sqrt{b^2 - 4a(c - H)}}{2a}"
           }
         ]
       },
