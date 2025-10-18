@@ -768,7 +768,7 @@ export const storyBeats: StoryBeat[] = [
       "",
       "“Where is the link?” he murmured. “One devolves to the other… parabola to ellipse… ellipse to circle…”",
       "",
-      "A cool breeze tugged at his sleeve though no window was open. He looked up. Then, without warning, something inside him shifted — as though the axis of thought itself had tilted — and he heard a faint, harmonious humming resolve into words:",
+      "A cool breeze tugged at his sleeve though it had been a hot, still day. He looked up. Then, without warning, something inside him shifted — as though the axis of thought itself had tilted — and he heard a faint, harmonious humming resolve into words:",
       "",
       "“O master of the curve and line,",
       "Who bent the cone to truth’s design,",
