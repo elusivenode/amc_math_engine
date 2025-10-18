@@ -1882,7 +1882,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
     },
     {
       "id": "algebra-avengers-intermediate-1-problem-15",
-      "title": "Nested Linear Function",
+      "title": "Match those coefficients",
       "statement": "Let $f(x) = ax + b$ where $a$ and $b$ are real numbers. Suppose that for all real $x$, $f(f(x)) = 4x + 3$. Find all possible values of $a + b$.",
       "solution": "Start from $f(x) = ax + b$. Then $f(f(x)) = a(ax + b) + b = a^2 x + ab + b$. Matching coefficients with $4x + 3$ gives $a^2 = 4$ and $b(a + 1) = 3.\n\nCase 1: $a = 2$. Then $(2 + 1)b = 3$, so $b = 1$ and $a + b = 3$.\n\nCase 2: $a = -2$. Then $(-2 + 1)b = 3$, so $-b = 3$ giving $b = -3$ and $a + b = -5$. Thus the possible values are $3$ and $-5$.",
       "difficulty": 5,
@@ -1899,8 +1899,8 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "type": "expression",
           "value": ["3,-5", "-5,3"],
           "success": "Correct! The two cases yield $a + b = 3$ and $a + b = -5$.",
-          "failure": "Compute both cases from $a^2 = 4$ and list the two values of $a + b$ separated by a comma.",
-          "inputHint": "Enter both values separated by a comma, e.g. 3,-5."
+          "failure": "If $f(x) = ax + b$, what is $f(f(x)$?). Once you have that, match coefficients and go from there.",
+          "inputHint": "There are 2 cases. Evaluate a+b for both. Enter both values separated by a comma."
         },
         "solutionSteps": [
           {
