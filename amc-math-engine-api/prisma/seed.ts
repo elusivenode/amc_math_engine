@@ -2013,8 +2013,67 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "content": "After completing the square, take square roots and carefully isolate $t$."
         }
       ]
+    },
+    {
+      "id": "algebra-avengers-advanced-1-problem-2",
+      "title": "A Sum of Cubes Surprise",
+      "statement": "Carl inspects a list of ten integers and realises each term is the cube of a consecutive integer, beginning with $1^3$ and ending with $10^3$. The sum of these cubes happens to be $3025$. Carl now adds together the ten underlying integers themselves and squares that sum. What value does he obtain?",
+      "solution": "The underlying integers are $1, 2, \\dots, 10$. Their sum is $\\frac{10 \\cdot 11}{2} = 55$, so the square is $55^2 = 3025$. This illustrates the identity $\\left(1 + 2 + \\dots + n\\right)^2 = 1^3 + 2^3 + \\dots + n^3$ for $n = 10$.",
+      "difficulty": 6,
+      "tags": ["algebra", "number theory", "sums of powers", "AMC advanced"],
+      "metadata": {
+        "tagline": "Explore why the sum of the first $n$ cubes matches the square of the $n$th triangular number.",
+        "objectives": [
+          "Identify the underlying consecutive integers that generate the cubes.",
+          "Recall the closed-form formula for the sum of the first $n$ positive integers.",
+          "Square the triangular-number sum and connect it to the sum of cubes identity."
+        ],
+        "answer": {
+          "type": "numeric",
+          "value": 3025,
+          "success": "Correct! $55^2$ matches the given sum of cubes, spotlighting the classic identity.",
+          "failure": "Add the ten consecutive integers starting at 1, then square that total.",
+          "tolerance": 0,
+          "inputHint": "Add the integers from 1 through 10, then square the result."
+        },
+        "solutionSteps": [
+          {
+            "text": "List the underlying integers whose cubes appear: $1, 2, \\dots, 10$.",
+            "expression": "1^3 + 2^3 + \\dots + 10^3"
+          },
+          {
+            "text": "Compute their sum using the triangular-number formula $\\frac{n(n+1)}{2}$ with $n = 10$.",
+            "expression": "\\sum_{k=1}^{10} k = \\frac{10 \\cdot 11}{2} = 55"
+          },
+          {
+            "text": "Square the sum to match the total of the cubes.",
+            "expression": "55^2 = 3025"
+          },
+          {
+            "text": "Recognise the identity $\\left(\\sum_{k=1}^n k\\right)^2 = \\sum_{k=1}^n k^3$ for $n = 10$.",
+            "expression": "\\left(\\sum_{k=1}^{10} k\\right)^2 = \\sum_{k=1}^{10} k^3"
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "Can you write down the underlying integers whose cubes you see?"
+        },
+        {
+          "order": 2,
+          "content": "What formula sums the integers from 1 through $n$?"
+        },
+        {
+          "order": 3,
+          "content": "Find the sum of $1 + 2 + \\dots + 10$ and then square it."
+        },
+        {
+          "order": 4,
+          "content": "Notice how squaring that sum reproduces the total of the cubes."
+        }
+      ]
     }
-
   ],
 };
 

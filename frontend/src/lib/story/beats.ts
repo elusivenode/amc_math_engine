@@ -824,5 +824,35 @@ export const storyBeats: StoryBeat[] = [
     "image": "/story/algebraic-avengers/beat_32.png",
     "imageAlt": "Diophantus seated among towering shelves in the Great Library of Alexandria as a sudden breeze stirs the parchment of Arithmetica before him.",
     "caption": "In the silence of the Great Library, Diophantus receives the final summons — called to rise as the last Keeper of the Stones and defender of reason."
+  },
+  {
+    "id": "algebra-avengers-beat-33",
+    "pathSlug": "algebra-avengers",
+    "sequence": 33,
+    "context": "problem",
+    "problemOrder": 32,
+    "problemId": "algebra-avengers-advanced-1-problem-2",
+    "title": "Carl and Emmy exchange parchments",
+    "narrative": [
+      "Carl’s heart was still racing as he shut the stable door behind him. He scarcely noticed the sting in his frozen fingertips — the letter he carried had driven all other sensation from his mind.",
+      "",
+      "A sudden, heavy rap at the door made him jump. His pulse spiked.",
+      "“Who is it?” he shouted before he could stop himself, all courtesy gone.",
+      "",
+      "“It is Emmy, Squire Gauss,” came the reply. “Forgive the lateness — I needed to bring you this at once.”",
+      "",
+      "Carl opened the door and bowed low. “It is I who must beg forgiveness, Your Highness. My manner was —”",
+      "",
+      "Emmy cut him off gently. “Think nothing of it.” She studied his face. His colour was high; fear sat behind his eyes. “Are you unwell, Squire Gauss?”",
+      "",
+      "He said nothing. Instead he held out the letter with a trembling hand. She took it and read quickly, her brow tightening. Then she reached into the small volume she carried and drew out a slip of parchment that had fallen loose.",
+      "",
+      "Without a word, she placed it in Carl’s palm.",
+      "",
+      "For a long moment they stood together in the cold, the only motion their breath turning to grey smoke in the air — two minds held still by the same unsettling summons."
+    ],
+    "image": "/story/algebraic-avengers/beat_33.png",
+    "imageAlt": "Carl Gauss and Princess Emmy standing in the cold stable entry, exchanging letters with visible tension in the winter air.",
+    "caption": "A late-night deliverance binds Gauss and Emmy into the unfolding mystery — the summons has reached them both."
   }  
 ];
