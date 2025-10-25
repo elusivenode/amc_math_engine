@@ -2108,7 +2108,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "coordinateSeparator": ",",
           "success": "Correct! Both intersection points lie exactly 10 m from the scarecrow along the bat's flight path.",
           "failure": "List both intersection points in the form x,y:x,y. Each coordinate can be written using simplified radicals such as $\\frac{6 - \\sqrt{491}}{5}$.",
-          "inputHint": "Enter the two intersection points as x,y:x,y — for example (1 - √2)/2,(3 + 2√2)/2:(1 + √2)/2,(1 - 2√2)/2."
+          "inputHint": "Enter the two intersection points as x,y:x,y — for example (6 - √491)/5,(3 + 2√491)/5:(6 + √491)/5,(3 - 2√491)/5."
         },
         "solutionSteps": [
           {
@@ -2149,6 +2149,76 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
         {
           "order": 4,
           "content": "Substitute each $x$-value back into $y = -2x + 3$ to obtain the two $(x, y)$ pairs."
+        }
+      ]
+    },
+    {
+      "id": "algebra-avengers-advanced-1-problem-4",
+      "title": "Prime Factoring Trickery",
+      "statement": "Integers $a$, $b$, and $c$ satisfy $ab + c = 100$, $bc + a = 87$, and $ca + b = 60$. What is $ab + bc + ca$? \\[Source: 2024 AMC 10A\\]",
+      "solution": "Subtract $bc + a = 87$ from $ab + c = 100$ to get $(b - 1)(a - c) = 13$. Because $a$, $b$, $c$ are integers and $13$ is prime, the only factor pairs are $(1,13)$ and $(-1,-13)$ (and their reversals). Testing each case against the original system, only $b - 1 = -13$ and $a - c = -1$ works, giving $b = -12$ and $a = c - 1$. Substitute into $ca + b = 60$ to find $c = -8$, then $a = -9$. Finally compute $ab + bc + ca = (-9)(-12) + (-12)(-8) + (-8)(-9) = 108 + 96 + 72 = 276$.",
+      "difficulty": 8,
+      "tags": ["algebra", "number theory", "systems of equations", "AMC advanced"],
+      "metadata": {
+        "tagline": "Exploit a prime factorisation hidden inside a symmetric system.",
+        "objectives": [
+          "Subtract equations to reveal a factored expression involving $(b - 1)(a - c)$. ",
+          "Use the primality of 13 to limit possible integer factor pairs.",
+          "Test each case against the original system to locate consistent integer solutions.",
+          "Sum $ab + bc + ca$ once $a$, $b$, and $c$ are determined."
+        ],
+        "answer": {
+          "type": "numeric",
+          "value": 276,
+          "success": "Correct! Only $b = -12$, $c = -8$, and $a = -9$ satisfy the system, giving $ab + bc + ca = 276$.",
+          "failure": "Subtract equations to factor $(b - 1)(a - c)$, test the integer factor pairs of 13, and verify which triple satisfies the system.",
+          "tolerance": 0,
+          "supportsRadicals": false,
+          "inputHint": "Enter the value of $ab + bc + ca$ as an integer."
+        },
+        "solutionSteps": [
+          {
+            "text": "Label the equations: (1) $ab + c = 100$, (2) $bc + a = 87$, (3) $ca + b = 60$.",
+            "expression": "ab + c = 100,\\ bc + a = 87,\\ ca + b = 60"
+          },
+          {
+            "text": "Subtract equation (2) from (1) to obtain $(b - 1)(a - c) = 13$.",
+            "expression": "ab - bc + c - a = 13"
+          },
+          {
+            "text": "Because 13 is prime, the factor pairs are $(1,13)$, $(-1,-13)$ and their reversals.",
+            "expression": "(b - 1,\\ a - c) \\in \\{(1,13), (13,1), (-1,-13), (-13,-1)\\}"
+          },
+          {
+            "text": "Test each factor pair in the original equations; only $b - 1 = -13$ and $a - c = -1$ work, yielding $b = -12$, $c = -8$, and $a = -9$.",
+            "expression": "b = -12,\\ c = -8,\\ a = -9"
+          },
+          {
+            "text": "Compute $ab + bc + ca = (-9)(-12) + (-12)(-8) + (-8)(-9) = 276$.",
+            "expression": "ab + bc + ca = 276"
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "Notice that equation (1) minus equation (2) equals $13$. Can that help?"
+        },
+        {
+          "order": 2,
+          "content": "Since $13$ is prime, its integer factor pairs are limited to $\\pm1$ and $\\pm13$."
+        },
+        {
+          "order": 3,
+          "content": "Rewrite $ab - bc + c - a$ as $(b - 1)(a - c)$ so the factor pairs apply directly."
+        },
+        {
+          "order": 4,
+          "content": "After factoring, plug each case back into the original equations to see which triple $(a, b, c)$ works."
+        },
+        {
+          "order": 5,
+          "content": "Once you have the consistent triple, compute $ab + bc + ca$."
         }
       ]
     }

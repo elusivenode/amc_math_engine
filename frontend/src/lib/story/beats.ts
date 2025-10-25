@@ -889,5 +889,27 @@ export const storyBeats: StoryBeat[] = [
     "image": "/story/algebraic-avengers/beat_34.png",
     "imageAlt": "Father Mersenne welcoming four ancient mathematicians into his candlelit cottage, parchment in hand and bread set on the table.",
     "caption": "In a humble cottage, the four Keepers assemble at last — Archimedes' charge read aloud, and their task set before them."
-  }  
+  },
+  {
+    "id": "algebra-avengers-beat-35",
+    "pathSlug": "algebra-avengers",
+    "sequence": 35,
+    "context": "problem",
+    "problemOrder": 34,
+    "problemId": "algebra-avengers-advanced-1-problem-4",
+    "title": "The Red Baron Moves",
+    "narrative": [
+      "Even the crows seemed to sense the danger as the Red Baron scratched angrily across his pad. His lead henchman had just reported that no trace of the stones had been found. A cold wind tore down the hill from BlackHouse, making the scene feel darker still. There was no telling what would happen next.",
+      "",
+      "The henchman stood rigid, throat locked by an interminable silence. He did not dare swallow, did not dare breathe.",
+      "",
+      "At last the scratching stopped. The Baron set down his pen with surgical precision. Then, without looking up, he spoke — the words more chilling than a shout:",
+      "",
+      "“Bring me Riemann,” he snarled."
+    ],
+    "image": "/story/algebraic-avengers/beat_35.png",
+    "imageAlt": "A stern Red Baron seated at a desk under dim light, quill paused mid-scratch as his terrified henchman stands before him.",
+    "caption": "The Red Baron learns the stones remain hidden — and with rising fury, he orders the next move: summon Riemann."
+  }
+  
 ];
