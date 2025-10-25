@@ -764,6 +764,26 @@ $: {
   }
 
   function transformRemoteProblem(remote: RemoteProblem): ProblemDefinition {
+    const extractStatementSource = (statement: string | null | undefined): {
+      body: string;
+      source: string | null;
+    } => {
+      if (!statement || typeof statement !== 'string') {
+        return { body: statement ?? '', source: null };
+      }
+
+      const sourcePattern = /\\\[Source:\s*(.*?)\\\]\s*$/i;
+      const match = statement.match(sourcePattern);
+      if (match && typeof match.index === 'number') {
+        const body = statement.slice(0, match.index).trimEnd();
+        const source = match[1]?.trim() ?? null;
+        return { body, source };
+      }
+
+      return { body: statement, source: null };
+    };
+
+    const { body: statementBody, source: statementSource } = extractStatementSource(remote.statement);
     const metadata =
       (remote.metadata && typeof remote.metadata === 'object'
         ? (remote.metadata as Record<string, unknown>)
@@ -781,7 +801,8 @@ $: {
       tagline,
       difficulty: `Worth ${remote.level.points} pts`,
       objectives: objectives.length > 0 ? objectives : [`Stage: ${remote.level.subpath.title}`],
-      question: remote.statement,
+      question: statementBody,
+      source: statementSource ?? undefined,
       diagram,
       hints: remote.hints
         .sort((a, b) => a.order - b.order)
@@ -2062,6 +2083,9 @@ $: {
       </div>
       <div class="mt-6 space-y-4 text-lg text-slate-800">
         <TextWithMath text={problem.question} />
+        {#if problem.source}
+          <p class="text-xs text-slate-500">Source: {problem.source}</p>
+        {/if}
         {#if problem.diagram}
           {#if problem.diagram.display === 'popover'}
             <div

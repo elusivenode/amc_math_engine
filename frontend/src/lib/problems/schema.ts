@@ -122,6 +122,7 @@ export type ProblemDefinition = {
   difficulty: string;
   objectives: ProblemObjective[];
   question: string;
+  source?: string;
   hints: ProblemHint[];
   solution: ProblemSolutionStep[];
   answer: AnswerDefinition;

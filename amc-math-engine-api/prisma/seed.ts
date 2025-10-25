@@ -2171,7 +2171,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "type": "numeric",
           "value": 276,
           "success": "Correct! Only $b = -12$, $c = -8$, and $a = -9$ satisfy the system, giving $ab + bc + ca = 276$.",
-          "failure": "Subtract equations to factor $(b - 1)(a - c)$, test the integer factor pairs of 13, and verify which triple satisfies the system.",
+          "failure": "Subtract equations and look for a prime.",
           "tolerance": 0,
           "supportsRadicals": false,
           "inputHint": "Enter the value of $ab + bc + ca$ as an integer."
