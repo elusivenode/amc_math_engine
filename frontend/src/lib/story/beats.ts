@@ -910,6 +910,26 @@ export const storyBeats: StoryBeat[] = [
     "image": "/story/algebraic-avengers/beat_35.png",
     "imageAlt": "A stern Red Baron seated at a desk under dim light, quill paused mid-scratch as his terrified henchman stands before him.",
     "caption": "The Red Baron learns the stones remain hidden — and with rising fury, he orders the next move: summon Riemann."
-  }
-  
+  },
+  {
+    "id": "algebra-avengers-beat-36",
+    "pathSlug": "algebra-avengers",
+    "sequence": 36,
+    "context": "problem",
+    "problemOrder": 35,
+    "problemId": "algebra-avengers-advanced-1-problem-5",
+    "title": "Summoned",
+    "narrative": [
+      "Bernhard Riemann could feel the tension in the guards long before he saw the door. He had been summoned before the Red Baron many times, but never in such a silence, never with such tightly clenched jaws and eyes fixed to the floor.",
+      "",
+      "He had served as the Baron’s mathematician for several years, ever since his father’s farm had been seized and there was no other way to keep his family from ruin. He was a man of fierce intellect and inward habits — quiet enough to be forgotten in a room, yet sharp enough to see through every lie and motive that passed before him.",
+      "",
+      "He had seen the greed. He had seen the chaos gather like a storm behind the velvet curtains of power. And now, as he walked between two trembling guards toward the Baron’s chamber, he understood: something had shifted. The search for the stones had reached a breaking point — and the Baron was about to cross a line that could not be uncrossed.",
+      "",
+      "Riemann squared his shoulders. Whatever happened next, he would face it with open eyes."
+    ],
+    "image": "/story/algebraic-avengers/beat_36.png",
+    "imageAlt": "Bernhard Riemann escorted down a dim corridor by tense guards toward a heavy wooden door.",
+    "caption": "Sensing a change in the air, Riemann is summoned to the Red Baron's chamber as the hunt for the stones reaches a perilous turning point."
+  }  
 ];

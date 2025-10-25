@@ -2221,6 +2221,83 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "content": "Once you have the consistent triple, compute $ab + bc + ca$."
         }
       ]
+    },
+    {
+      "id": "algebra-avengers-advanced-1-problem-5",
+      "title": "Logarithmic Balancing Act",
+      "statement": "Positive real numbers $b \ne 1$ and $n$ satisfy $\sqrt{\log_b n} = \log_b \sqrt{n}$ and $b\,\log_b n = \log_b (bn)$. Find $n$.",
+      "solution": "Let $x = \log_b n$. Then the equations become $\sqrt{x} = \tfrac{1}{2}x$ and $b^x = x + 1$. The first equality simplifies to $x = \tfrac{x^2}{4}$, so $x(x - 4) = 0$. Discard $x = 0$ (it contradicts $b^x = x + 1$), leaving $x = 4$. Substituting into $b^x = x + 1$ gives $b^4 = 5$, so $b = \tfrac{5}{4}$, and therefore $n = b^x = (\tfrac{5}{4})^4 = \tfrac{625}{256}.$",
+      "difficulty": 8,
+      "tags": ["algebra", "logarithms", "equations", "AMC advanced"],
+      "metadata": {
+        "tagline": "Linearise nested logarithms with a substitution and balance the resulting system.",
+        "objectives": [
+          "Introduce $x = \log_b n$ to translate the equations into algebraic form.",
+          "Apply logarithm power rules to simplify both relationships involving $x$.",
+          "Solve the resulting quadratic for $x$ and ensure the solution satisfies both equations.",
+          "Recover $n$ from $b^x$ once $b$ and $x$ are known."
+        ],
+        "diagram": {
+          "type": "image",
+          "src": "/problems/algebra/advanced/problem-5.png",
+          "alt": "Equations showing square-rooted logarithms and logarithms of products.",
+          "caption": "Hover to preview the given logarithmic relationships.",
+          "display": "popover"
+        },
+        "answer": {
+          "type": "numeric",
+          "value": 2.44140625,
+          "success": "Correct! With $x = 4$ and $b = 5/4$, the value of $n$ is $(5/4)^4 = 625/256$.",
+          "failure": "Let $x = \log_b n$, use the power rules to rewrite both equations, and solve the resulting quadratic for $x$.",
+          "tolerance": 0,
+          "supportsRadicals": false,
+          "inputHint": "Enter $n$ as a fraction or decimal (e.g. 625/256)."
+        },
+        "solutionSteps": [
+          {
+            "text": "Introduce $x = \log_b n$ to rewrite the system in terms of $x$.",
+            "expression": "x = \log_b n"
+          },
+          {
+            "text": "Apply logarithm rules to obtain $\sqrt{x} = \tfrac{1}{2}x$ and $b^x = x + 1$.",
+            "expression": "\sqrt{x} = \tfrac{1}{2}x,\quad b^x = x + 1"
+          },
+          {
+            "text": "Square and rearrange $\sqrt{x} = \tfrac{1}{2}x$ to get $x(x - 4) = 0$.",
+            "expression": "x^2 - 4x = 0"
+          },
+          {
+            "text": "Reject $x = 0$, then use $x = 4$ in $b^x = x + 1$ to find $b = 5/4$.",
+            "expression": "b^4 = 5 \Rightarrow b = 5/4"
+          },
+          {
+            "text": "Recover $n = b^x = (5/4)^4 = 625/256$.",
+            "expression": "n = (5/4)^4 = 625/256"
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "Let $x = \log_b n$ so the equations become easier to compare."
+        },
+        {
+          "order": 2,
+          "content": "Use $\log_b(n^{1/2}) = \tfrac{1}{2}\log_b n = \tfrac{1}{2}x$."
+        },
+        {
+          "order": 3,
+          "content": "Apply $\log_b(bn) = \log_b b + \log_b n = 1 + x$."
+        },
+        {
+          "order": 4,
+          "content": "Now solve $\sqrt{x} = \tfrac{1}{2}x$ and $b^x = x + 1$ for $x$ and $b$."
+        },
+        {
+          "order": 5,
+          "content": "Once you know $x$, compute $n = b^x$."
+        }
+      ]
     }
   ],
 };
