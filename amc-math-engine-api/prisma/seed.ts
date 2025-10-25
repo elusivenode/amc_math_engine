@@ -2073,6 +2073,84 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "content": "Notice how squaring that sum reproduces the total of the cubes."
         }
       ]
+    },
+    {
+      "id": "algebra-avengers-advanced-1-problem-3",
+      "title": "Sensor Sweep Intersections",
+      "statement": "Rene mounts a new motion sensor on Farmer Joe's scarecrow. The device triggers whenever something passes exactly $10$ metres from the scarecrow in any direction, forming a detection circle of radius $10$ centred at the origin. A rare bat species has been tracked flying along the line $y = -2x + 3$. Where does the bat's flight path hit the sensor boundary? Provide both intersection points.",
+      "solution": "The detection circle is $x^2 + y^2 = 100$. Substituting $y = -2x + 3$ gives $x^2 + (-2x + 3)^2 = 100$, or $5x^2 - 12x + 9 = 100$. Rearranging yields $5x^2 - 12x - 91 = 0$. Completing the square (or using the quadratic formula) produces $x = \\frac{6 \\pm \\sqrt{491}}{5}$. Substituting back into $y = -2x + 3$ gives $y = \\frac{3 + 2\\sqrt{491}}{5}$ for the smaller $x$-value and $y = \\frac{3 - 2\\sqrt{491}}{5}$ for the larger $x$-value. Thus the bat meets the sensor at $\\left(\\frac{6 - \\sqrt{491}}{5}, \\frac{3 + 2\\sqrt{491}}{5}\\right)$ and $\\left(\\frac{6 + \\sqrt{491}}{5}, \\frac{3 - 2\\sqrt{491}}{5}\\right)$, both of which sit $10$ metres from the scarecrow.",
+      "difficulty": 7,
+      "tags": ["algebra", "geometry", "circles", "AMC advanced"],
+      "metadata": {
+        "tagline": "Intersect a line with a detection circle by completing the square.",
+        "objectives": [
+          "Model a distance sensor as the circle $x^2 + y^2 = 100$ centred at the origin.",
+          "Substitute the bat's flight path into the circle to obtain a quadratic equation in $x$.",
+          "Complete the square (or apply the quadratic formula) to solve for the intersection $x$-coordinates.",
+          "Back-substitute each $x$-value into $y = -2x + 3$ to determine the matching $y$-coordinates."
+        ],
+        "diagram": {
+          "type": "image",
+          "src": "/problems/algebra/advanced/problem-3.png",
+          "alt": "Coordinate plane with a circle of radius 10 and the line y = -2x + 3 intersecting it in two points.",
+          "caption": "Hover to preview Farmer Joe's paddock layout.",
+          "display": "popover"
+        },
+        "answer": {
+          "type": "point_pair",
+          "expected": [
+            { "x": -3.231703961232068, "y": 9.463407922464135 },
+            { "x": 5.631703961232068, "y": -8.263407922464136 }
+          ],
+          "tolerance": 0.0001,
+          "orderMatters": false,
+          "pointSeparator": ":",
+          "coordinateSeparator": ",",
+          "success": "Correct! Both intersection points lie exactly 10 m from the scarecrow along the bat's flight path.",
+          "failure": "List both intersection points in the form x,y:x,y. Each coordinate can be written using simplified radicals such as $\\frac{6 - \\sqrt{491}}{5}$.",
+          "inputHint": "Enter the two intersection points as x,y:x,y — for example (1 - √2)/2,(3 + 2√2)/2:(1 + √2)/2,(1 - 2√2)/2."
+        },
+        "solutionSteps": [
+          {
+            "text": "Model the sensor boundary as the circle of radius $10$ centred at the origin.",
+            "expression": "x^2 + y^2 = 100"
+          },
+          {
+            "text": "Substitute the bat's line $y = -2x + 3$ into the circle equation to obtain a quadratic in $x$.",
+            "expression": "x^2 + (-2x + 3)^2 = 100"
+          },
+          {
+            "text": "Expand and collect like terms to prepare for completing the square.",
+            "expression": "5x^2 - 12x - 91 = 0"
+          },
+          {
+            "text": "Complete the square (or apply the quadratic formula) to solve for $x$.",
+            "expression": "x = \\frac{6 \\pm \\sqrt{491}}{5}"
+          },
+          {
+            "text": "Substitute each $x$-value into $y = -2x + 3$ to find the corresponding $y$-coordinates.",
+            "expression": "y = -2x + 3 \\Rightarrow y = \\frac{3 \\pm 2\\sqrt{491}}{5}"
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "Treat the sensor as a circle of radius $10$ centred at the origin."
+        },
+        {
+          "order": 2,
+          "content": "Plug $y = -2x + 3$ into $x^2 + y^2 = 100$ to reduce the problem to a single equation in $x$."
+        },
+        {
+          "order": 3,
+          "content": "Complete the square (or use the quadratic formula) to find your x's."
+        },
+        {
+          "order": 4,
+          "content": "Substitute each $x$-value back into $y = -2x + 3$ to obtain the two $(x, y)$ pairs."
+        }
+      ]
     }
   ],
 };

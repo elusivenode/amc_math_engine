@@ -6,7 +6,13 @@
   import TextWithMath from '$components/TextWithMath.svelte';
   import KatexBlock from '$components/KatexBlock.svelte';
   import { apiFetch } from '$lib/api';
-  import type { AnswerDefinition, ExpressionAnswer, NumericAnswer, ProblemDefinition } from '$lib/problems';
+  import type {
+    AnswerDefinition,
+    ExpressionAnswer,
+    NumericAnswer,
+    PointPairAnswer,
+    ProblemDefinition,
+  } from '$lib/problems';
   import StoryPanelModal from '$lib/components/StoryPanelModal.svelte';
   import SubpathCompletionModal from '$lib/components/SubpathCompletionModal.svelte';
   import {
@@ -195,35 +201,46 @@
   let journeySubpathTitle: string | null = null;
   let journeyNextSubpathTitle: string | null = null;
   let lastProblemReference: string | null = null;
-  let answerInstruction = '';
+let answerInstruction = '';
+let answerPlaceholder = 'Type your answer or expression';
 
-  $: {
-    if (problem?.answer?.type === 'numeric') {
-      const numericAnswer = problem.answer as NumericAnswer;
-      showRadicalShortcut = numericAnswer.supportsRadicals === true;
-    } else {
-      showRadicalShortcut = false;
-    }
+$: {
+  answerPlaceholder = 'Type your answer or expression';
 
-    if (problem?.answer?.type === 'expression') {
-      const expressionAnswer = problem.answer as ExpressionAnswer;
-      expressionShortcuts =
-        Array.isArray(expressionAnswer.shortcuts) && expressionAnswer.shortcuts.length > 0
-          ? expressionAnswer.shortcuts
-          : expressionAnswer.variables && expressionAnswer.variables.length > 0
-            ? expressionAnswer.variables
-            : ['x', 'y'];
-      includeExponentShortcut =
-        expressionAnswer.includeExponentTwo === undefined
-          ? true
-          : expressionAnswer.includeExponentTwo;
-      showExpressionShortcuts = expressionShortcuts.length > 0 || includeExponentShortcut;
-    } else {
-      expressionShortcuts = [];
-      includeExponentShortcut = false;
-      showExpressionShortcuts = false;
-    }
+  if (problem?.answer?.type === 'numeric') {
+    const numericAnswer = problem.answer as NumericAnswer;
+    showRadicalShortcut = numericAnswer.supportsRadicals === true;
+  } else {
+    showRadicalShortcut = false;
   }
+
+  if (problem?.answer?.type === 'expression') {
+    const expressionAnswer = problem.answer as ExpressionAnswer;
+    expressionShortcuts =
+      Array.isArray(expressionAnswer.shortcuts) && expressionAnswer.shortcuts.length > 0
+        ? expressionAnswer.shortcuts
+        : expressionAnswer.variables && expressionAnswer.variables.length > 0
+          ? expressionAnswer.variables
+          : ['x', 'y'];
+    includeExponentShortcut =
+      expressionAnswer.includeExponentTwo === undefined
+        ? true
+        : expressionAnswer.includeExponentTwo;
+    showExpressionShortcuts = expressionShortcuts.length > 0 || includeExponentShortcut;
+  } else {
+    expressionShortcuts = [];
+    includeExponentShortcut = false;
+    showExpressionShortcuts = false;
+  }
+
+  if (problem?.id === 'algebra-avengers-advanced-1-problem-3') {
+    answerPlaceholder = 'x,y:x,y — replace with your coordinates';
+    showRadicalShortcut = true;
+    expressionShortcuts = ['(', ')', '/'];
+    includeExponentShortcut = false;
+    showExpressionShortcuts = true;
+  }
+}
 
   function insertToken(token: string) {
     if (mathInputRef?.insertAtCursor) {
@@ -538,6 +555,45 @@
       }
     }
 
+    if (rawType === 'point_pair') {
+      const expectedRaw = raw.expected;
+      if (
+        Array.isArray(expectedRaw) &&
+        expectedRaw.length === 2 &&
+        expectedRaw.every(
+          (point) =>
+            point &&
+            typeof point === 'object' &&
+            typeof (point as Record<string, unknown>).x === 'number' &&
+            typeof (point as Record<string, unknown>).y === 'number',
+        )
+      ) {
+        const expectedPoints = expectedRaw as { x: number; y: number }[];
+        return {
+          type: 'point_pair',
+          expected: [
+            { x: expectedPoints[0].x, y: expectedPoints[0].y },
+            { x: expectedPoints[1].x, y: expectedPoints[1].y },
+          ],
+          tolerance:
+            typeof raw.tolerance === 'number' && Number.isFinite(raw.tolerance) ? raw.tolerance : 1e-6,
+          pointSeparator:
+            typeof raw.pointSeparator === 'string' && raw.pointSeparator.length > 0 ? raw.pointSeparator : ':',
+          coordinateSeparator:
+            typeof raw.coordinateSeparator === 'string' && raw.coordinateSeparator.length > 0
+              ? raw.coordinateSeparator
+              : ',',
+          orderMatters: raw.orderMatters === true,
+          inputHint: typeof raw.inputHint === 'string' ? raw.inputHint : undefined,
+          success: typeof raw.success === 'string' ? raw.success : 'Great work!',
+          failure:
+            typeof raw.failure === 'string'
+              ? raw.failure
+              : 'List both intersection points separated by a colon, with each point written as x,y.',
+        } satisfies PointPairAnswer;
+      }
+    }
+
     if (rawType === 'fraction') {
       const value = typeof raw.value === 'string' ? raw.value.trim() : '';
       if (value.length > 0) {
@@ -756,6 +812,11 @@
         const firstLabel = answer.firstLabel ?? 'first value';
         const secondLabel = answer.secondLabel ?? 'second value';
         return `Enter your answer as two numbers separated by "${separator}" — ${firstLabel} first, ${secondLabel} second. Example: "12${separator}8".`;
+      }
+      case 'point_pair': {
+        const pointSeparator = answer.pointSeparator ?? ':';
+        const coordinateSeparator = answer.coordinateSeparator ?? ',';
+        return `Enter both points as x${coordinateSeparator}y${pointSeparator}x${coordinateSeparator}y. Example: "1${coordinateSeparator}2${pointSeparator}3${coordinateSeparator}4".`;
       }
       case 'fraction':
         return 'Enter your answer as a simplified fraction such as $\\tfrac{3}{4}$.';
@@ -1004,6 +1065,46 @@
         outcome,
         attemptValue,
       });
+    } else if (answerDef.type === 'point_pair') {
+      const points = evaluatePointPairResponse(
+        attemptValue,
+        answerDef.pointSeparator ?? ':',
+        answerDef.coordinateSeparator ?? ',',
+      );
+      if (!points) {
+        attemptStatus = 'incorrect';
+        feedback =
+          answerDef.inputHint ??
+          `Enter both intersection points as x${answerDef.coordinateSeparator ?? ','}y${answerDef.pointSeparator ?? ':'}x${answerDef.coordinateSeparator ?? ','}y.`;
+        return;
+      }
+
+      const tolerance = answerDef.tolerance ?? 1e-6;
+      const expectedFirst = answerDef.expected[0];
+      const expectedSecond = answerDef.expected[1];
+      const inOrder =
+        arePointsClose(points[0], expectedFirst, tolerance) &&
+        arePointsClose(points[1], expectedSecond, tolerance);
+
+      let matched = inOrder;
+      if (!answerDef.orderMatters) {
+        const swapped =
+          arePointsClose(points[0], expectedSecond, tolerance) &&
+          arePointsClose(points[1], expectedFirst, tolerance);
+        matched = matched || swapped;
+      }
+
+      isCorrect = matched;
+      outcome = isCorrect ? 'CORRECT' : 'INCORRECT';
+
+      console.log('Attempt prepared', {
+        points,
+        expected: answerDef.expected,
+        tolerance,
+        orderMatters: answerDef.orderMatters,
+        outcome,
+        attemptValue,
+      });
     } else if (answerDef.type === 'fraction') {
       const normalizedFraction = normalizeFractionString(attemptValue);
       if (!normalizedFraction) {
@@ -1181,6 +1282,7 @@
   }
 
   type PairValue = { first: number; second: number };
+  type ParsedPoint = { x: number; y: number };
 
   function evaluatePairResponse(rawInput: string, separator: string): PairValue | null {
     if (!rawInput) return null;
@@ -1214,6 +1316,71 @@
     return { first, second };
   }
 
+  function evaluatePointPairResponse(
+    rawInput: string,
+    pointSeparator: string,
+    coordinateSeparator: string,
+  ): [ParsedPoint, ParsedPoint] | null {
+    if (!rawInput) return null;
+
+    const trimmed = rawInput.trim();
+    if (!trimmed) return null;
+
+    const pointSegments = splitPairSegments(trimmed, pointSeparator);
+    if (pointSegments.length !== 2) {
+      return null;
+    }
+
+    const parsePoint = (segment: string): ParsedPoint | null => {
+      const coordinates = splitCoordinateSegments(segment, coordinateSeparator);
+      if (coordinates.length !== 2) {
+        return null;
+      }
+
+      const x = evaluateResponse(coordinates[0]);
+      const y = evaluateResponse(coordinates[1]);
+
+      if (x === null || y === null) {
+        return null;
+      }
+
+      return { x, y };
+    };
+
+    const first = parsePoint(pointSegments[0]);
+    const second = parsePoint(pointSegments[1]);
+
+    if (!first || !second) {
+      return null;
+    }
+
+    return [first, second];
+  }
+
+  function splitCoordinateSegments(segment: string, separator: string): string[] {
+    const trimmedSeparator = separator.trim();
+
+    if (trimmedSeparator && trimmedSeparator !== ' ') {
+      const parts = segment
+        .split(trimmedSeparator)
+        .map((part) => part.trim())
+        .filter((part) => part.length > 0);
+      if (parts.length === 2) {
+        return parts;
+      }
+    }
+
+    const fallback = segment
+      .split(/[,;\s]+/)
+      .map((part) => part.trim())
+      .filter((part) => part.length > 0);
+    if (fallback.length === 2) {
+      return fallback;
+    }
+
+    return [];
+  }
+
   function splitPairSegments(input: string, separator: string): string[] {
     const trimmedSeparator = separator.trim();
 
@@ -1230,6 +1397,10 @@
     }
 
     return [];
+  }
+
+  function arePointsClose(a: ParsedPoint, b: ParsedPoint, tolerance: number): boolean {
+    return Math.abs(a.x - b.x) <= tolerance && Math.abs(a.y - b.y) <= tolerance;
   }
 
   function gcdBigInt(a: bigint, b: bigint): bigint {
@@ -2038,7 +2209,7 @@
               <MathInput
                 bind:this={mathInputRef}
                 bind:value={attemptValue}
-                placeholder="Type your answer or expression"
+                placeholder={answerPlaceholder}
               />
             </div>
             {#if showRadicalShortcut || showExpressionShortcuts}

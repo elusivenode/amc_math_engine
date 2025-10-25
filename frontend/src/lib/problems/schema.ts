@@ -70,12 +70,28 @@ export type ExpressionAnswer = {
   inputHint?: string;
 };
 
+export type PointPairAnswer = {
+  type: 'point_pair';
+  expected: [
+    { x: number; y: number },
+    { x: number; y: number }
+  ];
+  tolerance?: number;
+  pointSeparator?: string;
+  coordinateSeparator?: string;
+  orderMatters?: boolean;
+  inputHint?: string;
+  success: string;
+  failure: string;
+};
+
 export type AnswerDefinition =
   | NumericAnswer
   | PairAnswer
   | RatioAnswer
   | FractionAnswer
-  | ExpressionAnswer;
+  | ExpressionAnswer
+  | PointPairAnswer;
 
 export type ProblemDiagram =
   | {

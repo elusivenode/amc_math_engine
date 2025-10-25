@@ -854,5 +854,40 @@ export const storyBeats: StoryBeat[] = [
     "image": "/story/algebraic-avengers/beat_33.png",
     "imageAlt": "Carl Gauss and Princess Emmy standing in the cold stable entry, exchanging letters with visible tension in the winter air.",
     "caption": "A late-night deliverance binds Gauss and Emmy into the unfolding mystery — the summons has reached them both."
+  },
+  {
+    "id": "algebra-avengers-beat-34",
+    "pathSlug": "algebra-avengers",
+    "sequence": 34,
+    "context": "problem",
+    "problemOrder": 33,
+    "problemId": "algebra-avengers-advanced-1-problem-3",
+    "title": "The Four As One",
+    "narrative": [
+      "“Welcome, travellers!” beamed Father Mersenne, opening the small wooden door to his cottage. Before him stood four of the greatest minds in the history of reason. “Come in, come in,” he waved, almost giddy. “What an honour — four in one life! Sit, sit — I will bring bread.”",
+      "",
+      "He hurried to the kitchen, speaking the whole way, and returned with a loaf, a knife, and four cups. He set them down with hands still trembling.",
+      "",
+      "“It is a rare honour indeed to see the four Keepers as one. A message came with you — let me read it aloud.”",
+      "",
+      "He reached behind a stack of manuscripts and took up a sheet of parchment. Archimedes’ ancient hand declared:",
+      "",
+      "“And so assemble minds of four,",
+      "In time ahead and time before;",
+      "Across the nations you must go,",
+      "To loosen chains that none yet know.”",
+      "",
+      "“For power now is blind and cold,",
+      "And grasps men’s lives with thoughtless hold;",
+      "Where reason sleeps and rights decay,",
+      "Your teaching lights the narrow way.”",
+      "",
+      "Mersenne lowered the page slowly. The calm, steady faces before him filled him with awe — the quiet presence of minds that could move worlds.",
+      "",
+      "“We are ready, Father,” said Euclid, finishing the last piece of bread."
+    ],
+    "image": "/story/algebraic-avengers/beat_34.png",
+    "imageAlt": "Father Mersenne welcoming four ancient mathematicians into his candlelit cottage, parchment in hand and bread set on the table.",
+    "caption": "In a humble cottage, the four Keepers assemble at last — Archimedes' charge read aloud, and their task set before them."
   }  
 ];
