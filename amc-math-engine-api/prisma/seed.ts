@@ -2291,6 +2291,75 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "content": "Once you know $x$, compute $n = b^x$, write it as $\\tfrac{j}{k}$, and add $j + k$."
         }
       ]
+    },
+    {
+      "id": "algebra-avengers-advanced-1-problem-6",
+      "title": "Ritual of Even Flames",
+      "statement": "The sum of the squares of three consecutive even integers equals $1736$. What is the sum of those three integers?",
+      "solution": "Let the integers be $n - 2$, $n$, and $n + 2$ with $n$ even. Their squared sum is $(n - 2)^2 + n^2 + (n + 2)^2 = 3n^2 + 8$. Setting this equal to $1736$ gives $3n^2 = 1728$, so $n^2 = 576$ and $n = 24$. The integers are $22$, $24$, and $26$, and their sum is $22 + 24 + 26 = 72$.",
+      "difficulty": 7,
+      "tags": ["algebra", "quadratics", "number theory", "AMC advanced"],
+      "metadata": {
+        "tagline": "Translate a worded condition on consecutive even integers into a quadratic to unlock their sum.",
+        "objectives": [
+          "Represent consecutive even integers with a single variable to simplify the algebra.",
+          "Expand and collect like terms in a sum of squares to form a quadratic equation.",
+          "Solve the quadratic and interpret the result in the original context."
+        ],
+        "answer": {
+          "type": "numeric",
+          "value": 72,
+          "success": "Correct! The three integers are 22, 24, and 26, which sum to 72.",
+          "failure": "After solving for $n$, remember to add all three integers—not just report $n$ itself.",
+          "tolerance": 0,
+          "supportsRadicals": false,
+          "inputHint": "Enter the sum of the three integers."
+        },
+        "solutionSteps": [
+          {
+            "text": "Let the consecutive even integers be $n - 2$, $n$, and $n + 2$.",
+            "expression": "n - 2,\\ n,\\ n + 2"
+          },
+          {
+            "text": "Express the given condition as $(n - 2)^2 + n^2 + (n + 2)^2 = 1736$.",
+            "expression": "(n - 2)^2 + n^2 + (n + 2)^2 = 1736"
+          },
+          {
+            "text": "Expand and combine like terms to obtain $3n^2 + 8 = 1736$.",
+            "expression": "3n^2 + 8 = 1736"
+          },
+          {
+            "text": "Solve $3n^2 = 1728$ to find $n^2 = 576$ and $n = 24$.",
+            "expression": "n = 24"
+          },
+          {
+            "text": "Evaluate the integers $22$, $24$, and $26$ and add them to get $72$.",
+            "expression": "22 + 24 + 26 = 72"
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "Selecting an appropriate variable can simplify the algebra."
+        },
+        {
+          "order": 2,
+          "content": "We need three consecutive even integers—how can you capture them with one variable?"
+        },
+        {
+          "order": 3,
+          "content": "Let $n$ be the middle integer. Write an equation for the squared sum."
+        },
+        {
+          "order": 4,
+          "content": "Expand $(n - 2)^2 + n^2 + (n + 2)^2 = 1736$ and solve for $n$."
+        },
+        {
+          "order": 5,
+          "content": "With $n = 24$, list all three integers and add them to answer the question."
+        }
+      ]
     }
   ],
 };
