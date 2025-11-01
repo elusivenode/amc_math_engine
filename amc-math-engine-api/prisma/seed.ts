@@ -2364,8 +2364,8 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
     {
       "id": "algebra-avengers-advanced-1-problem-7",
       "title": "Equalising the Vats",
-      "statement": "Jar A contains four liters of a solution that is $45\\%$ acid. Jar B contains five liters of a solution that is $48\\%$ acid. Jar C contains one liter of a solution that is $k\\%$ acid. From jar C, $\\tfrac{m}{n}$ liters of the solution is added to jar A, and the remainder of the solution in jar C is added to jar B. At the end both jar A and jar B contain solutions that are $50\\%$ acid. Given that $m$ and $n$ are relatively prime positive integers, find $k + m + n$. \\[Source: 2011 AIME I Problem 1\\]",
-      "solution": "Jar A begins with $4$ liters containing $\\tfrac{9}{5}$ liters of acid and jar B begins with $5$ liters containing $\\tfrac{12}{5}$ liters of acid. Jar C has $1$ liter with $\\tfrac{k}{100}$ liters of acid. Suppose $\\tfrac{m}{n}$ liters from jar C are poured into jar A and the remaining $1 - \\tfrac{m}{n}$ liters into jar B. After mixing, jar A holds $4 + \\tfrac{m}{n}$ liters total, of which $\\tfrac{9}{5} + \\tfrac{k}{100}\\cdot\\tfrac{m}{n}$ liters are acid. Jar B holds $6 - \\tfrac{m}{n}$ liters total, with $\\tfrac{12}{5} + \\tfrac{k}{100}\\left(1 - \\tfrac{m}{n}\\right)$ liters of acid. Since each jar is $50\\%$ acid, doubling the acid amounts must equal the total volumes, yielding the equations $4 + \\tfrac{m}{n} = \\tfrac{18}{5} + \\tfrac{k m}{50 n}$ and $6 - \\tfrac{m}{n} = \\tfrac{24}{5} + \\tfrac{k}{50} - \\tfrac{k m}{50 n}$. Adding the equations gives $10 = \\tfrac{42}{5} + \\tfrac{k}{50}$, so $k = 80$. Substituting back, $\\tfrac{m}{n} = \\tfrac{2}{3}$. Hence $k + m + n = 80 + 2 + 3 = 85$.",
+      "statement": "Jar A contains four litres of a solution that is $45\\%$ acid. Jar B contains five litres of a solution that is $48\\%$ acid. Jar C contains one litre of a solution that is $k\\%$ acid. From jar C, $\\tfrac{m}{n}$ litres of the solution is added to jar A, and the remainder of the solution in jar C is added to jar B. At the end both jar A and jar B contain solutions that are $50\\%$ acid. Given that $m$ and $n$ are relatively prime positive integers, find $k + m + n$. \\[Source: 2011 AIME I Problem 1\\]",
+      "solution": "Jar A begins with $4$ litres containing $\\tfrac{9}{5}$ litres of acid and jar B begins with $5$ litres containing $\\tfrac{12}{5}$ litres of acid. Jar C has $1$ litre with $\\tfrac{k}{100}$ litres of acid. Suppose $\\tfrac{m}{n}$ litres from jar C are poured into jar A and the remaining $1 - \\tfrac{m}{n}$ litres into jar B. After mixing, jar A holds $4 + \\tfrac{m}{n}$ litres total, of which $\\tfrac{9}{5} + \\tfrac{k}{100}\\cdot\\tfrac{m}{n}$ litres are acid. Jar B holds $6 - \\tfrac{m}{n}$ litres total, with $\\tfrac{12}{5} + \\tfrac{k}{100}\\left(1 - \\tfrac{m}{n}\\right)$ litres of acid. Since each jar is $50\\%$ acid, doubling the acid amounts must equal the total volumes, yielding the equations $4 + \\tfrac{m}{n} = \\tfrac{18}{5} + \\tfrac{k m}{50 n}$ and $6 - \\tfrac{m}{n} = \\tfrac{24}{5} + \\tfrac{k}{50} - \\tfrac{k m}{50 n}$. Adding the equations gives $10 = \\tfrac{42}{5} + \\tfrac{k}{50}$, so $k = 80$. Substituting back, $\\tfrac{m}{n} = \\tfrac{2}{3}$. Hence $k + m + n = 80 + 2 + 3 = 85$.",
       "difficulty": 8,
       "tags": ["algebra", "systems of equations", "ratios", "AMC advanced"],
       "metadata": {
@@ -2386,15 +2386,15 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
         },
         "solutionSteps": [
           {
-            "text": "Record the initial acid amounts: jar A has $\\tfrac{9}{5}$ liters, jar B has $\\tfrac{12}{5}$ liters, and jar C has $\\tfrac{k}{100}$ liters.",
+            "text": "Record the initial acid amounts: jar A has $\\tfrac{9}{5}$ litres, jar B has $\\tfrac{12}{5}$ litres, and jar C has $\\tfrac{k}{100}$ litres.",
             "expression": "\\text{Acid}_{A}=\\tfrac{9}{5},\\ \\text{Acid}_{B}=\\tfrac{12}{5},\\ \\text{Acid}_{C}=\\tfrac{k}{100}"
           },
           {
-            "text": "Let $\\tfrac{m}{n}$ liters from jar C go into jar A, so jar A totals $4 + \\tfrac{m}{n}$ liters and jar B totals $6 - \\tfrac{m}{n}$ liters.",
+            "text": "Let $\\tfrac{m}{n}$ litres from jar C go into jar A, so jar A totals $4 + \\tfrac{m}{n}$ litres and jar B totals $6 - \\tfrac{m}{n}$ litres.",
             "expression": "V_A = 4 + \\tfrac{m}{n},\\ V_B = 6 - \\tfrac{m}{n}"
           },
           {
-            "text": "Track the acid transferred: jar A has $\\tfrac{9}{5} + \\tfrac{k}{100}\\cdot\\tfrac{m}{n}$ liters of acid, while jar B has $\\tfrac{12}{5} + \\tfrac{k}{100}\\left(1 - \\tfrac{m}{n}\\right)$ liters.",
+            "text": "Track the acid transferred: jar A has $\\tfrac{9}{5} + \\tfrac{k}{100}\\cdot\\tfrac{m}{n}$ litres of acid, while jar B has $\\tfrac{12}{5} + \\tfrac{k}{100}\\left(1 - \\tfrac{m}{n}\\right)$ litres.",
             "expression": "\\text{Acid}_{A}=\\tfrac{9}{5}+\\tfrac{k m}{100 n},\\ \\text{Acid}_{B}=\\tfrac{12}{5}+\\tfrac{k}{100}\\left(1-\\tfrac{m}{n}\\right)"
           },
           {
