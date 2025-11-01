@@ -2360,6 +2360,83 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "content": "With $n = 24$, list all three integers and add them to answer the question."
         }
       ]
+    },
+    {
+      "id": "algebra-avengers-advanced-1-problem-7",
+      "title": "Equalising the Vats",
+      "statement": "Jar A contains four liters of a solution that is $45\\%$ acid. Jar B contains five liters of a solution that is $48\\%$ acid. Jar C contains one liter of a solution that is $k\\%$ acid. From jar C, $\\tfrac{m}{n}$ liters of the solution is added to jar A, and the remainder of the solution in jar C is added to jar B. At the end both jar A and jar B contain solutions that are $50\\%$ acid. Given that $m$ and $n$ are relatively prime positive integers, find $k + m + n$. \\[Source: 2011 AIME I Problem 1\\]",
+      "solution": "Jar A begins with $4$ liters containing $\\tfrac{9}{5}$ liters of acid and jar B begins with $5$ liters containing $\\tfrac{12}{5}$ liters of acid. Jar C has $1$ liter with $\\tfrac{k}{100}$ liters of acid. Suppose $\\tfrac{m}{n}$ liters from jar C are poured into jar A and the remaining $1 - \\tfrac{m}{n}$ liters into jar B. After mixing, jar A holds $4 + \\tfrac{m}{n}$ liters total, of which $\\tfrac{9}{5} + \\tfrac{k}{100}\\cdot\\tfrac{m}{n}$ liters are acid. Jar B holds $6 - \\tfrac{m}{n}$ liters total, with $\\tfrac{12}{5} + \\tfrac{k}{100}\\left(1 - \\tfrac{m}{n}\\right)$ liters of acid. Since each jar is $50\\%$ acid, doubling the acid amounts must equal the total volumes, yielding the equations $4 + \\tfrac{m}{n} = \\tfrac{18}{5} + \\tfrac{k m}{50 n}$ and $6 - \\tfrac{m}{n} = \\tfrac{24}{5} + \\tfrac{k}{50} - \\tfrac{k m}{50 n}$. Adding the equations gives $10 = \\tfrac{42}{5} + \\tfrac{k}{50}$, so $k = 80$. Substituting back, $\\tfrac{m}{n} = \\tfrac{2}{3}$. Hence $k + m + n = 80 + 2 + 3 = 85$.",
+      "difficulty": 8,
+      "tags": ["algebra", "systems of equations", "ratios", "AMC advanced"],
+      "metadata": {
+        "tagline": "Balance percentages by translating mixture conditions into simultaneous equations.",
+        "objectives": [
+          "Model changing solution volumes and acid amounts using variables.",
+          "Translate percentage constraints into linear equations.",
+          "Combine and solve the resulting equations to determine the unknown concentration."
+        ],
+        "answer": {
+          "type": "numeric",
+          "value": 85,
+          "success": "Correct! With $k = 80$ and $\\tfrac{m}{n} = \\tfrac{2}{3}$, the requested sum is 85.",
+          "failure": "After finding $k$ and simplifying $\\tfrac{m}{n}$, add $k + m + n$.",
+          "tolerance": 0,
+          "supportsRadicals": false,
+          "inputHint": "Enter $k + m + n$ as an integer."
+        },
+        "solutionSteps": [
+          {
+            "text": "Record the initial acid amounts: jar A has $\\tfrac{9}{5}$ liters, jar B has $\\tfrac{12}{5}$ liters, and jar C has $\\tfrac{k}{100}$ liters.",
+            "expression": "\\text{Acid}_{A}=\\tfrac{9}{5},\\ \\text{Acid}_{B}=\\tfrac{12}{5},\\ \\text{Acid}_{C}=\\tfrac{k}{100}"
+          },
+          {
+            "text": "Let $\\tfrac{m}{n}$ liters from jar C go into jar A, so jar A totals $4 + \\tfrac{m}{n}$ liters and jar B totals $6 - \\tfrac{m}{n}$ liters.",
+            "expression": "V_A = 4 + \\tfrac{m}{n},\\ V_B = 6 - \\tfrac{m}{n}"
+          },
+          {
+            "text": "Track the acid transferred: jar A has $\\tfrac{9}{5} + \\tfrac{k}{100}\\cdot\\tfrac{m}{n}$ liters of acid, while jar B has $\\tfrac{12}{5} + \\tfrac{k}{100}\\left(1 - \\tfrac{m}{n}\\right)$ liters.",
+            "expression": "\\text{Acid}_{A}=\\tfrac{9}{5}+\\tfrac{k m}{100 n},\\ \\text{Acid}_{B}=\\tfrac{12}{5}+\\tfrac{k}{100}\\left(1-\\tfrac{m}{n}\\right)"
+          },
+          {
+            "text": "Impose the $50\\%$ condition: set $2\\,\\text{Acid}_{A} = V_A$ and $2\\,\\text{Acid}_{B} = V_B$ to obtain two linear equations.",
+            "expression": "\\begin{cases}4 + \\tfrac{m}{n} = \\tfrac{18}{5} + \\tfrac{k m}{50 n}\\\\[4pt]6 - \\tfrac{m}{n} = \\tfrac{24}{5} + \\tfrac{k}{50} - \\tfrac{k m}{50 n}\\end{cases}"
+          },
+          {
+            "text": "Add the two equations to eliminate $\\tfrac{k m}{50 n}$ and solve for $k$: $10 = \\tfrac{42}{5} + \\tfrac{k}{50}$, hence $k = 80$.",
+            "expression": "10 = \\tfrac{42}{5} + \\tfrac{k}{50} \\Rightarrow k = 80"
+          },
+          {
+            "text": "Substitute $k = 80$ to find $\\tfrac{m}{n} = \\tfrac{2}{3}$, then compute $k + m + n = 80 + 2 + 3 = 85$.",
+            "expression": "\\tfrac{m}{n} = \\tfrac{2}{3},\\ k + m + n = 85"
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "Write equations that track the total liquid in jars A and B after pouring from jar C."
+        },
+        {
+          "order": 2,
+          "content": "Also record how much acid ends up in each jar after the transfer."
+        },
+        {
+          "order": 3,
+          "content": "Because each jar finishes at $50\\%$ acid, twice the acid volume equals the total volume in that jar."
+        },
+        {
+          "order": 4,
+          "content": "You now have two equations—try adding them to eliminate the mixed term and solve for $k$."
+        },
+        {
+          "order": 5,
+          "content": "Back-substitute to determine $\\tfrac{m}{n}$ in lowest terms, then remember to compute $k + m + n$."
+        },
+        {
+          "order": 6,
+          "content": "Ensure $m$ and $n$ are relatively prime before adding them to $k$."
+        }
+      ]
     }
   ],
 };

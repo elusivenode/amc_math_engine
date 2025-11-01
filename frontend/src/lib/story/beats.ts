@@ -939,7 +939,7 @@ export const storyBeats: StoryBeat[] = [
     "context": "problem",
     "problemOrder": 36,
     "problemId": "algebra-avengers-advanced-1-problem-6",
-    "title": "Riemann Before the Baron",
+    "title": "A genius leveraged",
     "narrative": [
       "Bernhard Riemann stood in the vast dining hall, torchlight pooling beneath BlackHouse’s arched vaults while the Red Baron paced between the long tables like a caged predator. His voice cracked through the air — demanding, furious — insisting that Riemann reveal how the Order shields the Stones’ power.",
       "",
@@ -970,5 +970,30 @@ export const storyBeats: StoryBeat[] = [
     "image": "/story/algebraic-avengers/beat_37.png",
     "imageAlt": "Riemann standing in a torchlit hall as the Red Baron seizes him by the collar across a long banquet table.",
     "caption": "Pressed by threat and fury, Riemann reveals the prophecy of the two lines of Keepers — and the Baron vows to twist it to his own will."
+  },
+  {
+    "id": "algebra-avengers-beat-38",
+    "pathSlug": "algebra-avengers",
+    "sequence": 38,
+    "context": "problem",
+    "problemOrder": 37,
+    "problemId": "algebra-avengers-advanced-1-problem-7",
+    "title": "Angst into Resolve",
+    "narrative": [
+      "Riemann staggered into the corridor, his breath ragged and his pulse pounding in his temples. The echo of the Baron’s words still rang in his ears like iron striking stone. His mind reeled — visions of his father’s farm, of the Order, of the Stones’ terrible promise — all crashing together in a blur of guilt and dread.",
+      "",
+      "He pressed a trembling hand to the wall for balance. “What have I done?” he whispered. The question cut deeper each time it escaped his lips.",
+      "",
+      "Tears blurred his vision. He had revealed too much — perhaps everything — yet he could not undo what was spoken. The air in the hallway felt heavy, charged with consequence.",
+      "",
+      "And then, beneath the crushing weight of fear, something shifted. A spark — the same one that had driven him to seek truth in infinite spaces — flared within. His breathing slowed. The chaos in his mind began to settle into focus.",
+      "",
+      "He straightened. His jaw tightened. “I must warn them,” he said quietly, resolve hardening like steel in his chest.",
+      "",
+      "Without another glance behind, Riemann vanished into the dark."
+    ],
+    "image": "/story/algebraic-avengers/beat_38.png",
+    "imageAlt": "Riemann rushing down a dimly lit stone corridor, cloak billowing as torches flicker against the walls.",
+    "caption": "Haunted by what he’s revealed, Riemann resolves to act — to warn the others before the Baron unleashes the Stones’ power."
   }  
 ];
