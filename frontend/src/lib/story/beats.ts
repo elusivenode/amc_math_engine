@@ -995,5 +995,34 @@ export const storyBeats: StoryBeat[] = [
     "image": "/story/algebraic-avengers/beat_38.png",
     "imageAlt": "Riemann rushing down a dimly lit stone corridor, cloak billowing as torches flicker against the walls.",
     "caption": "Haunted by what he’s revealed, Riemann resolves to act — to warn the others before the Baron unleashes the Stones’ power."
+  },
+  {
+    "id": "algebra-avengers-beat-39",
+    "pathSlug": "algebra-avengers",
+    "sequence": 39,
+    "context": "problem",
+    "problemOrder": 38,
+    "problemId": "algebra-avengers-advanced-1-problem-8",
+    "title": "The Harmonic Convergence",
+    "narrative": [
+      "Riemann sat in silence, his eyes lowered, while the Red Baron’s sneer carved through the air.",
+      "“I’ll have the Stones soon enough,” the Baron hissed. “I have eyes everywhere. And once I do, you will fuse all their power into one.”",
+      "",
+      "His laugh — harsh and hollow — ricocheted off the stone walls of Riemann’s study. With a thud, he hurled several sheets of parchment onto the desk.",
+      "“Sketch what is required,” he growled. “And be swift. I think your father would… agree.”",
+      "",
+      "The door slammed behind him, leaving only the echo of his boots and the pounding of Riemann’s heart.",
+      "",
+      "He sat frozen for a long moment. Then, without a word, he reached for his chalk. Through the night he worked, summoning text after text from the library, scouring through pages of geometry, analysis, and number theory. Fragments of memory stirred — forgotten theorems, faint whispers of symmetry and flow — until, piece by piece, a pattern began to take shape.",
+      "",
+      "When the first light of dawn crept across his desk, the parchment was no longer empty. Lines of symbols curved and intertwined, equations unfolding like constellations.",
+      "",
+      "Riemann stepped back, exhausted. He knew what he had written — a lattice of perfect balance, a map of resonance between all things.",
+      "",
+      "The Harmonic Convergence had been born."
+    ],
+    "image": "/story/algebraic-avengers/beat_39.png",
+    "imageAlt": "Bernhard Riemann surrounded by books and parchment, illuminated by dawn light as intricate equations fill the desk before him.",
+    "caption": "Under threat and through the night, Riemann completes his creation — the Harmonic Convergence, a design capable of uniting the Stones’ power."
   }  
 ];

@@ -2437,6 +2437,95 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "content": "Ensure $m$ and $n$ are relatively prime before adding them to $k$."
         }
       ]
+    },
+    {
+      "id": "algebra-avengers-advanced-1-problem-8",
+      "title": "Catching Up the Crew",
+      "statement": "In order to complete a large job, $1000$ workers were hired, just enough to complete the job on schedule. All the workers stayed on the job while the first quarter of the work was done, so the first quarter of the work was completed on schedule. Then $100$ workers were laid off, so the second quarter of the work was completed behind schedule. Then an additional $100$ workers were laid off, so the third quarter of the work was completed still further behind schedule. Given that all workers work at the same rate, what is the minimum number of additional workers, beyond the $800$ workers still on the job at the end of the third quarter, that must be hired after three-quarters of the work has been completed so that the entire project can be completed on schedule or before? \\[Source: 2004 AIME I Problem 5\\]",
+      "solution": "Let the total work be $1$ unit, let each worker’s rate be $w$ units per unit time, and let $t$ be the planned total time. During the first window the crew of $1000$ workers finishes one quarter of the job on schedule: $1000w\\cdot\\tfrac{t}{4} = \\tfrac{1}{4}$, so $w t = \\tfrac{1}{1000}$. During the second window, only $900$ workers remain, so if that window lasts a fraction $\\alpha$ of the total time, then $900w\\cdot \\alpha t = \\tfrac{1}{4}$, giving $\\alpha = \\tfrac{5}{18}$. Likewise the third window with $800$ workers takes a fraction $\\beta$ such that $800w\\cdot \\beta t = \\tfrac{1}{4}$, so $\\beta = \\tfrac{5}{16}$. Thus the first three windows consume $\\tfrac{1}{4} + \\tfrac{5}{18} + \\tfrac{5}{16} = \\tfrac{121}{144}$ of the total time, leaving only $\\tfrac{23}{144} t$ for the last quarter of work. Let $x$ be the number of additional workers hired for the final window. Then $(800 + x)w\\cdot \\tfrac{23}{144} t = \\tfrac{1}{4}$. Using $w t = \\tfrac{1}{1000}$, this becomes $\\tfrac{23}{144}\\cdot \\tfrac{800 + x}{1000} = \\tfrac{1}{4}$, so $800 + x = \\tfrac{36000}{23}$ and $x = \\tfrac{17600}{23}$. The project requires an integer number of workers, so $x$ must be at least $766$.",
+      "difficulty": 8,
+      "tags": ["algebra", "rates", "work", "AMC advanced"],
+      "metadata": {
+        "tagline": "Track changing crew sizes by equating work done in each phase to keep the project on schedule.",
+        "objectives": [
+          "Introduce variables for total work, individual work rate, and scheduled time.",
+          "Relate each phase’s worker count and time fraction to one quarter of the job.",
+          "Determine the remaining time and solve for the additional workers needed to finish on schedule."
+        ],
+        "answer": {
+          "type": "numeric",
+          "value": 766,
+          "success": "Correct! An extra 766 workers are needed to bring the total to at least $\\tfrac{36000}{23}$ workers in the final phase.",
+          "failure": "Solve for $x$ in $(800 + x)w\\cdot \\tfrac{23}{144} t = \\tfrac{1}{4}$, then round up to the next integer.",
+          "tolerance": 0,
+          "supportsRadicals": false,
+          "inputHint": "Enter the minimum integer number of additional workers."
+        },
+        "solutionSteps": [
+          {
+            "text": "Let the total work be $1$, each worker’s rate be $w$, and the planned total time be $t$.",
+            "expression": "W=1,\\ \\text{rate per worker}=w,\\ \\text{time}=t"
+          },
+          {
+            "text": "During the first window $1000$ workers complete $\\tfrac{1}{4}$ of the job on schedule, so $1000w\\cdot \\tfrac{t}{4} = \\tfrac{1}{4}$ and $w t = \\tfrac{1}{1000}$.",
+            "expression": "1000w\\cdot \\tfrac{t}{4} = \\tfrac{1}{4} \\Rightarrow w t = \\tfrac{1}{1000}"
+          },
+          {
+            "text": "Let $\\alpha t$ be the length of the second window. Solve $900w\\cdot \\alpha t = \\tfrac{1}{4}$ to get $\\alpha = \\tfrac{5}{18}$.",
+            "expression": "\\alpha = \\tfrac{5}{18}"
+          },
+          {
+            "text": "Let $\\beta t$ be the length of the third window. Solve $800w\\cdot \\beta t = \\tfrac{1}{4}$ to get $\\beta = \\tfrac{5}{16}$.",
+            "expression": "\\beta = \\tfrac{5}{16}"
+          },
+          {
+            "text": "Compute the remaining fraction of time: $1 - \\left(\\tfrac{1}{4} + \\tfrac{5}{18} + \\tfrac{5}{16}\\right) = \\tfrac{23}{144}$.",
+            "expression": "\\tfrac{23}{144}"
+          },
+          {
+            "text": "If $x$ new workers join the $800$ remaining workers, solve $(800 + x)w\\cdot \\tfrac{23}{144} t = \\tfrac{1}{4}$ using $w t = \\tfrac{1}{1000}$.",
+            "expression": "(800 + x)\\cdot \\tfrac{23}{144000} = \\tfrac{1}{4}"
+          },
+          {
+            "text": "Find $x = \\tfrac{17600}{23}$ and round up to the nearest integer to satisfy the on-time requirement: $x = 766$.",
+            "expression": "x = 766"
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "Identify what stays constant across the four periods."
+        },
+        {
+          "order": 2,
+          "content": "Each period produces one quarter of the work—only the time taken changes."
+        },
+        {
+          "order": 3,
+          "content": "Let the total work be $1$, each worker’s rate be $w$, and the planned total time be $t$."
+        },
+        {
+          "order": 4,
+          "content": "Use $1000$ workers in period one to relate $w$ and $t$."
+        },
+        {
+          "order": 5,
+          "content": "Set up similar equations for periods two and three to find their fractions of the total time."
+        },
+        {
+          "order": 6,
+          "content": "Subtract those fractions from the whole to determine the time remaining for period four."
+        },
+        {
+          "order": 7,
+          "content": "Let $x$ be the extra workers in the final period and solve $(800 + x)w$ against the remaining time."
+        },
+        {
+          "order": 8,
+          "content": "Round up your result for $x$ so the project finishes on time."
+        }
+      ]
     }
   ],
 };
