@@ -2456,7 +2456,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "type": "numeric",
           "value": 766,
           "success": "Correct! An extra 766 workers are needed to bring the total to at least $\\tfrac{36000}{23}$ workers in the final phase.",
-          "failure": "Solve for $x$ in $(800 + x)w\\cdot \\tfrac{23}{144} t = \\tfrac{1}{4}$, then round up to the next integer.",
+          "failure": "Look first what stays the same. Take the next hint if you’re stuck.",
           "tolerance": 0,
           "supportsRadicals": false,
           "inputHint": "Enter the minimum integer number of additional workers."
