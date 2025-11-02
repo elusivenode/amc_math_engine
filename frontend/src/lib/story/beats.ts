@@ -1013,7 +1013,7 @@ export const storyBeats: StoryBeat[] = [
       "",
       "The door slammed behind him, leaving only the echo of his boots and the pounding of Riemann’s heart.",
       "",
-      "He sat frozen for a long moment. Then, without a word, he reached for his chalk. Through the night he worked, summoning text after text from the library, scouring through pages of geometry, analysis, and number theory. Fragments of memory stirred — forgotten theorems, faint whispers of symmetry and flow — until, piece by piece, a pattern began to take shape.",
+      "He sat frozen for a long moment. Then, without a word, he reached for his quill. Through the night he worked, summoning text after text from the library, scouring through pages of geometry, analysis, and number theory. Fragments of memory stirred — forgotten theorems, faint whispers of symmetry and flow — until, piece by piece, a pattern began to take shape.",
       "",
       "When the first light of dawn crept across his desk, the parchment was no longer empty. Lines of symbols curved and intertwined, equations unfolding like constellations.",
       "",
