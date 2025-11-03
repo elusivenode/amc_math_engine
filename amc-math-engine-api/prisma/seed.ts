@@ -2526,6 +2526,101 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "content": "Round up your result for $x$ so the project finishes on time."
         }
       ]
+    },
+    {
+      "id": "algebra-avengers-advanced-1-problem-9",
+      "title": "Ring Within a Ring",
+      "statement": "In the figure (hover to view), four congruent circles of radius $r$ sit in a ring and are all tangent to a larger circle. What is the ratio of the sum of the areas of the four smaller circles to the area of the larger circle? \\[Source: 2009 AMC 10A Problem 21\\]",
+      "solution": "Let each small circle have radius $r$. Connecting their centres forms a square of side $2r$ (hover to see the overlay). The distance from the square’s centre to a corner is $\\sqrt{2}\\,r$, so the diagonal is $2\\sqrt{2}\\,r$. The diameter of the large circle is $2r + 2\\sqrt{2}\\,r$, giving a large radius $R = r(1 + \\sqrt{2})$. The required ratio is \\(\\frac{4\\pi r^2}{\\pi R^2} = \\frac{4}{(1 + \\sqrt{2})^2} = \\frac{4}{3 + 2\\sqrt{2}} = 4(3 - 2\\sqrt{2})\\).",
+      "difficulty": 7,
+      "tags": ["geometry", "circles", "ratios", "AMC advanced"],
+      "metadata": {
+        "tagline": "Relate small and large circle radii through symmetry, then compare their areas.",
+        "objectives": [
+          "Use symmetry to connect circle centres and identify the enclosing square.",
+          "Express the large circle’s radius in terms of the small circle’s radius.",
+          "Simplify the ratio of areas, rationalising the denominator if desired."
+        ],
+        "diagram": {
+          "type": "image",
+          "src": "/problems/algebra/advanced/problem-9.png",
+          "alt": "Four congruent circles arranged in a ring inside a larger circle.",
+          "caption": "Hover to preview the configuration of tangent circles.",
+          "display": "popover"
+        },
+        "supplementaryDiagrams": [
+          {
+            "type": "image",
+            "src": "/problems/algebra/advanced/problem-9-square.png",
+            "alt": "Centres of the small circles connected to form a square inside the larger circle.",
+            "caption": "Hover to see the square formed by the circle centres.",
+            "display": "popover"
+          }
+        ],
+        "answer": {
+          "type": "expression",
+          "value": "4/(3+2*sqrt(2))",
+          "success": "Correct! The ratio of the four small circles’ area to the large circle’s area is $\\tfrac{4}{3 + 2\\sqrt{2}}$ (equivalently $4(3 - 2\\sqrt{2})$).",
+          "failure": "Revisit how you related the radii and double-check your area ratio simplification.",
+          "shortcuts": ["(", ")", "+", "-", "/", "√(", "x", "y"],
+          "inputHint": ""
+        },
+        "solutionSteps": [
+          {
+            "text": "Let $r$ be the radius of each small circle; joining their centres forms a square of side $2r$ (see the supplementary square overlay diagram)."
+          },
+          {
+            "text": "The distance from the square’s centre to a vertex is $\\sqrt{2}\\,r$, so the diagonal equals $2\\sqrt{2}\\,r$."
+          },
+          {
+            "text": "The large circle’s diameter is $2r + 2\\sqrt{2}\\,r$, hence its radius is $R = r(1 + \\sqrt{2})$."
+          },
+          {
+            "text": "Compute the ratio $\\frac{4\\pi r^2}{\\pi R^2} = \\frac{4}{(1 + \\sqrt{2})^2} = \\frac{4}{3 + 2\\sqrt{2}}$."
+          },
+          {
+            "text": "Rationalise if desired: $\\frac{4}{3 + 2\\sqrt{2}} = 4(3 - 2\\sqrt{2})$."
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "The ratio of areas will depend on the circles’ radii."
+        },
+        {
+          "order": 2,
+          "content": "Connect the centres of the small circles—use the main diagram or open the square overlay popover. What shape do you get?"
+        },
+        {
+          "order": 3,
+          "content": "That shape is a square with side length $2r$."
+        },
+        {
+          "order": 4,
+          "content": "Use Pythagoras to find the square’s diagonal."
+        },
+        {
+          "order": 5,
+          "content": "The diagonal is $2\\sqrt{2}\\,r$, which helps identify the large circle’s diameter."
+        },
+        {
+          "order": 6,
+          "content": "From the diameter $2r + 2\\sqrt{2}\\,r$, find the large radius $R$."
+        },
+        {
+          "order": 7,
+          "content": "Write the area ratio: $4\\pi r^2$ divided by $\\pi R^2$."
+        },
+        {
+          "order": 8,
+          "content": "Cancel common factors and simplify to $\\tfrac{4}{3 + 2\\sqrt{2}}$."
+        },
+        {
+          "order": 9,
+          "content": "Optionally rationalise: multiply numerator and denominator by $3 - 2\\sqrt{2}$."
+        }
+      ]
     }
   ],
 };

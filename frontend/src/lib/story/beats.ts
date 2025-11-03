@@ -1024,5 +1024,32 @@ export const storyBeats: StoryBeat[] = [
     "image": "/story/algebraic-avengers/beat_39.png",
     "imageAlt": "Bernhard Riemann surrounded by books and parchment, illuminated by dawn light as intricate equations fill the desk before him.",
     "caption": "Under threat and through the night, Riemann completes his creation — the Harmonic Convergence, a design capable of uniting the Stones’ power."
+  },
+  {
+    "id": "algebra-avengers-beat-40",
+    "pathSlug": "algebra-avengers",
+    "sequence": 40,
+    "context": "problem",
+    "problemOrder": 39,
+    "problemId": "algebra-avengers-advanced-1-problem-9",
+    "title": "The Posters of Schmald",
+    "narrative": [
+      "Morning light spilled unevenly across the cobblestones of Schmald. A small crowd had gathered outside the baker’s shop, voices low and uncertain. The night before, the walls of the village had been bare. Now they were plastered with the same strange notice — printed in bold, urgent letters:",
+      "",
+      "WANTED",
+      "Four strangers to this village — likely dressed in foreign garb.",
+      "They may appear civil. Do not approach.",
+      "Report all sightings to your local Sheriff of the Red immediately.",
+      "The safety of all is at stake.",
+      "",
+      "Per Müller, the baker, squinted at the poster as he wiped flour from his hands. “What do you make of this, Gertrude?” he asked his wife, who stood beside him with a basket of rolls.",
+      "",
+      "“Not a clue, Per,” she murmured, frowning. “Though it sounds serious enough.”",
+      "",
+      "A hush fell over the street. The couple exchanged a wary glance as a tall man in a red cloak strode past, his boots echoing sharply on the stone. Without another word, they slipped back into the shop just as the service bell rang, its chime breaking the uneasy silence that had settled over the village."
+    ],
+    "image": "/story/algebraic-avengers/beat_40.png",
+    "imageAlt": "Villagers gathered on a cobblestone street, staring at fresh Red Order posters on the walls under the pale morning light.",
+    "caption": "As dawn breaks over Schmald, strange posters appear overnight — warnings of four mysterious strangers and the reach of the Red Order grows."
   }  
 ];
