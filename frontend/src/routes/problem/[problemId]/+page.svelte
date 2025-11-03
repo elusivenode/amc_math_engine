@@ -12,6 +12,7 @@
     NumericAnswer,
     PointPairAnswer,
     ProblemDefinition,
+    ProblemDiagram,
   } from '$lib/problems';
   import StoryPanelModal from '$lib/components/StoryPanelModal.svelte';
   import SubpathCompletionModal from '$lib/components/SubpathCompletionModal.svelte';
@@ -192,6 +193,9 @@
   let diagramPopoverVisible = false;
   let diagramPopoverElement: HTMLDivElement | null = null;
   let diagramTriggerButton: HTMLButtonElement | null = null;
+  let hintDiagramLookup: Record<number, ProblemDiagram[]> = {};
+  let activeHintDiagram: { hintOrder: number; diagramIndex: number } | null = null;
+  let lastHintProblemId: string | null = null;
   let subpathContext: SubpathContext | null = null;
   let subpathContextLoading = false;
   let journeyModalOpen = false;
@@ -205,6 +209,12 @@ let answerInstruction = '';
 let answerPlaceholder = 'Type your answer or expression';
 
 $: {
+  if ((problem?.id ?? null) !== lastHintProblemId) {
+    hintDiagramLookup = problem?.hintDiagrams ?? {};
+    activeHintDiagram = null;
+    lastHintProblemId = problem?.id ?? null;
+  }
+
   answerPlaceholder = 'Type your answer or expression';
 
   if (problem?.answer?.type === 'numeric') {
@@ -256,6 +266,22 @@ $: {
 
   function insertExponentTwo() {
     insertToken('²');
+  }
+
+  function toggleHintDiagram(hintOrder: number, diagramIndex: number) {
+    if (
+      activeHintDiagram &&
+      activeHintDiagram.hintOrder === hintOrder &&
+      activeHintDiagram.diagramIndex === diagramIndex
+    ) {
+      activeHintDiagram = null;
+    } else {
+      activeHintDiagram = { hintOrder, diagramIndex };
+    }
+  }
+
+  function closeHintDiagram() {
+    activeHintDiagram = null;
   }
 
   function showDiagramPopover() {
@@ -732,8 +758,7 @@ $: {
     ];
   }
 
-  function getDiagram(metadata: Record<string, unknown>) {
-    const raw = metadata.diagram;
+  function parseDiagram(raw: unknown): ProblemDiagram | undefined {
     if (!raw || typeof raw !== 'object') {
       return undefined;
     }
@@ -742,8 +767,7 @@ $: {
     const type = typeof diagram.type === 'string' ? diagram.type : 'image';
 
     if (type === 'image') {
-      const src = typeof diagram.src === 'string' ? diagram.src : null;
-      const alt = typeof diagram.alt === 'string' ? diagram.alt : '';
+      const src = typeof diagram.src === 'string' ? diagram.src.trim() : '';
       if (!src) {
         return undefined;
       }
@@ -752,15 +776,61 @@ $: {
       const display: 'inline' | 'popover' = displayRaw === 'popover' ? 'popover' : 'inline';
 
       return {
-        type: 'image' as const,
+        type: 'image',
         src,
-        alt,
+        alt: typeof diagram.alt === 'string' ? diagram.alt : '',
         caption: typeof diagram.caption === 'string' ? diagram.caption : undefined,
         display,
+        label: typeof diagram.label === 'string' ? diagram.label : undefined,
       };
     }
 
     return undefined;
+  }
+
+  function getDiagram(metadata: Record<string, unknown>) {
+    return parseDiagram(metadata.diagram);
+  }
+
+  function getSupplementaryDiagrams(metadata: Record<string, unknown>) {
+    const raw = metadata.supplementaryDiagrams;
+    if (!Array.isArray(raw)) {
+      return undefined;
+    }
+
+    const diagrams = raw
+      .map((item) => parseDiagram(item))
+      .filter((item): item is ProblemDiagram => Boolean(item));
+
+    return diagrams.length > 0 ? diagrams : undefined;
+  }
+
+  function getHintDiagrams(metadata: Record<string, unknown>) {
+    const raw = metadata.hintDiagrams;
+    if (!raw || typeof raw !== 'object') {
+      return undefined;
+    }
+
+    const entries = raw as Record<string, unknown>;
+    const result: Record<number, ProblemDiagram[]> = {};
+
+    for (const [key, value] of Object.entries(entries)) {
+      const index = Number(key);
+      if (!Number.isFinite(index)) {
+        continue;
+      }
+
+      const diagrams = Array.isArray(value) ? value : [value];
+      const parsed = diagrams
+        .map((item) => parseDiagram(item))
+        .filter((item): item is ProblemDiagram => Boolean(item));
+
+      if (parsed.length > 0) {
+        result[index] = parsed;
+      }
+    }
+
+    return Object.keys(result).length > 0 ? result : undefined;
   }
 
   function transformRemoteProblem(remote: RemoteProblem): ProblemDefinition {
@@ -794,6 +864,8 @@ $: {
     const objectives = getObjectives(metadata);
     const solutionSteps = getSolutionSteps(metadata, remote.solution);
     const diagram = getDiagram(metadata);
+    const supplementaryDiagrams = getSupplementaryDiagrams(metadata);
+    const hintDiagrams = getHintDiagrams(metadata);
 
     return {
       id: remote.id,
@@ -804,6 +876,8 @@ $: {
       question: statementBody,
       source: statementSource ?? undefined,
       diagram,
+      supplementaryDiagrams,
+      hintDiagrams,
       hints: remote.hints
         .sort((a, b) => a.order - b.order)
         .map((hint, index) => ({
@@ -2349,6 +2423,48 @@ $: {
                 </p>
                 {#if hint.expression}
                   <KatexBlock expression={hint.expression} />
+                {/if}
+                {#if hintDiagramLookup[index + 1]}
+                  <div class="mt-2 flex flex-wrap gap-2">
+                    {#each hintDiagramLookup[index + 1] as diagram, diagramIndex}
+                      <button
+                        class="inline-flex items-center justify-center rounded-full border border-indigo-200 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-indigo-600 transition hover:border-indigo-300 hover:bg-indigo-50"
+                        type="button"
+                        on:click={() => toggleHintDiagram(index + 1, diagramIndex)}
+                      >
+                        {diagram.label ?? 'View diagram'}
+                      </button>
+                    {/each}
+                  </div>
+                  {#if activeHintDiagram && activeHintDiagram.hintOrder === index + 1}
+                    {#each hintDiagramLookup[index + 1] as diagram, diagramIndex}
+                      {#if activeHintDiagram.diagramIndex === diagramIndex}
+                        <figure class="mt-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+                          {#if diagram.type === 'image'}
+                            <img
+                              class="w-full rounded-lg border border-slate-100 object-contain"
+                              src={diagram.src}
+                              alt={diagram.alt}
+                            />
+                          {:else if diagram.type === 'component'}
+                            <svelte:component this={diagram.component} />
+                          {/if}
+                          {#if diagram.caption}
+                            <figcaption class="mt-2 text-sm text-slate-500">{diagram.caption}</figcaption>
+                          {/if}
+                          <div class="mt-3 text-right">
+                            <button
+                              class="inline-flex items-center justify-center rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-slate-600 transition hover:border-slate-300 hover:text-slate-800"
+                              type="button"
+                              on:click={closeHintDiagram}
+                            >
+                              Close
+                            </button>
+                          </div>
+                        </figure>
+                      {/if}
+                    {/each}
+                  {/if}
                 {/if}
               {:else}
                 <p class="mt-1 text-xs text-slate-400">Unlock this hint to reveal its guidance.</p>

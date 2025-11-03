@@ -2554,9 +2554,21 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
             "src": "/problems/algebra/advanced/problem-9-square.png",
             "alt": "Centres of the small circles connected to form a square inside the larger circle.",
             "caption": "Hover to see the square formed by the circle centres.",
-            "display": "popover"
+            "display": "popover",
+            "label": "Square overlay"
           }
         ],
+        "hintDiagrams": {
+          "2": [
+            {
+              "type": "image",
+              "src": "/problems/algebra/advanced/problem-9-square.png",
+              "alt": "Centres of the small circles connected to form a square.",
+              "caption": "Connecting the centres of the four congruent circles highlights the inscribed square.",
+              "label": "Show square overlay"
+            }
+          ]
+        },
         "answer": {
           "type": "expression",
           "value": "4/(3+2*sqrt(2))",

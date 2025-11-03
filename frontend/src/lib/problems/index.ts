@@ -27,4 +27,5 @@ export {
   type AnswerDefinition,
   type ExpressionAnswer,
   type PointPairAnswer,
+  type ProblemDiagram,
 } from './schema';

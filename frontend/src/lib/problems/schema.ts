@@ -100,12 +100,14 @@ export type ProblemDiagram =
       alt: string;
       caption?: string;
       display?: 'inline' | 'popover';
+      label?: string;
     }
   | {
       type: 'component';
       component: ComponentType;
       caption?: string;
       display?: 'inline' | 'popover';
+      label?: string;
     };
 
 export type ProblemMetadata = {
@@ -127,6 +129,8 @@ export type ProblemDefinition = {
   solution: ProblemSolutionStep[];
   answer: AnswerDefinition;
   diagram?: ProblemDiagram;
+  supplementaryDiagrams?: ProblemDiagram[];
+  hintDiagrams?: Record<number, ProblemDiagram[]>;
   pathSlug?: string;
   metadata: ProblemMetadata;
 };
