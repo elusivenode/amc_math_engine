@@ -1051,5 +1051,34 @@ export const storyBeats: StoryBeat[] = [
     "image": "/story/algebraic-avengers/beat_40.png",
     "imageAlt": "Villagers gathered on a cobblestone street, staring at fresh Red Order posters on the walls under the pale morning light.",
     "caption": "As dawn breaks over Schmald, strange posters appear overnight — warnings of four mysterious strangers and the reach of the Red Order grows."
+  },
+  {
+    "id": "algebra-avengers-beat-41",
+    "pathSlug": "algebra-avengers",
+    "sequence": 41,
+    "context": "problem",
+    "problemOrder": 40,
+    "problemId": "algebra-avengers-advanced-1-problem-10",
+    "title": "The Message in Harmony",
+    "narrative": [
+      "Riemann worked quickly but with precision, each symbol drawn in careful silence. When he finished, he wrapped the parchment and slate together into what would appear — to any casual reader — as a treatise on spectral acoustics, filled with dense harmonic analysis and notes on wave interference. But woven into the margins, invisible to all but Mersenne’s network, were tiny markings — prime-number bar-lines — an encrypted rhythm only one man alive would understand.",
+      "",
+      "At dawn, Riemann sealed the packet and pressed it into the hands of a travelling violinist bound for Paris. “Deliver this to the Brother of Measured Song,” he whispered. Then, leaning close, he added the cipher’s key: “Critical line.”",
+      "",
+      "Days later, Father Mersenne received the parcel in his modest study. The moment he saw the rhythmic spacing between the numbers, he knew its source. Without delay he summoned the four ancient Keepers — Euclid, Apollonius, Diophantus, and Eudoxus — who gathered around his resonant oak table as he unrolled the parchment.",
+      "",
+      "They placed their palms upon the edges and began to hum in harmony. The table itself seemed to respond — the lines on the page shimmered, arcs tightening into symbols that glowed faintly in the candlelight.",
+      "",
+      "The code revealed its hidden message:",
+      "> The Red Baron knows of the Stones.",
+      "> He will set the Keepers one against another.",
+      "> He seeks the power, yet not the truth.",
+      "> Guard the bearers — their paths must not be found.",
+      "",
+      "Mersenne exhaled slowly. “So the breach begins,” he murmured. The four mathematicians exchanged solemn glances. The warning had arrived — and war for the soul of reason was no longer a distant threat."
+    ],
+    "image": "/story/algebraic-avengers/beat_41.png",
+    "imageAlt": "Father Mersenne and the four ancient Keepers gathered around a candlelit oak table as glowing symbols emerge on Riemann’s parchment.",
+    "caption": "Riemann’s coded treatise reaches Mersenne, who deciphers its warning with the four Keepers — the Red Baron knows of the Stones, and reason itself stands at the brink."
   }  
 ];

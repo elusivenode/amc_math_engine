@@ -2633,6 +2633,78 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "content": "Optionally rationalise: multiply numerator and denominator by $3 - 2\\sqrt{2}$."
         }
       ]
+    },
+    {
+      "id": "algebra-avengers-advanced-1-problem-10",
+      "title": "Digit Flip Squares",
+      "statement": "Let $x$ and $y$ be two-digit integers such that $y$ is obtained by reversing the digits of $x$. The integers $x$ and $y$ satisfy $x^2 - y^2 = m^2$ for some positive integer $m$. What is $x + y + m$? \\[Source: 2005 AMC 10B Problem 24\\]",
+      "solution": "Let $x = 10a + b$ and $y = 10b + a$ with digits $a > b > 0$ so that $x > y$. Then\n\\[\n\\begin{aligned}\nx^2 - y^2 &= (x - y)(x + y) \\\\\n&= (9a - 9b)(11a + 11b) \\\\\n&= 99(a - b)(a + b) = m^2.\n\\end{aligned}\n\\]\nThus $(a - b)(a + b) = m^2 / 99$ and $m^2$ must be divisible by $99 = 3^2 \\cdot 11$. The least square multiple is $(3^2 \\cdot 11)^2 = 33^2$, giving $m = 33$. With $x - y = 9$ and $x + y = 121$, the solution yields $x = 65$ and $y = 56$. Therefore $x + y + m = 154$.",
+      "difficulty": 8,
+      "tags": ["algebra", "number theory", "digit manipulation", "AMC advanced"],
+      "metadata": {
+        "tagline": "Reverse two-digit numbers and factor a difference of squares to find a perfect square.",
+        "objectives": [
+          "Express numbers with reversed digits using their tens and units digits.",
+          "Factor $x^2 - y^2$ and connect the factors to divisibility by 99.",
+          "Identify the minimal square multiple that satisfies the factorisation constraints."
+        ],
+        "answer": {
+          "type": "numeric",
+          "value": 154,
+          "success": "Correct! $x = 65$, $y = 56$, and $m = 33$, so $x + y + m = 154$.",
+          "failure": "Translate the digits into $x$ and $y$, factor $x^2 - y^2$, and use the smallest square multiple of 99.",
+          "tolerance": 0
+        },
+        "solutionSteps": [
+          {
+            "text": "Represent the numbers as $x = 10a + b$ and its reversal $y = 10b + a$, with $a > b > 0$."
+          },
+          {
+            "text": "Compute $x - y = 9(a - b)$ and $x + y = 11(a + b)$."
+          },
+          {
+            "text": "Factor $x^2 - y^2$ into $(x - y)(x + y) = 99(a - b)(a + b)$."
+          },
+          {
+            "text": "Conclude that $(a - b)(a + b) = m^2 / 99$, so $m^2$ is a multiple of $99 = 3^2 \\cdot 11$."
+          },
+          {
+            "text": "Choose the least such square: $m^2 = (3^2 \\cdot 11)^2 = 33^2$, hence $m = 33$."
+          },
+          {
+            "text": "Set $x - y = 9$ and $x + y = 121$ to match factors, solving for $x = 65$ and $y = 56$."
+          },
+          {
+            "text": "Add the values to obtain $x + y + m = 154$."
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "Translate the statement into algebraic equations for $x$, $y$, and $m$."
+        },
+        {
+          "order": 2,
+          "content": "Let $x = 10a + b$ and $y = 10b + a$."
+        },
+        {
+          "order": 3,
+          "content": "Plug these into $x^2 - y^2$ and factor into $(x - y)(x + y)$."
+        },
+        {
+          "order": 4,
+          "content": "From $99(a + b)(a - b) = m^2$, deduce $(a + b)(a - b) = m^2 / 99$."
+        },
+        {
+          "order": 5,
+          "content": "Recall $99 = 3^2 \\cdot 11$."
+        },
+        {
+          "order": 6,
+          "content": "Choose the smallest square multiple, $(3^2 \\cdot 11)^2 = 33^2$, giving $m = 33$."
+        }
+      ]
     }
   ],
 };
