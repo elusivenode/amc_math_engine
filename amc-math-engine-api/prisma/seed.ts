@@ -2652,7 +2652,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "type": "numeric",
           "value": 154,
           "success": "Correct! $x = 65$, $y = 56$, and $m = 33$, so $x + y + m = 154$.",
-          "failure": "Translate the digits into $x$ and $y$, factor $x^2 - y^2$, and use the smallest square multiple of 99.",
+          "failure": "Translate the digits into $x$ and $y$, factor $x^2 - y^2$, and look for a square multiple.",
           "tolerance": 0
         },
         "solutionSteps": [
