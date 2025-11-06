@@ -2666,7 +2666,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
             "text": "Factor $x^2 - y^2$ into $(x - y)(x + y) = 99(a - b)(a + b)$."
           },
           {
-            "text": "Conclude that $(a - b)(a + b) = m^2 / 99$, so $m^2$ is a multiple of $99 = 3^2 \\cdot 11$."
+            "text": "Conclude that $(a - b)(a + b) = m^2 / 99$, so $m^2$ is a multiple of $99 = 3^2 \\cdot 11$." 
           },
           {
             "text": "Choose the least such square: $m^2 = (3^2 \\cdot 11)^2 = 33^2$, hence $m = 33$."
@@ -2703,6 +2703,69 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
         {
           "order": 6,
           "content": "Choose the smallest square multiple, $(3^2 \\cdot 11)^2 = 33^2$, giving $m = 33$."
+        }
+      ]
+    },
+    {
+      "id": "algebra-avengers-advanced-1-problem-11",
+      "title": "Eliminate the Constant",
+      "statement": "Suppose $3 = k\\cdot 2^r$ and $15 = k\\cdot 4^r$. What is $r$?",
+      "solution": "Divide the second equation by the first: $\\dfrac{15}{3} = \\dfrac{k\\cdot 4^r}{k\\cdot 2^r}$, so $5 = \\dfrac{4^r}{2^r} = (\\tfrac{4}{2})^r = 2^r$. Therefore $r = \\log_2 5$.",
+      "difficulty": 7,
+      "tags": ["algebra", "exponents", "logarithms", "AMC advanced"],
+      "metadata": {
+        "tagline": "Divide exponential equations to wipe out the unknown coefficient.",
+        "objectives": [
+          "Use division to eliminate a common constant in exponential equations.",
+          "Apply exponent rules to simplify the quotient of exponential expressions.",
+          "Solve for an exponent with logarithms when exact powers are unavailable."
+        ],
+        "answer": {
+          "type": "expression",
+          "value": "log_2(5)",
+          "success": "Correct! $2^r = 5$ gives $r = \\log_2 5$.",
+          "failure": "Remove $k$ by dividing the equations and use logarithms to isolate $r$.",
+          "variables": [],
+          "shortcuts": ["log_2("],
+          "includeExponentTwo": false,
+          "inputHint": "Enter $\\log_2 5$ or an equivalent logarithmic expression."
+        },
+        "solutionSteps": [
+          {
+            "text": "Divide the second equation by the first: $\\dfrac{15}{3} = \\dfrac{k\\cdot 4^r}{k\\cdot 2^r}$."
+          },
+          {
+            "text": "Simplify to get $5 = (4/2)^r = 2^r$."
+          },
+          {
+            "text": "Take base-2 logarithms to isolate $r$: $r = \\log_2 5$."
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "Can you eliminate any variables using the two equations?"
+        },
+        {
+          "order": 2,
+          "content": "Remember that dividing equations can eliminate a common factor, not just adding or subtracting."
+        },
+        {
+          "order": 3,
+          "content": "Divide the second equation by the first."
+        },
+        {
+          "order": 4,
+          "content": "$15/3 = (k\\cdot 4^r)/(k\\cdot 2^r) = 5 = (4/2)^r = 2^r.$"
+        },
+        {
+          "order": 5,
+          "content": "If $2^r = 5$, how can you isolate $r$?"
+        },
+        {
+          "order": 6,
+          "content": "Use logarithms: $r = \\log_2 5$."
         }
       ]
     }

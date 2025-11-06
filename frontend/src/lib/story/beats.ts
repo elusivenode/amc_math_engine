@@ -1086,5 +1086,32 @@ export const storyBeats: StoryBeat[] = [
     "image": "/story/algebraic-avengers/beat_41.png",
     "imageAlt": "Father Mersenne and the four ancient Keepers gathered around a candlelit oak table as glowing symbols emerge on Riemann’s parchment.",
     "caption": "Riemann’s coded treatise reaches Mersenne, who deciphers its warning with the four Keepers — the Red Baron knows of the Stones, and reason itself stands at the brink."
+  },
+  {
+    "id": "algebra-avengers-beat-42",
+    "pathSlug": "algebra-avengers",
+    "sequence": 42,
+    "context": "problem",
+    "problemOrder": 41,
+    "problemId": "algebra-avengers-advanced-1-problem-11",
+    "title": "The Prime Pulse",
+    "narrative": [
+      "Pierre de Fermat’s back ached as the coach finally rattled onto the outer streets of Paris. For nine long days he had endured the jolts and sways of the journey from Toulouse — the wooden wheels hammering each cobblestone like an accusation.",
+      "",
+      "“Infernal contraptions,” he muttered, pressing a hand to the small of his back. Yet despite the fatigue, a grin crept across his face. “How many years has it been now?” he thought. “Too many since I last saw dear Mersenne.”",
+      "",
+      "Then he felt it — a faint, rhythmic tremor from his coat pocket. He frowned and drew out the small red stone, its polished surface pulsing with soft, even flashes. At first the rhythm seemed random, like the crackle of distant thunder. But as he listened closer, a pattern began to form — two beats, then three beats, then five beats, then seven beats — the unmistakable cadence of the prime numbers.",
+      "",
+      "His brow furrowed. “Two, three, five, seven…” he whispered, his mind whirring. Then a pause, and the sequence began anew — this time reversed. “Seven, five, three, two…”",
+      "",
+      "A realization chilled him: the primes were collapsing inward, a signal of convergence. He reached for his notebook and scribbled a quick calculation — ratios of intervals matching the harmonic frequencies of a vibrating string. The values aligned perfectly with a descending series he had once discussed in a letter to Mersenne.",
+      "",
+      "“This isn’t chance,” he breathed. “It’s a warning.”",
+      "",
+      "The pattern pulsed again, brighter now — a silent message in number and rhythm, calling him toward the Brother of Measured Song."
+    ],
+    "image": "/story/algebraic-avengers/beat_42.png",
+    "imageAlt": "Pierre de Fermat seated in a dim carriage entering Paris, the red stone glowing in his hand as rhythmic pulses reflect in his thoughtful eyes.",
+    "caption": "On his long journey to Paris, Fermat feels the red stone awaken — its pulse beating out the prime sequence, a mathematical warning meant for him alone."
   }  
 ];
