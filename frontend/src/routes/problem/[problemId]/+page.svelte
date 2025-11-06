@@ -1554,7 +1554,123 @@ $: {
     | { type: 'paren-close'; value: ')' }
     | { type: 'comma'; value: ',' };
 
-  const algebraicFunctions = new Set(['sqrt']);
+  const algebraicFunctions = new Set(['sqrt', 'log']);
+
+  function extractParenthesizedContent(input: string, startIndex: number): { content: string; endIndex: number } | null {
+    if (input[startIndex] !== '(') {
+      return null;
+    }
+
+    let depth = 0;
+    let index = startIndex;
+    let content = '';
+
+    for (; index < input.length; index += 1) {
+      const char = input[index];
+      if (char === '(') {
+        if (depth > 0) {
+          content += char;
+        }
+        depth += 1;
+        continue;
+      }
+      if (char === ')') {
+        depth -= 1;
+        if (depth === 0) {
+          return { content: content.trim(), endIndex: index + 1 };
+        }
+        content += char;
+        continue;
+      }
+      if (depth > 0) {
+        content += char;
+      } else {
+        break;
+      }
+    }
+
+    return null;
+  }
+
+  function expandLogBases(input: string): string {
+    if (!input.includes('log_')) {
+      return input;
+    }
+
+    let output = '';
+
+    for (let index = 0; index < input.length; ) {
+      if (input.startsWith('log_', index)) {
+        index += 4;
+        if (index >= input.length) {
+          output += 'log_';
+          break;
+        }
+
+        let baseExpression = '';
+
+        if (input[index] === '(') {
+          const extracted = extractParenthesizedContent(input, index);
+          if (!extracted) {
+            output += 'log_';
+            break;
+          }
+          baseExpression = extracted.content;
+          index = extracted.endIndex;
+        } else {
+          const start = index;
+          while (
+            index < input.length &&
+            /[0-9a-zA-Z.\-+*/^]/.test(input[index]) &&
+            input[index] !== '('
+          ) {
+            index += 1;
+          }
+          baseExpression = input.slice(start, index).trim();
+        }
+
+        while (index < input.length && /\s/.test(input[index])) {
+          index += 1;
+        }
+
+        let argumentContent: string | null = null;
+        if (index < input.length && input[index] === '(') {
+          const argument = extractParenthesizedContent(input, index);
+          if (argument) {
+            index = argument.endIndex;
+            argumentContent = argument.content;
+          }
+        } else {
+          const startArg = index;
+          while (
+            index < input.length &&
+            /[0-9a-zA-Z.\-+*/^]/.test(input[index]) &&
+            !/\s/.test(input[index])
+          ) {
+            index += 1;
+          }
+          const rawArgument = input.slice(startArg, index).trim();
+          if (rawArgument.length > 0) {
+            argumentContent = rawArgument;
+          }
+        }
+
+        if (!argumentContent) {
+          output += `log_${baseExpression}`;
+          continue;
+        }
+
+        const cleanedBase = baseExpression.length > 0 ? baseExpression : '10';
+        output += `((log(${argumentContent}))/(log(${cleanedBase})))`;
+        continue;
+      }
+
+      output += input[index];
+      index += 1;
+    }
+
+    return output;
+  }
 
   function normalizeLatexLikeExpression(input: string): string | null {
     if (typeof input !== 'string') {
@@ -1596,6 +1712,12 @@ $: {
       .replace(/\}/g, ')')
       .replace(/\s+/g, ' ')
       .trim();
+
+    if (!output) {
+      return null;
+    }
+
+    output = expandLogBases(output);
 
     return output.length > 0 ? output : null;
   }
@@ -1746,7 +1868,11 @@ $: {
       return null;
     }
 
-    if (!/^[-+*/0-9a-zA-Z().,* ]+$/.test(sanitized.replace(/Math\.sqrt/g, 'Mathsqrt'))) {
+    if (
+      !/^[-+*/0-9a-zA-Z().,* ]+$/.test(
+        sanitized.replace(/Math\.(sqrt|log)/g, 'Mathfn')
+      )
+    ) {
       return null;
     }
 

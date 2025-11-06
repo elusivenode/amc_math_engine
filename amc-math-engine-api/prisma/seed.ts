@@ -2726,8 +2726,8 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "success": "Correct! $2^r = 5$ gives $r = \\log_2 5$.",
           "failure": "Remove $k$ by dividing the equations and use logarithms to isolate $r$.",
           "variables": [],
-          "shortcuts": ["log_", "(", ")"],
-          "includeExponentTwo": false,
+          "shortcuts": ["log_", "sqrt(", "(", ")"],
+          "includeExponentTwo": true,
           "inputHint": "Enter an algebraic expression."
         },
         "solutionSteps": [
