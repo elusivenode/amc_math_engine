@@ -2768,6 +2768,69 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "content": "Use logarithms: $r = \\log_2 5$."
         }
       ]
+    },
+    {
+      "id": "algebra-avengers-advanced-1-problem-12",
+      "title": "Division Rivalry Schedule",
+      "statement": "A basketball league has two divisions of five teams each. Every team plays the other four teams in its own division $N$ times and every team in the other division $M$ times, where $N > 2M$ and $M > 4$. Each team’s schedule has 90 games. How many games does a team play within its own division?",
+      "solution": "Each team has $4$ in-division opponents and $5$ cross-division opponents, so its schedule is $4N + 5M = 90$. Because $N = \\dfrac{90 - 5M}{4}$, $90 - 5M$ must be divisible by $4$, forcing $M \\equiv 2 \\pmod{4}$ with $M > 4$. Testing $M = 6, 10, 14, 18$ yields $N = 15, 10, 5, 0$, but only $M = 6$ also satisfies $N > 2M$. Thus $N = 15$ and the number of in-division games is $4N = 60$.",
+      "difficulty": 7,
+      "tags": ["algebra", "systems of equations", "counting", "AMC advanced"],
+      "metadata": {
+        "tagline": "Balance linear constraints to pin down a rigid game schedule.",
+        "objectives": [
+          "Model a word problem with a linear equation in two variables.",
+          "Use divisibility and inequality constraints to limit integer solutions.",
+          "Interpret the variables to answer the original counting question."
+        ],
+        "answer": {
+          "type": "numeric",
+          "value": 60,
+          "success": "Correct! $N = 15$ leads to $4N = 60$ in-division games.",
+          "failure": "Translate the schedule into an equation, apply the constraints on $N$ and $M$, and recompute the in-division total.",
+          "tolerance": 0
+        },
+        "solutionSteps": [
+          {
+            "text": "A team faces 4 opponents in its division $N$ times each and 5 opponents from the other division $M$ times each, so $4N + 5M = 90$."
+          },
+          {
+            "text": "Solve for $N$ to get $N = (90 - 5M)/4$, so $90 - 5M$ must be divisible by 4."
+          },
+          {
+            "text": "Since $M > 4$ and $M \\equiv 2 \\pmod{4}$, test $M = 6, 10, 14, 18$; only $M = 6$ also yields $N > 2M$."
+          },
+          {
+            "text": "With $N = 15$, the team plays $4N = 60$ games within its division."
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "How many opponents are in the same division? How many are in the other division?"
+        },
+        {
+          "order": 2,
+          "content": "Write an equation for the 90 total games using $4N$ in-division games and $5M$ cross-division games."
+        },
+        {
+          "order": 3,
+          "content": "Solve $4N + 5M = 90$ for $N$ in terms of $M$."
+        },
+        {
+          "order": 4,
+          "content": "Since $M$ is an integer, $90 - 5M$ must be divisible by 4. What does that say about $M$ modulo 4?"
+        },
+        {
+          "order": 5,
+          "content": "Test the possible $M$ values that satisfy $M > 4$ and the divisibility condition, and keep the one with $N > 2M$."
+        },
+        {
+          "order": 6,
+          "content": "Once you have $N$, multiply by 4 to count the in-division games."
+        }
+      ]
     }
   ],
 };
