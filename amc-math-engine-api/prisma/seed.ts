@@ -2831,6 +2831,64 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "content": "Once you have $N$, multiply by 4 to count the in-division games."
         }
       ]
+    },
+    {
+      "id": "algebra-avengers-advanced-1-problem-13",
+      "title": "Lunch Line Logic",
+      "statement": "At the school cafeteria, sandwiches cost $4 each and pies cost $6 each. Jack buys at least one of each and spends less than $50 in total. While daydreaming in class, Jack realizes that if sandwiches cost $1 more and pies cost $1 less, he could have bought one more sandwich and two fewer pies for the same total cost. How many sandwiches did Jack originally buy?",
+      "solution": "Let $s$ be the sandwiches and $p$ the pies, with $s, p \\ge 1$ and $4s + 6p < 50$. The adjusted scenario gives $(4 + 1)(s + 1) + (6 - 1)(p - 2) = 4s + 6p$, which simplifies to $5s + 5 + 5p - 10 = 4s + 6p$, so $s - p = 5$ and $s = p + 5$. Substitute into the spending limit: $4(p + 5) + 6p < 50 \\Rightarrow 10p + 20 < 50$, yielding $p < 3$. Since $p$ is at least 1 and an integer, $p = 2$ and $s = 7$. Jack originally bought 7 sandwiches.",
+      "difficulty": 7,
+      "tags": ["algebra", "systems of equations", "AMC advanced", "word problems"],
+      "metadata": {
+        "tagline": "Use simultaneous constraints on spending to pin down the lunch order.",
+        "objectives": [
+          "Translate a price-change story into equations and inequalities.",
+          "Eliminate variables by comparing two spending expressions.",
+          "Apply integer constraints to finish the count."
+        ],
+        "answer": {
+          "type": "numeric",
+          "value": 7,
+          "success": "Yes — Jack bought 7 sandwiches and 2 pies originally.",
+          "failure": "Set up both the original inequality and the equal-cost scenario, then use the integer constraints to solve.",
+          "tolerance": 0
+        },
+        "solutionSteps": [
+          {
+            "text": "Let $s$ be sandwiches and $p$ pies with $s, p \\ge 1$ and $4s + 6p < 50$."
+          },
+          {
+            "text": "Equate the alternate purchase to the original: $(4 + 1)(s + 1) + (6 - 1)(p - 2) = 4s + 6p$."
+          },
+          {
+            "text": "Simplify to $5s + 5 + 5p - 10 = 4s + 6p$, so $s - p = 5$ and $s = p + 5$."
+          },
+          {
+            "text": "Substitute into $4s + 6p < 50$: $4(p + 5) + 6p < 50 \\Rightarrow 10p + 20 < 50$, giving $p < 3$."
+          },
+          {
+            "text": "With $p \\ge 1$, the only integer solution is $p = 2$ and hence $s = 7$."
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "Introduce variables for sandwiches and pies, and note the inequality that keeps the total below $50$."
+        },
+        {
+          "order": 2,
+          "content": "Write an equation equating the cost of the alternate purchase to the original bill."
+        },
+        {
+          "order": 3,
+          "content": "Simplify the alternate scenario to relate $s$ and $p$, then substitute into the inequality."
+        },
+        {
+          "order": 4,
+          "content": "Use the integer constraints ($s, p \\ge 1$) to pick the only feasible pair."
+        }
+      ]
     }
   ],
 };
