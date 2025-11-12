@@ -2835,7 +2835,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
     {
       "id": "algebra-avengers-advanced-1-problem-13",
       "title": "Lunch Line Logic",
-      "statement": "At the school cafeteria, sandwiches cost $4$ each and pies cost $6$ each. Jack buys at least one of each and spends less than $50$ in total. While daydreaming in class, Jack realizes that if sandwiches cost $1$ more and pies cost $1$ less, he could have bought one more sandwich and two fewer pies for the same total cost. How many sandwiches did Jack originally buy?",
+      "statement": "At the school cafeteria, sandwiches cost $\\$4$ each and pies cost $\\$6$ each. Jack buys at least one of each and spends less than $\\$50$ in total. While daydreaming in class, Jack realizes that if sandwiches cost $\\$1$ more and pies cost $\\$1$ less, he could have bought one more sandwich and two fewer pies for the same total cost. How many sandwiches did Jack originally buy?",
       "solution": "Let $s$ be the sandwiches and $p$ the pies, with $s, p \\ge 1$ and $4s + 6p < 50$. The adjusted scenario gives $(4 + 1)(s + 1) + (6 - 1)(p - 2) = 4s + 6p$, which simplifies to $5s + 5 + 5p - 10 = 4s + 6p$, so $s - p = 5$ and $s = p + 5$. Substitute into the spending limit: $4(p + 5) + 6p < 50 \\Rightarrow 10p + 20 < 50$, yielding $p < 3$. Since $p$ is at least 1 and an integer, $p = 2$ and $s = 7$. Jack originally bought 7 sandwiches.",
       "difficulty": 7,
       "tags": ["algebra", "systems of equations", "AMC advanced", "word problems"],
