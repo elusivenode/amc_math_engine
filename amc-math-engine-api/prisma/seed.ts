@@ -2893,7 +2893,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
     {
       "id": "algebra-avengers-advanced-1-problem-14",
       "title": "Two-Step Ledger",
-      "statement": "A sequence $(a_n)$ is defined by $a_1 = 7$ and, for all integers $n \\ge 1$, \\[a_{n+1} = \\frac{a_n + 12}{a_n - 1}.\\] Jack records each term and wonders what value appears at $a_{2026}$. What is $a_{2026}$?",
+      "statement": "A sequence $(a_n)$ is defined by $a_1 = 7$ and, for all integers $n \\ge 1$, $a_{n+1} = \\dfrac{a_n + 12}{a_n - 1}$. Jack records each term and wonders what value appears at $a_{2026}$. What is $a_{2026}$?",
       "solution": "Compute $a_2 = \\frac{7 + 12}{7 - 1} = \\frac{19}{6}$ and $a_3 = \\frac{\\frac{19}{6} + 12}{\\frac{19}{6} - 1} = 7$. The update function $f(x) = \\frac{x + 12}{x - 1}$ satisfies $f(f(x)) = x$ for $x \\ne 1$, so once a term is chosen the next two terms repeat the same pair. Therefore $a_n = 7$ for odd $n$ and $a_n = \\tfrac{19}{6}$ for even $n$. Since $2026$ is even, $a_{2026} = \\tfrac{19}{6}$.",
       "difficulty": 7,
       "tags": ["algebra", "recurrences", "AMC advanced"],
