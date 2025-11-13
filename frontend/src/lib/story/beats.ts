@@ -1191,5 +1191,42 @@ export const storyBeats: StoryBeat[] = [
     "image": "/story/algebraic-avengers/beat_44.png",
     "imageAlt": "A rain-slick Paris street at dusk, Red Order henchmen surrounding an empty carriage as a single hat lies inside, marked with a faint chalk spiral.",
     "caption": "The Red Order intercepts Fermat’s coach — only to find it empty. A chalk spiral of primes left behind hints that the mathematician has already slipped beyond their grasp."
+  },
+  {
+    "id": "algebra-avengers-beat-45",
+    "pathSlug": "algebra-avengers",
+    "sequence": 45,
+    "context": "problem",
+    "problemOrder": 44,
+    "problemId": "algebra-avengers-advanced-1-problem-14",
+    "title": "The Keeper Revealed",
+    "narrative": [
+      "Fermat stumbled through the rain-slick streets, breath misting in the cold air as he struggled to keep pace with the stranger who had hauled him from his carriage only minutes earlier.",
+      "",
+      "“Where are we heading?” he panted.",
+      "",
+      "The man said nothing, striding ahead with long, deliberate steps, his boots striking the cobblestones in a steady, rhythmic pattern — almost mathematical in its precision.",
+      "",
+      "The rain thickened, drumming on rooftops and spilling in silver sheets across the narrow lane. Fermat stopped beneath the awning of a shuttered café, chest heaving. “I’ll be damned,” he muttered, straightening his coat. “I’ve had enough of this absurd chase.”",
+      "",
+      "The stranger turned. His eyes caught the lantern light — calm, analytical, yet piercing. He studied Fermat as though testing an equation.",
+      "",
+      "“Well?” Fermat demanded, anger rising. “You drag me through half the city like a common fugitive. What is the meaning of this intrusion?”",
+      "",
+      "The man’s voice, when it came, was steady and deep, carrying the clarity of logic itself. “Time is short, and danger is near. Answers will come at the appointed moment.”",
+      "",
+      "Fermat’s temper flared. “At least tell me who you are, sir, before I decide whether to trust you or throttle you!”",
+      "",
+      "The stranger inclined his head slightly. “I am Euclid of Alexandria — keeper of the stone you carry in your pocket. There is much to explain, but not here.”",
+      "",
+      "Fermat froze, hand instinctively brushing against the red stone in his coat. The pulse that had once seemed random now beat in perfect synchrony with the man’s stride.",
+      "",
+      "“Now onward,” said Euclid, already turning into the mist.",
+      "",
+      "Fermat followed, half in disbelief, half compelled — a man of reason stepping into a mystery older than proof itself."
+    ],
+    "image": "/story/algebraic-avengers/beat_45.png",
+    "imageAlt": "Pierre de Fermat stands beneath a café awning in the Paris rain, confronting a cloaked stranger whose calm gaze reflects the light of a nearby lantern.",
+    "caption": "Dragged from his carriage and pursued through the rain, Fermat meets his rescuer — Euclid of Alexandria, keeper of the red stone — and follows him into the mist toward destiny."
   }  
 ];
