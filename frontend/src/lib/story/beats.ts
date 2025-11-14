@@ -1267,5 +1267,36 @@ export const storyBeats: StoryBeat[] = [
     "image": "/story/algebraic-avengers/beat_46.png",
     "imageAlt": "Fermat sits in a dimly lit cellar beneath Sainte-Chapelle, startled as René Descartes appears beside him, the flicker of torchlight revealing a mix of warmth and unease.",
     "caption": "In the hidden cellar beneath Sainte-Chapelle, Fermat reunites with Descartes — an old friend bringing calm counsel amid growing confusion and unseen forces."
+  },
+  {
+    "id": "algebra-avengers-beat-47",
+    "pathSlug": "algebra-avengers",
+    "sequence": 47,
+    "context": "problem",
+    "problemOrder": 46,
+    "problemId": "algebra-avengers-advanced-1-problem-16",
+    "title": "The Fellowship of Reason",
+    "narrative": [
+      "“The cards are now on the table, my friends,” said Father Marin Mersenne, his voice resonating through the vaulted cellar of the Sainte-Chapelle. “Though many still lie face-down.”",
+      "",
+      "Before him stood a gathering beyond reason — Pierre de Fermat, René Descartes, Sophie Germain, Karl Weierstrass, and the four ancient Keepers, their forms half-lit by the amber glow of the torches. Centuries of thought, bound together in one impossible room.",
+      "",
+      "“None of us,” continued Mersenne, “can claim to understand the mechanism that has drawn us across time and death itself. Perhaps that understanding lies beyond the limits even of our logic. Only Archimedes, who set this design in motion, might have known the method.”",
+      "",
+      "A ripple of murmurs moved through the assembly. Fermat leaned forward, Sophie folded her arms, Weierstrass frowned in thought — minds searching instinctively for proof where none could yet be found.",
+      "",
+      "Mersenne raised a hand. “Let that puzzle rest. For now, let us take it as axiomatic that we are here — and that the Stones are accounted for. From this base, we must proceed as reason dictates: each of us a term in the equation to restore balance.”",
+      "",
+      "He paused, his expression hardening. “Make no mistake. What we face is no mere curiosity of fate. There has been an assault on reason itself — an assault on logic, on freedom, on the very right to think. The people’s minds are chained by greed and shadowed by power. Knowledge has been bartered for profit, understanding for control.”",
+      "",
+      "The torches flickered; the air seemed to tighten.",
+      "",
+      "“Archimedes foresaw this. He scattered the Stones not in despair, but in faith — faith that those who valued truth above comfort would find one another when the world most needed them. We may not yet see the full pattern, nor the final theorem, but it exists. And together,” he said, voice rising, “we shall solve it.”",
+      "",
+      "The chamber fell silent. For the first time in centuries, reason had its fellowship."
+    ],
+    "image": "/story/algebraic-avengers/beat_47.png",
+    "imageAlt": "In the flickering light of the Sainte-Chapelle cellar, Father Mersenne stands before an assembly of mathematicians from across the ages, their faces illuminated with resolve.",
+    "caption": "In a hidden chamber beneath Paris, Mersenne unites minds across centuries — the first Fellowship of Reason — to defend logic and freedom from the forces of ignorance and greed."
   }  
 ];

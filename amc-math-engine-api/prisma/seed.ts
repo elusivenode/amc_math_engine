@@ -2950,7 +2950,7 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
     },
     {
       "id": "algebra-avengers-advanced-1-problem-15",
-      "title": "Balanced Lunch Trade",
+      "title": "Balancing Act",
       "statement": "Positive numbers $x$ and $y$ satisfy $x + y = 10$. What is the smallest possible value of $x + \\dfrac{25}{y}$?",
       "solution": "Use the constraint $x = 10 - y$ to get $f(y) = 10 - y + \\dfrac{25}{y}$ for $0 < y < 10$. Apply AM–GM to the last two terms: $\\dfrac{25}{y} + \\dfrac{25}{y} + (10 - y) \\ge 3 \\sqrt[3]{\\dfrac{25}{y} \\cdot \\dfrac{25}{y} \\cdot (10 - y)}$. Instead, observe directly that the minimum occurs when $10 - y = \\dfrac{25}{y}$ by differentiating or completing the square. Solving $10 - y = \\dfrac{25}{y}$ gives $y^2 - 10y + 25 = 0$, so $y = 5$ and hence $x = 5$. Plugging back gives the minimum $x + \\dfrac{25}{y} = 5 + 5 = 10$.",
       "difficulty": 7,
@@ -3003,6 +3003,62 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
         {
           "order": 4,
           "content": "Substitute back to find $x$ and evaluate $x + \\dfrac{25}{y}$ at that pair."
+        }
+      ]
+    }
+  ],
+  'algebra-avengers:BOSS:1': [
+    {
+      "id": "algebra-avengers-boss-1-problem-1",
+      "title": "Keeper’s Final Code",
+      "statement": "Positive real numbers $x$, $y$, and $z$ satisfy $x + y + z = 30$, $xy + yz + zx = 274$, and $xyz = 480$. What is $x^3 + y^3 + z^3$?",
+      "solution": "Use the identity $x^3 + y^3 + z^3 = (x + y + z)^3 - 3(x + y + z)(xy + yz + zx) + 3xyz$. Substitute the given symmetric sums to obtain $30^3 - 3 \\cdot 30 \\cdot 274 + 3 \\cdot 480 = 27{,}000 - 24{,}660 + 1{,}440 = 3{,}780$.",
+      "difficulty": 9,
+      "tags": ["algebra", "symmetric sums", "boss fight"],
+      "metadata": {
+        "tagline": "Crack the final code by wielding symmetric identities.",
+        "objectives": [
+          "Recognize when cubic expressions can be rewritten using symmetric sums.",
+          "Apply the identity for $a^3 + b^3 + c^3$ in terms of $a + b + c$, $ab + bc + ca$, and $abc$.",
+          "Execute exact arithmetic to finish the evaluation."
+        ],
+        "answer": {
+          "type": "numeric",
+          "value": 3780,
+          "success": "Correct! The symmetric identity collapses the expression to $3{,}780$.",
+          "failure": "Express $a^3 + b^3 + c^3$ using the known sums before substituting numbers.",
+          "tolerance": 0
+        },
+        "solutionSteps": [
+          {
+            "text": "Recall the identity $x^3 + y^3 + z^3 = (x + y + z)^3 - 3(x + y + z)(xy + yz + zx) + 3xyz$."
+          },
+          {
+            "text": "Substitute $x + y + z = 30$, $xy + yz + zx = 274$, and $xyz = 480$."
+          },
+          {
+            "text": "Compute $(x + y + z)^3 = 30^3 = 27{,}000$ and $3(x + y + z)(xy + yz + zx) = 3 \\cdot 30 \\cdot 274 = 24{,}660$."
+          },
+          {
+            "text": "Add $3xyz = 3 \\cdot 480 = 1{,}440$ and combine the terms to get $27{,}000 - 24{,}660 + 1{,}440 = 3{,}780$."
+          },
+          {
+            "text": "Conclude $x^3 + y^3 + z^3 = 3{,}780$."
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "Try to rewrite $a^3 + b^3 + c^3$ using the sums you already know."
+        },
+        {
+          "order": 2,
+          "content": "Use the identity $(a + b + c)^3 = a^3 + b^3 + c^3 + 3(a + b)(b + c)(c + a)$ or its rearranged form."
+        },
+        {
+          "order": 3,
+          "content": "Carefully substitute the given values and keep track of the arithmetic."
         }
       ]
     }
@@ -3068,7 +3124,7 @@ const PATH_SEEDS: PathSeed[] = [
       {
         stage: SubpathStage.BOSS,
         title: 'Boss fight',
-        description: 'Face a multi-step algebraic gauntlet.',
+        description: 'Face a single-question algebraic gauntlet.',
         order: 4,
         levels: [
           {
@@ -3076,7 +3132,7 @@ const PATH_SEEDS: PathSeed[] = [
             kind: LevelKind.BOSS,
             title: 'Algebra Boss Battle',
             subtitle: 'Placeholder boss level',
-            description: 'Bundle a culminating set of problems once authored.',
+            description: 'One multi-step problem that weaves every algebraic tactic learned.',
             estimatedMinutes: 35,
           },
         ],
@@ -3141,7 +3197,7 @@ const PATH_SEEDS: PathSeed[] = [
       {
         stage: SubpathStage.BOSS,
         title: 'Boss fight',
-        description: 'High-stakes combinatorics showdown.',
+        description: 'High-stakes single-question combinatorics showdown.',
         order: 4,
         levels: [
           {
@@ -3149,7 +3205,7 @@ const PATH_SEEDS: PathSeed[] = [
             kind: LevelKind.BOSS,
             title: 'Combinatoric Boss Battle',
             subtitle: 'Placeholder boss level',
-            description: 'Pair multiple themes into a final sequence.',
+            description: 'A lone, intricate counting puzzle that pairs multiple themes into one finale.',
             estimatedMinutes: 35,
           },
         ],
@@ -3214,7 +3270,7 @@ const PATH_SEEDS: PathSeed[] = [
       {
         stage: SubpathStage.BOSS,
         title: 'Boss fight',
-        description: 'Master geometry boss encounter.',
+        description: 'Single-problem geometry encounter that chains multiple lemmas.',
         order: 4,
         levels: [
           {
@@ -3222,7 +3278,7 @@ const PATH_SEEDS: PathSeed[] = [
             kind: LevelKind.BOSS,
             title: 'Geometry Boss Battle',
             subtitle: 'Placeholder boss level',
-            description: 'Combine multiple lemmas in a final scenario.',
+            description: 'One diagram, many steps — combine every lemma in a closing scenario.',
             estimatedMinutes: 35,
           },
         ],
@@ -3287,7 +3343,7 @@ const PATH_SEEDS: PathSeed[] = [
       {
         stage: SubpathStage.BOSS,
         title: 'Boss fight',
-        description: 'Number theory final duel.',
+        description: 'Single-number-theory duel that binds congruence and factorisation tricks.',
         order: 4,
         levels: [
           {
@@ -3295,7 +3351,7 @@ const PATH_SEEDS: PathSeed[] = [
             kind: LevelKind.BOSS,
             title: 'Number Theory Boss Battle',
             subtitle: 'Placeholder boss level',
-            description: 'Blend congruence, factorisation, and growth tactics.',
+            description: 'One question blending congruence, factorisation, and growth tactics.',
             estimatedMinutes: 35,
           },
         ],
@@ -3312,16 +3368,16 @@ const PATH_SEEDS: PathSeed[] = [
       {
         stage: SubpathStage.FINAL,
         title: 'Final Trials',
-        description: 'Unlocks once core paths are mastered.',
+        description: 'Unlocks once every path boss falls — twenty trials await.',
         order: 1,
         levels: [
           {
             order: 1,
             kind: LevelKind.OLYMPIAD,
             title: 'Order of the Olympiad',
-            subtitle: 'Placeholder final level',
-            description: 'Add mixed-discipline boss problems and story beats here.',
-            estimatedMinutes: 45,
+            subtitle: 'Twenty-problem final level',
+            description: 'Tackle twenty mixed-discipline challenges drawn from every path.',
+            estimatedMinutes: 90,
           },
         ],
       },
