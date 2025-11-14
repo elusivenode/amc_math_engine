@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Attempt, AttemptOutcome, Prisma } from '@prisma/client';
+import { Attempt, AttemptOutcome, LevelKind, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 
 export type PathWithContent = Prisma.PathGetPayload<{
@@ -75,7 +75,15 @@ export type PathProgress = {
   summary: StageStats;
 };
 
-const PROBLEMS_PER_LEVEL = 15;
+const DEFAULT_PROBLEMS_PER_LEVEL = 15;
+const LEVEL_KIND_CAPACITY: Partial<Record<LevelKind, number>> = {
+  [LevelKind.BOSS]: 1,
+  [LevelKind.OLYMPIAD]: 20,
+};
+
+function getProblemCapacity(kind: LevelKind): number {
+  return LEVEL_KIND_CAPACITY[kind] ?? DEFAULT_PROBLEMS_PER_LEVEL;
+}
 const LINEAR_PATH_ORDER = [
   'algebra-avengers',
   'combinatoric-crusaders',
@@ -227,6 +235,7 @@ export class PathsService {
 
         const levelSummaries = subpath.levels.map((level) => {
           const problems = level.problems ?? [];
+          const problemCapacity = getProblemCapacity(level.kind as LevelKind);
           const tiles: ProblemTileSummary[] = [];
 
           let allPreviousMastered = true;
@@ -247,7 +256,7 @@ export class PathsService {
             }
           });
 
-          for (let i = problems.length; i < PROBLEMS_PER_LEVEL; i += 1) {
+          for (let i = problems.length; i < problemCapacity; i += 1) {
             tiles.push({
               order: i + 1,
               title: 'Under construction',
@@ -260,7 +269,7 @@ export class PathsService {
           const realTiles = tiles.filter((tile) => !tile.isPlaceholder && tile.problemId);
           const levelMastered = realTiles.filter((tile) => tile.status === 'MASTERED').length;
           const levelInProgress = realTiles.filter((tile) => tile.status === 'IN_PROGRESS').length;
-          const levelTotal = PROBLEMS_PER_LEVEL;
+          const levelTotal = problemCapacity;
 
           stageMastered += levelMastered;
           stageInProgress += levelInProgress;
@@ -298,10 +307,6 @@ export class PathsService {
             inProgress: stageInProgress,
           },
         };
-
-        if (summary.title.toLowerCase().includes('basic')) {
-          summary.stats.total = PROBLEMS_PER_LEVEL;
-        }
 
         previousSubpathCompleted = previousSubpathCompleted && subpathCompleted;
         return summary;
