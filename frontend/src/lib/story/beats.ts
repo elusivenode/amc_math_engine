@@ -1219,11 +1219,11 @@ export const storyBeats: StoryBeat[] = [
       "",
       "The stranger inclined his head slightly. “I am Euclid of Alexandria — keeper of the stone you carry in your pocket. There is much to explain, but not here.”",
       "",
-      "Fermat froze, hand instinctively brushing against the red stone in his coat. The pulse that had once seemed random now beat in perfect synchrony with the man’s stride.",
+      "Fermat froze, hand instinctively brushing against the red stone in his coat.",
       "",
       "“Now onward,” said Euclid, already turning into the mist.",
       "",
-      "Fermat followed, half in disbelief, half compelled — a man of reason stepping into a mystery older than proof itself."
+      "Fermat followed, half in disbelief, half compelled — a man of reason stepping into a mystery older than proof itself. The pulse of the stone against his chest, that had once seemed random, now beat in perfect synchrony with the man’s stride."
     ],
     "image": "/story/algebraic-avengers/beat_45.png",
     "imageAlt": "Pierre de Fermat stands beneath a café awning in the Paris rain, confronting a cloaked stranger whose calm gaze reflects the light of a nearby lantern.",
