@@ -2947,6 +2947,64 @@ const PROBLEM_SEEDS: Record<string, ProblemSeed[]> = {
           "content": "If the sequence just alternates between two numbers, which one appears at an even index like $2026$?"
         }
       ]
+    },
+    {
+      "id": "algebra-avengers-advanced-1-problem-15",
+      "title": "Balanced Lunch Trade",
+      "statement": "Positive numbers $x$ and $y$ satisfy $x + y = 10$. What is the smallest possible value of $x + \\dfrac{25}{y}$?",
+      "solution": "Use the constraint $x = 10 - y$ to get $f(y) = 10 - y + \\dfrac{25}{y}$ for $0 < y < 10$. Apply AM–GM to the last two terms: $\\dfrac{25}{y} + \\dfrac{25}{y} + (10 - y) \\ge 3 \\sqrt[3]{\\dfrac{25}{y} \\cdot \\dfrac{25}{y} \\cdot (10 - y)}$. Instead, observe directly that the minimum occurs when $10 - y = \\dfrac{25}{y}$ by differentiating or completing the square. Solving $10 - y = \\dfrac{25}{y}$ gives $y^2 - 10y + 25 = 0$, so $y = 5$ and hence $x = 5$. Plugging back gives the minimum $x + \\dfrac{25}{y} = 5 + 5 = 10$.",
+      "difficulty": 7,
+      "tags": ["algebra", "inequalities", "optimization", "AMC advanced"],
+      "metadata": {
+        "tagline": "Balance reciprocal terms using AM–GM to minimize the expression.",
+        "objectives": [
+          "Substitute the linear constraint into the target expression to reduce to one variable.",
+          "Recognize symmetry and set the two positive terms equal to locate the minimum.",
+          "Confirm the minimal value either via AM–GM or a derivative-free argument."
+        ],
+        "answer": {
+          "type": "numeric",
+          "value": 10,
+          "success": "Correct! The expression is minimized when $x = y = 5$, giving $10$.",
+          "failure": "Rewrite the expression in one variable and look for a way to balance the two positive terms.",
+          "tolerance": 0
+        },
+        "solutionSteps": [
+          {
+            "text": "Use $x + y = 10$ to write $x = 10 - y$, so the expression becomes $f(y) = 10 - y + \\dfrac{25}{y}$ for $0 < y < 10$."
+          },
+          {
+            "text": "Notice that $f(y)$ is the sum of two positive terms $10 - y$ and $\\dfrac{25}{y}$. The minimum occurs when these terms are equal."
+          },
+          {
+            "text": "Set $10 - y = \\dfrac{25}{y}$ and solve the resulting quadratic $y^2 - 10y + 25 = 0$ to get $y = 5$ (the positive solution in range)."
+          },
+          {
+            "text": "Then $x = 10 - y = 5$, so the expression equals $5 + \\dfrac{25}{5} = 10$."
+          },
+          {
+            "text": "Conclude that $10$ is the smallest possible value."
+          }
+        ]
+      },
+      "hints": [
+        {
+          "order": 1,
+          "content": "Rewrite the expression using $x = 10 - y$ so everything is in terms of a single variable."
+        },
+        {
+          "order": 2,
+          "content": "Think about how to make $10 - y$ and $\\dfrac{25}{y}$ as balanced as possible to shrink their sum."
+        },
+        {
+          "order": 3,
+          "content": "Set $10 - y = \\dfrac{25}{y}$ to see where the two terms meet, then solve for $y$."
+        },
+        {
+          "order": 4,
+          "content": "Substitute back to find $x$ and evaluate $x + \\dfrac{25}{y}$ at that pair."
+        }
+      ]
     }
   ],
 };
