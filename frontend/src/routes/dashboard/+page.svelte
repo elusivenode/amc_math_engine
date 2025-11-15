@@ -91,9 +91,15 @@
   const PROBLEMS_PER_LEVEL = 15;
 
   function stageCapacity(subpath: SubpathSummary): number {
-    const levelsCount = subpath.levels?.length ?? 0;
-    const nominalCapacity = levelsCount * PROBLEMS_PER_LEVEL;
-    return Math.max(subpath.stats.total ?? 0, nominalCapacity);
+    const statsTotal = subpath.stats?.total ?? 0;
+    const realProblems =
+      subpath.levels?.reduce(
+        (sum, level) =>
+          sum + (level.tiles?.filter((tile) => !tile.isPlaceholder && tile.problemId).length ?? 0),
+        0,
+      ) ?? 0;
+    const fallback = (subpath.levels?.length ?? 0) * PROBLEMS_PER_LEVEL;
+    return statsTotal || realProblems || fallback;
   }
 
   let paths: PathProgress[] = [];
@@ -158,17 +164,21 @@
   }
 
   function computeStats(path: PathProgress): PathStats {
-    const { mastered, total, inProgress } = path.summary;
-    const pathStarted = (mastered ?? 0) + (inProgress ?? 0) > 0;
+    const { mastered = 0, total = 0, inProgress = 0 } = path.summary;
     const currentStage = path.subpaths.find((sub) => sub.isUnlocked && !sub.isCompleted);
     const nextLockedStage = path.subpaths.find((sub) => !sub.isUnlocked);
+    const subpathProgress = path.subpaths.some(
+      (sub) => (sub.stats.mastered ?? 0) + (sub.stats.inProgress ?? 0) > 0,
+    );
 
     const nextProblem = findNextProblem(path);
 
     const displayMastered = currentStage ? currentStage.stats.mastered : mastered;
     const displayInProgress = currentStage ? currentStage.stats.inProgress : inProgress;
     const displayTotal = currentStage ? stageCapacity(currentStage) : total;
-    const started = displayMastered + displayInProgress > 0;
+    const started =
+      currentStage ? (currentStage.stats.mastered ?? 0) + (currentStage.stats.inProgress ?? 0) > 0 : false;
+    const pathStarted = subpathProgress;
 
     return {
       mastered: displayMastered,
@@ -366,7 +376,7 @@
                       {#if stats.started}
                         Continue path
                       {:else if stats.pathStarted}
-                        Begin subpath
+                        Begin next stage
                       {:else}
                         Begin path
                       {/if}

@@ -68,9 +68,15 @@
   const PROBLEMS_PER_LEVEL = 15;
 
   function stageCapacity(subpath: SubpathSummary): number {
-    const levelsCount = subpath.levels?.length ?? 0;
-    const nominalCapacity = levelsCount * PROBLEMS_PER_LEVEL;
-    return Math.max(subpath.stats.total ?? 0, nominalCapacity);
+    const statsTotal = subpath.stats?.total ?? 0;
+    const realProblems =
+      subpath.levels?.reduce(
+        (sum, level) =>
+          sum + (level.tiles?.filter((tile) => !tile.isPlaceholder && tile.problemId).length ?? 0),
+        0,
+      ) ?? 0;
+    const fallback = (subpath.levels?.length ?? 0) * PROBLEMS_PER_LEVEL;
+    return statsTotal || realProblems || fallback;
   }
 
   const stageLabels: Record<string, string> = {
@@ -90,6 +96,8 @@
   let problemOrderById: Map<string, number> = new Map();
   let nextProblemOrder: number | null = null;
   let pathHasProgress = false;
+  let currentStage: SubpathSummary | null = null;
+  let visibleSummary: StageStats = { mastered: 0, total: 0, inProgress: 0 };
 
   function statusLabel(status: TileStatus): string {
     switch (status) {
@@ -223,6 +231,25 @@
     pathHasProgress = false;
   }
 
+  $: if (path) {
+    currentStage =
+      path.subpaths.find((sub) => sub.isUnlocked && !sub.isCompleted) ??
+      path.subpaths.find((sub) => sub.isUnlocked) ??
+      path.subpaths[0] ??
+      null;
+
+    visibleSummary = currentStage
+      ? {
+          mastered: currentStage.stats.mastered,
+          total: stageCapacity(currentStage),
+          inProgress: currentStage.stats.inProgress,
+        }
+      : path.summary;
+  } else {
+    currentStage = null;
+    visibleSummary = { mastered: 0, total: 0, inProgress: 0 };
+  }
+
   $: if (!storyInitialized && !loading && !errorMessage && path) {
     storyInitialized = true;
     if (!path.isUnlocked) {
@@ -279,7 +306,7 @@
         {#if path.description}
           <p class="text-sm text-slate-600">{path.description}</p>
         {/if}
-        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">{path.summary.mastered}/{path.summary.total} problems mastered</p>
+        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">{visibleSummary.mastered}/{visibleSummary.total} problems mastered</p>
       </header>
 
       {#if !path.isUnlocked}
