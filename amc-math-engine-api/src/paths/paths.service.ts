@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Attempt, AttemptOutcome, LevelKind, Prisma } from '@prisma/client';
+import { Attempt, AttemptOutcome, LevelKind, Prisma, SubpathStage } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 
 export type PathWithContent = Prisma.PathGetPayload<{
@@ -81,8 +81,11 @@ const LEVEL_KIND_CAPACITY: Partial<Record<LevelKind, number>> = {
   [LevelKind.OLYMPIAD]: 20,
 };
 
-function getProblemCapacity(kind: LevelKind): number {
-  return LEVEL_KIND_CAPACITY[kind] ?? DEFAULT_PROBLEMS_PER_LEVEL;
+function getProblemCapacity(kind: LevelKind | null | undefined, actualCount: number): number {
+  if (kind && LEVEL_KIND_CAPACITY[kind] !== undefined) {
+    return LEVEL_KIND_CAPACITY[kind]!;
+  }
+  return Math.max(DEFAULT_PROBLEMS_PER_LEVEL, actualCount);
 }
 const LINEAR_PATH_ORDER = [
   'algebra-avengers',
@@ -235,7 +238,7 @@ export class PathsService {
 
         const levelSummaries = subpath.levels.map((level) => {
           const problems = level.problems ?? [];
-          const problemCapacity = getProblemCapacity(level.kind as LevelKind);
+          const problemCapacity = getProblemCapacity(level.kind as LevelKind, problems.length);
           const tiles: ProblemTileSummary[] = [];
 
           let allPreviousMastered = true;
@@ -256,7 +259,12 @@ export class PathsService {
             }
           });
 
-          for (let i = problems.length; i < problemCapacity; i += 1) {
+          const placeholderLimit =
+            subpath.stage === SubpathStage.BOSS
+              ? problems.length
+              : Math.max(problemCapacity, problems.length);
+
+          for (let i = problems.length; i < placeholderLimit; i += 1) {
             tiles.push({
               order: i + 1,
               title: 'Under construction',
@@ -269,7 +277,8 @@ export class PathsService {
           const realTiles = tiles.filter((tile) => !tile.isPlaceholder && tile.problemId);
           const levelMastered = realTiles.filter((tile) => tile.status === 'MASTERED').length;
           const levelInProgress = realTiles.filter((tile) => tile.status === 'IN_PROGRESS').length;
-          const levelTotal = problemCapacity;
+          const levelTotal =
+            subpath.stage === SubpathStage.BOSS ? realTiles.length : problemCapacity;
 
           stageMastered += levelMastered;
           stageInProgress += levelInProgress;

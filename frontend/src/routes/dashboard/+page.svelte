@@ -91,15 +91,20 @@
   const PROBLEMS_PER_LEVEL = 15;
 
   function stageCapacity(subpath: SubpathSummary): number {
-    const statsTotal = subpath.stats?.total ?? 0;
     const realProblems =
       subpath.levels?.reduce(
         (sum, level) =>
           sum + (level.tiles?.filter((tile) => !tile.isPlaceholder && tile.problemId).length ?? 0),
         0,
       ) ?? 0;
-    const fallback = (subpath.levels?.length ?? 0) * PROBLEMS_PER_LEVEL;
-    return statsTotal || realProblems || fallback;
+    if (realProblems > 0) {
+      return realProblems;
+    }
+    const statsTotal = subpath.stats?.total ?? 0;
+    if (statsTotal > 0) {
+      return statsTotal;
+    }
+    return (subpath.levels?.length ?? 0) * PROBLEMS_PER_LEVEL || 0;
   }
 
   let paths: PathProgress[] = [];
@@ -373,10 +378,8 @@
                     title={path.isUnlocked ? undefined : path.unlockRequirement ? `Master ${path.unlockRequirement} first` : 'Master the previous path first'}
                   >
                     {#if path.isUnlocked}
-                      {#if stats.started}
+                      {#if stats.started || stats.pathStarted}
                         Continue path
-                      {:else if stats.pathStarted}
-                        Begin next stage
                       {:else}
                         Begin path
                       {/if}
