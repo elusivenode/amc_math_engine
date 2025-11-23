@@ -102,7 +102,11 @@
     }
     const statsTotal = subpath.stats?.total ?? 0;
     if (statsTotal > 0) {
-      return statsTotal;
+      if (subpath.stage === 'BOSS') {
+        return statsTotal;
+      }
+      const levelCount = subpath.levels?.length ?? 1;
+      return Math.max(statsTotal, levelCount * PROBLEMS_PER_LEVEL);
     }
     return (subpath.levels?.length ?? 0) * PROBLEMS_PER_LEVEL || 0;
   }
