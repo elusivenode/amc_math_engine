@@ -1274,7 +1274,7 @@ export const storyBeats: StoryBeat[] = [
     "sequence": 47,
     "context": "problem",
     "problemOrder": 46,
-    "problemId": "algebra-avengers-advanced-1-problem-16",
+    "problemId": "algebra-avengers-boss-1-problem-1",
     "title": "The Fellowship of Reason",
     "narrative": [
       "“The cards are now on the table, my friends,” said Father Marin Mersenne, his voice resonating through the vaulted cellar of the Sainte-Chapelle. “Though many still lie face-down.”",
