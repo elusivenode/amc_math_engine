@@ -74,16 +74,21 @@
           sum + (level.tiles?.filter((tile) => !tile.isPlaceholder && tile.problemId).length ?? 0),
         0,
       ) ?? 0;
-    if (realProblems > 0) {
-      return realProblems;
-    }
     const statsTotal = subpath.stats?.total ?? 0;
-    if (statsTotal > 0) {
-      const levelCount = Math.max(subpath.levels?.length ?? 0, 1);
-      return Math.max(statsTotal, levelCount * PROBLEMS_PER_LEVEL);
-    }
     const levelCount = Math.max(subpath.levels?.length ?? 0, 1);
-    return levelCount * PROBLEMS_PER_LEVEL;
+
+    if (subpath.stage === 'BOSS') {
+      if (realProblems > 0) {
+        return realProblems;
+      }
+      if (statsTotal > 0) {
+        return statsTotal;
+      }
+      return levelCount;
+    }
+
+    const base = levelCount * PROBLEMS_PER_LEVEL;
+    return Math.max(realProblems, statsTotal, base);
   }
 
   const stageLabels: Record<string, string> = {
