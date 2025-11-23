@@ -202,6 +202,11 @@
   let journeySubpathTitle: string | null = null;
   let journeyNextSubpathTitle: string | null = null;
   let lastProblemReference: string | null = null;
+  const NEXT_PATH_BY_SLUG: Record<string, string> = {
+    'algebra-avengers': 'combinatoric-crusaders',
+    'combinatoric-crusaders': 'knights-of-number',
+    'knights-of-number': 'guild-of-the-geometers',
+  };
 let answerInstruction = '';
 let answerPlaceholder = 'Type your answer or expression';
 
@@ -543,12 +548,20 @@ $: {
   function handleJourneyContinue() {
     closeJourneyModal();
     const slug = subpathContext?.pathSlug ?? pathSlugHint ?? problem?.pathSlug ?? null;
-    if (slug) {
-      const pathBeat = getStoryBeatForPath(slug);
+    const hasNextStage = subpathContext?.nextStage !== null && subpathContext?.nextStage !== undefined;
+    const nextPathSlug = slug ? NEXT_PATH_BY_SLUG[slug] : null;
+
+    const targetSlug =
+      hasNextStage || !nextPathSlug
+        ? slug
+        : nextPathSlug;
+
+    if (targetSlug) {
+      const pathBeat = getStoryBeatForPath(targetSlug);
       if (pathBeat) {
         markStoryBeatAcknowledged(pathBeat.id);
       }
-      void goto(`/path/${slug}`);
+      void goto(`/path/${targetSlug}`);
     } else {
       void goto('/dashboard');
     }
