@@ -24,11 +24,8 @@
   import { renderTextWithMath } from '$lib/utils/textWithMath';
   import type { StoryBeat } from '$lib/story';
   import { authStore } from '$lib/stores/auth';
-  import {
-    markStoryBeatAcknowledged,
-    hasAcknowledgedStoryBeat,
-  } from '$lib/stores/story-progress';
-  import { hasCelebratedSubpath, markSubpathCelebrated } from '$lib/stores/subpath-celebrations';
+  import { markStoryBeatAcknowledged, hasAcknowledgedStoryBeat } from '$lib/stores/story-progress';
+  import { markSubpathCelebrated } from '$lib/stores/subpath-celebrations';
   import { resolveJourneyMessage } from '$lib/journey/messages';
   import type { PageData } from './$types';
 
@@ -484,10 +481,6 @@ $: {
       } satisfies SubpathContext;
 
       if (previouslyCompleted || !located.subpath.isCompleted) {
-        return;
-      }
-
-      if (hasCelebratedSubpath(located.subpath.id)) {
         return;
       }
 
