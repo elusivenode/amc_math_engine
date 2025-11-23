@@ -452,9 +452,47 @@ $: {
       return;
     }
 
-    const slug = subpathContext?.pathSlug ?? pathSlugHint ?? problem.pathSlug ?? null;
     const auth = get(authStore);
-    if (!slug || !auth) {
+    if (!auth) {
+      return;
+    }
+
+    const slug = subpathContext?.pathSlug ?? pathSlugHint ?? problem.pathSlug ?? null;
+
+    const openModal = async (
+      args:
+        | {
+            slug: string;
+            subpathTitle: string;
+            fromStage: string;
+            toStage: string | null;
+            nextSubpathTitle: string | null;
+          }
+        | null,
+    ) => {
+      if (previouslyCompleted) return;
+
+      if (args) {
+        const message = await resolveJourneyMessage(args.slug, args.fromStage, args.toStage);
+        journeyHeading = message.heading ?? 'Stage Complete';
+        journeyMessageText = message.message;
+        journeyCtaLabel = message.ctaLabel ?? 'CONTINUE YOUR JOURNEY';
+        journeySubpathTitle = args.subpathTitle;
+        journeyNextSubpathTitle = args.nextSubpathTitle;
+      } else {
+        const fallback = await resolveJourneyMessage('default', 'stage', null);
+        journeyHeading = fallback.heading ?? 'Stage Complete';
+        journeyMessageText = fallback.message;
+        journeyCtaLabel = fallback.ctaLabel ?? 'CONTINUE YOUR JOURNEY';
+        journeySubpathTitle = null;
+        journeyNextSubpathTitle = null;
+      }
+
+      journeyModalOpen = true;
+    };
+
+    if (!slug) {
+      await openModal(null);
       return;
     }
 
@@ -466,6 +504,7 @@ $: {
       const located = findSubpathForProblem(progress, problem.id);
       if (!located) {
         subpathContext = null;
+        await openModal(null);
         return;
       }
 
@@ -484,22 +523,16 @@ $: {
         return;
       }
 
-      const message = await resolveJourneyMessage(
-        progress.slug,
-        located.subpath.stage,
-        located.nextSubpath?.stage ?? null,
-      );
-
-      journeyHeading = message.heading ?? 'Stage Complete';
-      journeyMessageText = message.message;
-      journeyCtaLabel = message.ctaLabel ?? 'CONTINUE YOUR JOURNEY';
-      journeySubpathTitle = located.subpath.title;
-      journeyNextSubpathTitle = located.nextSubpath?.title ?? null;
-      journeyModalOpen = true;
-
-      markSubpathCelebrated(located.subpath.id);
+      await openModal({
+        slug: progress.slug,
+        subpathTitle: located.subpath.title,
+        fromStage: located.subpath.stage,
+        toStage: located.nextSubpath?.stage ?? null,
+        nextSubpathTitle: located.nextSubpath?.title ?? null,
+      });
     } catch (error) {
       console.warn('Failed to verify subpath completion', error);
+      await openModal(null);
     }
   }
 
