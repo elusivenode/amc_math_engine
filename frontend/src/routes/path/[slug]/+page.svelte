@@ -79,10 +79,11 @@
     }
     const statsTotal = subpath.stats?.total ?? 0;
     if (statsTotal > 0) {
-      const levelCount = subpath.levels?.length ?? 1;
+      const levelCount = Math.max(subpath.levels?.length ?? 0, 1);
       return Math.max(statsTotal, levelCount * PROBLEMS_PER_LEVEL);
     }
-    return (subpath.levels?.length ?? 0) * PROBLEMS_PER_LEVEL || 0;
+    const levelCount = Math.max(subpath.levels?.length ?? 0, 1);
+    return levelCount * PROBLEMS_PER_LEVEL;
   }
 
   const stageLabels: Record<string, string> = {
