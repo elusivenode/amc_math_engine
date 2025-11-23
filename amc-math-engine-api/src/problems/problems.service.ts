@@ -68,6 +68,12 @@ export class ProblemsService {
                 id: true,
                 stage: true,
                 title: true,
+                path: {
+                  select: {
+                    slug: true,
+                    title: true,
+                  },
+                },
               },
             },
           },
